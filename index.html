@@ -96,7 +96,7 @@ h2 small{font-size:13px;color:var(--mut);font-weight:600}
 .ic{position:relative;width:38px;height:38px;border-radius:12px;background:var(--card2);border:1px solid var(--line);display:grid;place-items:center;font-size:17px}
 .ic em{position:absolute;top:-5px;right:-5px;min-width:18px;height:18px;padding:0 5px;border-radius:9px;background:var(--acc);color:#000;font-style:normal;font-size:11px;font-weight:900;display:grid;place-items:center}
 .heart{position:absolute;top:6px;right:6px;z-index:2;width:34px;height:34px;border-radius:50%;background:rgba(0,0,0,.55);display:grid;place-items:center;font-size:16px;line-height:1}
-.fixed .row3{display:flex;gap:8px}.fixed .row3 .sq{flex:none;width:52px;font-size:20px;padding:12px 0}
+.fixed>.btn{width:100%}.fixed .row3{display:flex;gap:8px}.fixed .row3 .sq{flex:none;width:52px;font-size:20px;padding:12px 0}
 .szpick{display:flex;flex-wrap:wrap;gap:8px;margin:4px 0 12px}.szpick p{width:100%;font-size:13px;color:var(--mut);font-weight:600}
 .cl{display:flex;gap:12px;align-items:center;background:var(--card);border:1px solid #1d1d22;border-radius:16px;padding:10px;margin-bottom:10px}
 .cl .im{position:relative;flex:none;width:76px;height:76px;border-radius:12px;overflow:hidden;background:#121215}.cl .im img{width:100%;height:100%;object-fit:cover}.cl .im svg{width:100%;height:100%}
@@ -104,6 +104,20 @@ h2 small{font-size:13px;color:var(--mut);font-weight:600}
 .cl .rm{flex:none;width:34px;height:34px;border-radius:10px;background:var(--card2);color:var(--mut);font-size:15px}
 .total{display:flex;justify-content:space-between;align-items:baseline;margin:6px 2px 4px;font-size:15px;color:var(--mut);font-weight:700}.total b{color:var(--txt);font-size:24px;font-weight:900}
 .toast{position:fixed;left:50%;bottom:96px;transform:translateX(-50%) translateY(20px);background:#26262c;border:1px solid var(--line);padding:10px 16px;border-radius:12px;font-size:14px;font-weight:700;opacity:0;transition:.25s;z-index:60;pointer-events:none;white-space:nowrap}.toast.on{opacity:1;transform:translateX(-50%)}
+.form .lb{font-size:13px;color:var(--mut);font-weight:700;margin:12px 0 7px}.form .lb:first-child{margin-top:0}
+.form .opts{display:flex;flex-wrap:wrap;gap:8px}
+.form input,.form textarea,.fitin input{width:100%;background:var(--card2);border:1px solid var(--line);border-radius:12px;padding:12px;color:var(--txt);font:inherit;font-size:15px;outline:none}
+.form input:focus,.form textarea:focus,.fitin input:focus{border-color:var(--acc)}.form input.err{border-color:#ff4d4d}
+.form textarea{min-height:64px;resize:vertical}
+.fitin{display:flex;gap:8px;margin:8px 0 4px}.fitin .btn{flex:none;padding:12px 14px}
+.myfit{background:var(--card2);border-radius:12px;padding:10px 12px;margin:6px 0 10px;font-size:14px}.myfit b{font-size:16px}.myfit a{color:var(--acc);margin-left:6px;font-size:13px}
+.ok{color:var(--grn)}.warn{color:#ffb020}
+.info .mine{display:inline-block;margin-top:5px;font-size:11px;font-weight:800;color:var(--grn)}
+.faqbtn{display:flex;align-items:center;gap:12px;width:100%;margin-top:14px;background:var(--card);border:1px solid #1d1d22;border-radius:16px;padding:14px;text-align:left;font-size:14px}.faqbtn b{display:block;font-size:15px}.faqbtn span{color:var(--mut);font-size:12.5px}.faqbtn i{font-style:normal;font-size:24px}
+.faq details{background:var(--card);border:1px solid #1d1d22;border-radius:14px;margin-bottom:8px;padding:0 14px}
+.faq summary{list-style:none;cursor:pointer;padding:14px 0;font-weight:800;font-size:15px;display:flex;justify-content:space-between;gap:10px}.faq summary::-webkit-details-marker{display:none}
+.faq summary:after{content:'+';color:var(--acc);font-size:20px;line-height:1}.faq details[open] summary:after{content:'–'}
+.faq details div{padding:0 0 14px;color:#d4d4dc;font-size:14px;line-height:1.55}
 .hidden{display:none!important}
 .fit{background:#0f2a1c;border:1px solid #1f5a3a;border-radius:12px;padding:12px;margin-bottom:10px}.fit>b{display:block;margin-bottom:6px}.fitrow{display:flex;justify-content:space-between;font-size:14px;padding:3px 0}.fitrow span{color:var(--mut)}.fitrec{margin-top:8px;font-size:13.5px;color:#cfe9d8}
 .modal{position:fixed;inset:0;background:rgba(0,0,0,.85);z-index:60;display:none;align-items:center;justify-content:center;padding:16px}.modal.open{display:flex}.modal img{max-width:100%;max-height:85vh;border-radius:14px}.modal button{position:absolute;top:14px;right:14px;width:40px;height:40px;border-radius:50%;background:#222;font-size:20px}
@@ -162,7 +176,7 @@ function shirt(p){const [a,b,c]=p.shirt;return `<svg viewBox="0 0 200 200"><path
 const pic=p=>p.photos&&p.photos.length?`<img src="${p.photos[0]}" alt="${esc(p.title)}" loading="lazy">`:shirt(p);
 const gallery=p=>p.photos&&p.photos.length?`<div class="slides" id="sl">${p.photos.map(u=>`<img src="${u}" alt="">`).join('')}</div>${p.photos.length>1?`<div class="dots">${p.photos.map((_,i)=>`<i class="${i?'':'on'}"></i>`).join('')}</div>`:''}`:shirt(p);
 const badge=p=>`<span class="badge ${p.auth==='original'?'b-orig':'b-rep'}">${p.auth==='original'?'Оригинал':'Реплика'}</span>`+(p.stock&&p.stock!=='В наличии'?`<span class="b-ord">${esc(p.stock)}</span>`:'');
-const card=p=>`<button class="item" data-id="${p.id}"><div class="ph" style="--glow:${p.glow||'#333'}">${pic(p)}${badge(p)}<span class="heart" data-fav="${p.id}">${isFav(p.id)?'❤️':'🤍'}</span></div><div class="info"><b>${esc(p.title)}</b><div class="sz">Размер: ${esc(p.size)}</div><div class="pr">${priceTxt(p)}</div></div></button>`;
+const card=p=>`<button class="item" data-id="${p.id}"><div class="ph" style="--glow:${p.glow||'#333'}">${pic(p)}${badge(p)}<span class="heart" data-fav="${p.id}">${isFav(p.id)?'❤️':'🤍'}</span></div><div class="info"><b>${esc(p.title)}</b><div class="sz">Размер: ${esc(p.size)}</div>${fitDiff(p)===0?'<span class="mine">✅ твой размер</span>':''}<div class="pr">${priceTxt(p)}</div></div></button>`;
 const CHART={fan:[['S','160–170','50–60',50],['M','170–176','60–68',52],['L','176–182','68–78',54],['XL','182–188','78–88',56],['2XL','188–195','88–100',59]],
  pl:[['S','160–170','50–57',46],['M','170–176','57–65',48],['L','176–182','65–74',50],['XL','182–188','74–84',52],['2XL','188–195','84–94',54]]};
 function fit(p){if(!p.w)return'';const t=CHART[p.version==='Игровая'?'pl':'fan'];let best=t[0];for(const r of t)if(Math.abs(r[3]-p.w)<Math.abs(best[3]-p.w))best=r;
@@ -172,6 +186,8 @@ function header(){const home=st.page==='home';$('#back').classList.toggle('hidde
  else if(st.page==='cat'){$('#ttl').textContent=CATS.find(c=>c.id===st.cat).name;$('#sub').textContent='FootballFitStore'}
  else if(st.page==='cart'){$('#ttl').textContent='Корзина';$('#sub').textContent='FootballFitStore'}
  else if(st.page==='fav'){$('#ttl').textContent='Избранное';$('#sub').textContent='FootballFitStore'}
+ else if(st.page==='checkout'){$('#ttl').textContent='Оформление заказа';$('#sub').textContent='FootballFitStore'}
+ else if(st.page==='faq'){$('#ttl').textContent='Вопросы и ответы';$('#sub').textContent='FootballFitStore'}
  else {$('#ttl').textContent='Товар';$('#sub').textContent='FootballFitStore'}
  updIcons();
  if(tg){st.page==='home'?tg.BackButton.hide():tg.BackButton.show()}}
@@ -184,15 +200,16 @@ function home(){
  
  <div class="hero"><img src="img/hero.jpg" alt=""><div><h1>Редкие джерси<br>и бутсы</h1><p>Оригиналы и реплики · доставка РБ и РФ</p></div></div>
  <h2>Категории</h2><div class="cats">${CATS.map(c=>`<button class="cat ${c.wide?'wide':''}" data-cat="${c.id}"><img src="${c.img}" alt=""><span>${c.name}</span><em>${cnt(c.id)||'Скоро'}</em></button>`).join('')}</div>
+ <button class="faqbtn" data-go="faq"><i>❓</i><div><b>Вопросы и ответы</b><span>Доставка, оплата, размеры, оригинал или реплика</span></div></button>
  `}
 function vals(list,key){const s=[...new Set(list.map(p=>p[key]).filter(Boolean))];return key==='size'?s.sort((a,b)=>(SIZE_ORDER.indexOf(a)+1||+a+100)-(SIZE_ORDER.indexOf(b)+1||+b+100)):s.sort()}
 function filtered(){let r=P.filter(p=>p.cat===st.cat&&(st.auth==='all'||p.auth===st.auth)&&match(p));
  for(const[k,v]of Object.entries(st.f))if(v.length)r=r.filter(p=>v.includes(p[k]));
- if(st.pmin)r=r.filter(p=>p.byn>=+st.pmin);if(st.pmax)r=r.filter(p=>p.byn&&p.byn<=+st.pmax);
+ if(st.mine&&st.cat==='jersey')r=r.filter(p=>fitDiff(p)===0);if(st.pmin)r=r.filter(p=>p.byn>=+st.pmin);if(st.pmax)r=r.filter(p=>p.byn&&p.byn<=+st.pmax);
  r.sort(st.sort==='asc'?(a,b)=>(a.byn||1e9)-(b.byn||1e9):st.sort==='desc'?(a,b)=>b.byn-a.byn:(a,b)=>b.added-a.added);return r}
 function catView(){const r=filtered();const nf=Object.values(st.f).reduce((a,v)=>a+v.length,0)+(st.pmin||st.pmax?1:0);
  view.innerHTML=`<div class="seg">${[['all','Все'],['original','Оригинал'],['replica','Реплика']].map(([k,t])=>`<button data-auth="${k}" class="${st.auth===k?'on':''}">${t}</button>`).join('')}</div>
- <div class="bar"><button class="chip ${nf?'on':''}" id="fopen">⚙️ Фильтры${nf?' · '+nf:''}</button>${[['asc','Дешевле'],['desc','Дороже']].map(([k,t])=>`<button class="chip ${st.sort===k?'on':''}" data-sort="${k}">${t}</button>`).join('')}</div>
+ <div class="bar"><button class="chip ${nf?'on':''}" id="fopen">⚙️ Фильтры${nf?' · '+nf:''}</button>${st.cat==='jersey'&&hasFit()?`<button class="chip ${st.mine?'on':''}" id="mine">✅ Мой размер</button>`:''}${[['asc','Дешевле'],['desc','Дороже']].map(([k,t])=>`<button class="chip ${st.sort===k?'on':''}" data-sort="${k}">${t}</button>`).join('')}</div>
  <div class="count">Найдено: ${r.length}</div>`+(r.length?`<div class="grid">${r.map(card).join('')}</div>`:`<div class="empty"><b>${P.some(p=>p.cat===st.cat)?'Ничего не подошло':'Скоро в продаже'}</b>Напиши менеджеру — подберём или привезём под заказ<br><br><a class="btn btn-y" href="https://t.me/${MANAGER}">Написать @${MANAGER}</a></div>`)}
 function prodView(){const p=P.find(x=>x.id===st.prod);if(!p){go('home');return}
  const rows=FILTERS[p.cat].filter(([k])=>p[k]&&k!=='stock').map(([k,t])=>`<div class="row"><span>${t}</span><b>${esc(p[k])}</b></div>`).join('');
@@ -204,28 +221,85 @@ function prodView(){const p=P.find(x=>x.id===st.prod);if(!p){go('home');return}
  <div class="note">${p.ship==='warehouse'?'Со склада, бесплатная доставка':p.stock==='Скоро в наличии'?'Скоро в наличии — можно забронировать заранее':p.stock==='Под заказ'?'Под заказ: предоплата, срок 3–5 недель':'В наличии · 1 шт'}</div>
  ${sizesOf(p).length>1?`<div class="szpick" id="szpick"><p>Выбери размер:</p>${sizesOf(p).map(z=>`<button class="chip ${st.size===z?'on':''}" data-pick="${esc(z)}">${esc(z)}</button>`).join('')}</div>`:''}
  <div class="box">${rows}</div>
- ${p.cat==='jersey'?`<div class="box"><h4>Как подобрать размер</h4>${fit(p)}${p.version==='Игровая'?'Игровая версия сидит плотно — если сомневаешься, бери на размер больше.<br>':''}${p.w?'Сравни с шириной своей футболки от подмышки до подмышки.':'Общая таблица — ориентир, у разных клубов сетка отличается. Точные замеры этой джерси спроси у менеджера.'}<br><button class="btn btn-g" id="chartBtn" style="margin-top:12px">Таблица размеров</button></div>`:''}
- <div class="box"><h4>Доставка и оплата</h4>${p.ship==='warehouse'?'🚚 Бесплатная доставка в любую страну<br>🇧🇾🇷🇺 Беларусь и Россия — 4–10 дней<br>🇰🇿 Казахстан — 8–14 дней<br>🇷🇺 Оплата для России — через Сбербанк<br>🪙 Возможна оплата криптовалютой':'🚚 Бесплатная доставка по СНГ<br>🇧🇾 Беларусь — 2–5 дней, Белпочта / Европочта, оплата при получении<br>🇷🇺 Россия — 2–5 дней, только СДЭК, оплата через Сбербанк<br>🇰🇿 Казахстан — 8–14 дней<br>🪙 Возможна оплата криптовалютой<br>Для дальних регионов цена может немного отличаться'}<br><br><a href="https://t.me/sksbvwsis" style="color:var(--acc)">Последние отправки и отзывы →</a></div>
+ ${p.cat==='jersey'?`<div class="box"><h4>Как подобрать размер</h4>${fitBox(p)}${fit(p)}${p.version==='Игровая'?'Игровая версия сидит плотно — если сомневаешься, бери на размер больше.<br>':''}${p.w?'Сравни с шириной своей футболки от подмышки до подмышки.':'Общая таблица — ориентир, у разных клубов сетка отличается. Точные замеры этой джерси спроси у менеджера.'}<br><button class="btn btn-g" id="chartBtn" style="margin-top:12px">Таблица размеров</button></div>`:''}
+ <div class="box"><h4>Доставка и оплата</h4>${p.ship==='warehouse'?'🚚 Бесплатная доставка в любую страну<br>🇧🇾🇷🇺 Беларусь и Россия — 4–10 дней<br>🇰🇿 Казахстан — 8–14 дней<br>🇷🇺 Оплата для России — через Сбербанк<br>🪙 Возможна оплата криптовалютой':'🚚 Бесплатная доставка по СНГ<br>🇧🇾 Беларусь — 2–5 дней, Белпочта / Европочта, оплата при получении<br>🇷🇺 Россия — 2–5 дней, только СДЭК, оплата через Сбербанк<br>🇰🇿 Казахстан — 8–14 дней<br>🪙 Возможна оплата криптовалютой<br>Для дальних регионов цена может немного отличаться'}<br><br><a href="https://t.me/sksbvwsis" style="color:var(--acc)">Последние отправки и отзывы →</a><button class="btn btn-g" data-go="faq" style="margin-top:12px">❓ Вопросы и ответы</button></div>
  <div style="height:80px"></div>
- <div class="fixed"><div class="row3"><button class="btn btn-g sq" id="pfav">${isFav(p.id)?'❤️':'🤍'}</button><button class="btn btn-g" id="pcart">${inCart(p.id)?'В корзине ✓':'В корзину'}</button><a class="btn btn-y" id="order" href="https://t.me/${MANAGER}?text=${encodeURIComponent(msg)}">Заказать</a></div></div>`;
+ <div class="fixed"><div class="row3"><button class="btn btn-g sq" id="pfav">${isFav(p.id)?'❤️':'🤍'}</button><button class="btn btn-g" id="pcart">${inCart(p.id)?'В корзине ✓':'В корзину'}</button><button class="btn btn-y" id="order">Заказать</button></div></div>`;
  $('#pfav').onclick=()=>{toggleFav(p);$('#pfav').textContent=isFav(p.id)?'❤️':'🤍'};
  $('#pcart').onclick=()=>{if(inCart(p.id)){go('cart');return}const z=sizesOf(p);if(z.length>1&&!st.size){toast('Сначала выбери размер');$('#szpick').scrollIntoView({behavior:'smooth',block:'center'});return}
   addCart(p,z.length>1?st.size:p.size);$('#pcart').textContent='В корзине ✓'};
  document.querySelectorAll('[data-pick]').forEach(b=>b.onclick=()=>{st.size=b.dataset.pick;document.querySelectorAll('[data-pick]').forEach(x=>x.classList.toggle('on',x===b))});
- $('#order').onclick=e=>{const z=sizesOf(p);if(z.length>1&&!st.size){e.preventDefault();toast('Сначала выбери размер');$('#szpick').scrollIntoView({behavior:'smooth',block:'center'});return}track('order',p);if(tg){e.preventDefault();tg.openTelegramLink(e.currentTarget.href)}};
+ $('#order').onclick=()=>{const z=sizesOf(p);if(z.length>1&&!st.size){toast('Сначала выбери размер');$('#szpick').scrollIntoView({behavior:'smooth',block:'center'});return}go('checkout',{buy:{id:p.id,size:z.length>1?st.size:p.size}})};
+ const fg=$('#fitgo');if(fg)fg.onclick=()=>{const h=+$('#hh').value,w=+$('#ww').value;if(!h&&!w){toast('Введи рост и вес');return}PROF.h=h||'';PROF.w=w||'';save();prodView()};
+ const fe=$('#fitedit');if(fe)fe.onclick=e=>{e.preventDefault();PROF.h=PROF.w='';save();prodView()};
  const cb=$('#chartBtn');if(cb)cb.onclick=()=>{$('#chart').classList.add('open')};
  const sl=$('#sl');if(sl)sl.onscroll=()=>{const i=Math.round(sl.scrollLeft/sl.clientWidth);document.querySelectorAll('.dots i').forEach((d,j)=>d.classList.toggle('on',i===j))}}
-function render(){header();st.page==='home'?home():st.page==='cat'?catView():st.page==='cart'?cartView():st.page==='fav'?favView():prodView();window.scrollTo(0,0)}
+function render(){header();st.page==='home'?home():st.page==='cat'?catView():st.page==='cart'?cartView():st.page==='fav'?favView():st.page==='checkout'?checkoutView():st.page==='faq'?faqView():prodView();window.scrollTo(0,0)}
 // ---- избранное и корзина (хранятся у покупателя: в Telegram CloudStorage + в браузере) ----
-let FAV=[],CART=[];
+let FAV=[],CART=[],PROF={};
 const sizesOf=p=>String(p.size||'').split('/').map(x=>x.trim()).filter(Boolean);
 const isFav=id=>FAV.includes(id), inCart=id=>CART.some(c=>c.id===id);
 const cloud=tg&&tg.CloudStorage&&tg.isVersionAtLeast&&tg.isVersionAtLeast('6.9')?tg.CloudStorage:null;
-function save(){const f=JSON.stringify(FAV),c=JSON.stringify(CART);try{localStorage.setItem('ffs_fav',f);localStorage.setItem('ffs_cart',c)}catch(e){}if(cloud){try{cloud.setItem('fav',f);cloud.setItem('cart',c)}catch(e){}}updIcons()}
-function loadSaved(){try{FAV=JSON.parse(localStorage.getItem('ffs_fav')||'[]');CART=JSON.parse(localStorage.getItem('ffs_cart')||'[]')}catch(e){}
- if(cloud){try{cloud.getItems(['fav','cart'],(err,v)=>{if(err||!v)return;try{if(v.fav)FAV=[...new Set([...FAV,...JSON.parse(v.fav)])];if(v.cart){for(const c of JSON.parse(v.cart))if(!inCart(c.id))CART.push(c)}}catch(e){}cleanSaved();if(st.page==='cart'||st.page==='fav')render();else{updIcons();if(st.page!=='prod')render()}})}catch(e){}}}
+function save(){const f=JSON.stringify(FAV),c=JSON.stringify(CART),pr=JSON.stringify(PROF);try{localStorage.setItem('ffs_fav',f);localStorage.setItem('ffs_cart',c);localStorage.setItem('ffs_prof',pr)}catch(e){}if(cloud){try{cloud.setItem('fav',f);cloud.setItem('cart',c);cloud.setItem('prof',pr)}catch(e){}}updIcons()}
+function loadSaved(){try{FAV=JSON.parse(localStorage.getItem('ffs_fav')||'[]');CART=JSON.parse(localStorage.getItem('ffs_cart')||'[]');PROF=JSON.parse(localStorage.getItem('ffs_prof')||'{}')}catch(e){}
+ if(cloud){try{cloud.getItems(['fav','cart','prof'],(err,v)=>{if(err||!v)return;try{if(v.prof)PROF={...JSON.parse(v.prof),...PROF};if(v.fav)FAV=[...new Set([...FAV,...JSON.parse(v.fav)])];if(v.cart){for(const c of JSON.parse(v.cart))if(!inCart(c.id))CART.push(c)}}catch(e){}cleanSaved();if(st.page==='cart'||st.page==='fav'||st.page==='cat')render();else{updIcons();if(st.page!=='prod')render()}})}catch(e){}}}
 function cleanSaved(){if(!P.length)return;FAV=FAV.filter(id=>P.some(p=>p.id===id));CART=CART.filter(c=>P.some(p=>p.id===c.id));updIcons()}
 function updIcons(){const f=$('#favN'),c=$('#cartN');f.textContent=FAV.length;f.classList.toggle('hidden',!FAV.length);c.textContent=CART.length;c.classList.toggle('hidden',!CART.length);$('#favBtn').firstChild.textContent=FAV.length?'❤️':'🤍'}
+// ---- подбор размера по росту и весу ----
+const hasFit=()=>!!(PROF.h||PROF.w);
+const rng=s=>String(s).split('–').map(Number);
+function recSize(p){if(!hasFit())return null;const t=CHART[p.version==='Игровая'?'pl':'fan'];const by=(v,k)=>{if(!v)return 0;const i=t.findIndex(r=>v<=rng(r[k])[1]);return i<0?t.length-1:i};return t[Math.max(by(+PROF.h,1),by(+PROF.w,2))][0]}
+function fitDiff(p){if(p.cat!=='jersey'||!hasFit())return null;const a=SIZE_ORDER.indexOf(p.size),b=SIZE_ORDER.indexOf(recSize(p));if(a<0||b<0)return null;return a-b}
+function fitBox(p){if(!hasFit())return `<div style="font-size:14px">Введи рост и вес — подскажем размер:</div><div class="fitin"><input id="hh" inputmode="numeric" placeholder="Рост, см"><input id="ww" inputmode="numeric" placeholder="Вес, кг"><button class="btn btn-y" id="fitgo">Подобрать</button></div><div style="height:8px"></div>`;
+ const r=recSize(p),d=fitDiff(p);
+ const v=d===0?'<span class="ok">✅ Этот размер тебе подходит</span>':d===1?'<span class="warn">Будет посвободнее, чем обычно</span>':d>1?'<span class="warn">⚠️ Скорее всего будет велика</span>':d===-1?'<span class="warn">⚠️ Будет в обтяжку или мала</span>':d<-1?'<span class="warn">❌ Скорее всего будет мала</span>':'';
+ return `<div class="myfit">Твой рост ${PROF.h||'—'} см, вес ${PROF.w||'—'} кг <a href="#" id="fitedit">изменить</a><br>Тебе подойдёт: <b>${r}</b>${p.version==='Игровая'?' (с учётом плотной посадки игровой версии)':''}<br>${v}</div>`}
+
+// ---- оформление заказа ----
+const COUNTRIES=[['by','🇧🇾 Беларусь'],['ru','🇷🇺 Россия'],['kz','🇰🇿 Казахстан'],['other','🌍 Другая']];
+const SHIPS={by:['Европочта','Белпочта'],ru:['СДЭК'],kz:['Уточнить у менеджера'],other:['Уточнить у менеджера']};
+const PAYS={by:['При получении','Криптовалюта'],ru:['Перевод на Сбербанк','Криптовалюта'],kz:['Уточнить у менеджера','Криптовалюта'],other:['Уточнить у менеджера','Криптовалюта']};
+const FIELDS=[['name','ФИО получателя','Иванов Иван Иванович','text',1],['phone','Телефон','+375 29 000-00-00','tel',1],['city','Город','','text',1],['addr','Адрес или номер отделения','','text',0],['tgnick','Твой ник в Telegram (необязательно)','@username','text',0],['comment','Комментарий (необязательно)','Например: нужна до 20 числа','area',0]];
+function coItems(){const l=st.buy?[st.buy]:CART;return l.map(c=>({c,p:P.find(p=>p.id===c.id)})).filter(x=>x.p)}
+function priceFor(p,ct){if(!p.byn)return 'цена по запросу';if(ct==='ru')return rub(p).toLocaleString('ru')+' ₽';if(ct==='kz'&&p.kzt)return p.kzt.toLocaleString('ru')+' ₸';if(ct==='by')return p.byn+' BYN';return `${p.byn} BYN / ${rub(p).toLocaleString('ru')} ₽`}
+function totalFor(r,ct){const q=r.filter(x=>x.p.byn);if(!q.length)return '';const sum=f=>q.reduce((a,x)=>a+f(x.p),0).toLocaleString('ru');
+ if(ct==='ru')return sum(rub)+' ₽';if(ct==='kz'&&q.every(x=>x.p.kzt))return sum(p=>p.kzt)+' ₸';if(ct==='by')return sum(p=>p.byn)+' BYN';return `${sum(p=>p.byn)} BYN / ${sum(rub)} ₽`}
+function readForm(){FIELDS.forEach(([k])=>{const e=$('#f_'+k);if(e)PROF[k]=e.value.trim()})}
+function checkoutView(){const r=coItems();if(!r.length){view.innerHTML=`<div class="empty"><b>Нечего оформлять</b>Добавь товары в корзину</div>`;return}
+ const ct=PROF.country||'';if(ct&&!SHIPS[ct].includes(PROF.ship))PROF.ship=SHIPS[ct][0];if(ct&&!PAYS[ct].includes(PROF.pay))PROF.pay=PAYS[ct][0];
+ const chips=(list,key)=>list.map(v=>`<button class="chip ${PROF[key]===v?'on':''}" data-set="${key}" data-val="${esc(v)}">${esc(v)}</button>`).join('');
+ const tot=totalFor(r,ct);
+ view.innerHTML=r.map(({c,p})=>`<div class="cl"><div class="im">${p.photos&&p.photos.length?`<img src="${p.photos[0]}" alt="">`:shirt(p)}</div><div class="tx"><b>${esc(p.title)}</b><span>Размер: ${esc(c.size)}</span><i>${priceFor(p,ct)}</i></div></div>`).join('')+
+ `<div class="box form"><p class="lb">Страна доставки</p><div class="opts">${COUNTRIES.map(([k,t])=>`<button class="chip ${ct===k?'on':''}" data-set="country" data-val="${k}">${t}</button>`).join('')}</div>
+ ${ct?`<p class="lb">Доставка</p><div class="opts">${chips(SHIPS[ct],'ship')}</div><p class="lb">Оплата</p><div class="opts">${chips(PAYS[ct],'pay')}</div>`:''}
+ ${FIELDS.map(([k,t,ph,ty])=>`<p class="lb">${t}</p>${ty==='area'?`<textarea id="f_${k}" placeholder="${ph}">${esc(PROF[k]||'')}</textarea>`:`<input id="f_${k}" type="${ty==='tel'?'tel':'text'}" placeholder="${ph}" value="${esc(PROF[k]||'')}">`}`).join('')}</div>
+ ${tot?`<div class="box"><div class="total"><span>Итого, ${r.length} шт.</span><b>${tot}</b></div><div style="font-size:13px;color:var(--mut);margin-top:6px">${ct==='by'||ct==='ru'||ct==='kz'?'Доставка бесплатная. ':''}Менеджер проверит наличие и подтвердит заказ.</div></div>`:''}
+ <div style="height:90px"></div><div class="fixed"><button class="btn btn-y" id="send">Отправить заказ менеджеру</button></div>`;
+ view.querySelectorAll('[data-set]').forEach(b=>b.onclick=()=>{readForm();PROF[b.dataset.set]=b.dataset.val;save();const y=window.scrollY;checkoutView();window.scrollTo(0,y)});
+ view.querySelectorAll('.form input,.form textarea').forEach(i=>i.onchange=()=>{readForm();save()});
+ $('#send').onclick=()=>{readForm();save();if(!PROF.country){toast('Выбери страну');return}
+  const miss=FIELDS.filter(f=>f[4]&&!PROF[f[0]]);if(miss.length){miss.forEach(f=>$('#f_'+f[0]).classList.add('err'));toast('Заполни: '+miss.map(f=>f[1].toLowerCase()).join(', '));$('#f_'+miss[0][0]).scrollIntoView({behavior:'smooth',block:'center'});return}
+  const cn=COUNTRIES.find(c=>c[0]===PROF.country)[1].replace(/^\S+\s/,'');
+  const msg='Здравствуйте! Хочу заказать:\n'+r.map((x,i)=>`${i+1}. ${x.p.title}, размер ${x.c.size} — ${priceFor(x.p,PROF.country)}`).join('\n')+(tot?`\nИтого: ${tot}`:'')+
+   `\n\nСтрана: ${cn}\nГород: ${PROF.city}\nДоставка: ${PROF.ship}${PROF.addr?`, ${PROF.addr}`:''}\nПолучатель: ${PROF.name}\nТелефон: ${PROF.phone}\nОплата: ${PROF.pay}`+(PROF.tgnick?`\nTelegram: ${PROF.tgnick}`:'')+(PROF.comment?`\nКомментарий: ${PROF.comment}`:'');
+  r.forEach(x=>track('order',x.p));const url=`https://t.me/${MANAGER}?text=${encodeURIComponent(msg)}`;
+  if(tg)tg.openTelegramLink(url);else location.href=url}}
+
+// ---- вопросы и ответы ----
+const FAQ=[
+ ['Как сделать заказ?','Добавь товары в корзину или нажми «Заказать» в карточке товара. Укажи страну, город и контакты, нажми «Отправить заказ менеджеру». Откроется чат с @'+MANAGER+', и готовое сообщение со всеми данными останется только отправить. Менеджер проверит наличие и подтвердит заказ.'],
+ ['Как оплатить?','🇧🇾 Беларусь — оплата при получении на почте.<br>🇷🇺 Россия — перевод на Сбербанк.<br>🪙 Из любой страны можно оплатить криптовалютой.<br>Товары «под заказ» — по предоплате.'],
+ ['Сколько стоит и идёт доставка?','Доставка по СНГ бесплатная.<br>🇧🇾 Беларусь — 2–5 дней, Европочта или Белпочта.<br>🇷🇺 Россия — 2–5 дней, только СДЭК.<br>🇰🇿 Казахстан — 8–14 дней.<br>Оригинальные бутсы со склада: Беларусь и Россия 4–10 дней, Казахстан 8–14 дней.<br>Для дальних регионов цена может немного отличаться.'],
+ ['Что значит «под заказ»?','Товара сейчас нет на руках: ты вносишь предоплату, мы заказываем, и примерно через 3–5 недель он приезжает и отправляется тебе.'],
+ ['Как подобрать размер?','Открой любую джерси и введи рост и вес — приложение подскажет твой размер и покажет, подходит ли эта джерси. В каталоге появится кнопка «✅ Мой размер», чтобы видеть только подходящие. Если сомневаешься — напиши менеджеру, он пришлёт замеры конкретной джерси.'],
+ ['Игровая или фанатская версия — в чём разница?','<b>Игровая</b> — как у футболистов на поле: лёгкая дышащая ткань, сидит плотно по фигуре. Если ты между размерами — бери на размер больше.<br><b>Фанатская</b> — посадка свободнее, как у обычной футболки, бери свой размер.'],
+ ['Оригинал или реплика — в чём разница?','<b>Оригинал</b> — товар бренда (Nike, Adidas, Puma), отправляется со склада.<br><b>Реплика</b> — качественная копия: те же цвета, эмблемы и спонсоры, но цена в разы ниже. На каждом товаре есть отметка «Оригинал» или «Реплика».'],
+ ['Можно вернуть или обменять?','Возврата и обмена нет, поэтому перед заказом сверь размер. Если не уверен — спроси менеджера, он пришлёт замеры и поможет выбрать.'],
+ ['Нет нужного клуба или размера?','Напиши @'+MANAGER+' — найдём и привезём под заказ.'],
+ ['Где посмотреть отзывы?','Последние отправки и отзывы покупателей — в канале <a href="https://t.me/sksbvwsis" style="color:var(--acc)">t.me/sksbvwsis</a>.']
+];
+function faqView(){view.innerHTML=`<div class="faq">${FAQ.map(([q,a])=>`<details><summary>${q}</summary><div>${a}</div></details>`).join('')}</div><a class="btn btn-y" style="margin-top:14px" href="https://t.me/${MANAGER}">Не нашёл ответ — написать @${MANAGER}</a><div style="height:20px"></div>`}
+
 let tt;function toast(t){const e=$('#toast');e.textContent=t;e.classList.add('on');clearTimeout(tt);tt=setTimeout(()=>e.classList.remove('on'),1600);try{tg&&tg.HapticFeedback.impactOccurred('light')}catch(e){}}
 function toggleFav(p){if(isFav(p.id)){FAV=FAV.filter(x=>x!==p.id);toast('Убрано из избранного')}else{FAV.unshift(p.id);track('fav',p);toast('❤️ Добавлено в избранное')}save()}
 function addCart(p,size){if(inCart(p.id))return;CART.push({id:p.id,size});track('cart',p);save();toast('🛒 Добавлено в корзину')}
@@ -236,15 +310,15 @@ function cartView(){const r=CART.map(c=>({c,p:P.find(p=>p.id===c.id)})).filter(x
  const byn=r.reduce((a,x)=>a+(x.p.byn||0),0),rb=r.reduce((a,x)=>a+(x.p.byn?rub(x.p):0),0),ask=r.some(x=>!x.p.byn);
  const msg='Здравствуйте! Хочу заказать:\n'+r.map((x,i)=>`${i+1}. ${x.p.title}, размер ${x.c.size}${x.p.byn?`, ${x.p.byn} BYN / ${rub(x.p)} ₽`:''}`).join('\n')+(byn?`\nИтого: ${byn} BYN / ${rb.toLocaleString('ru')} ₽`:'');
  view.innerHTML=r.map(({c,p})=>`<div class="cl"><button class="im" data-id="${p.id}">${p.photos&&p.photos.length?`<img src="${p.photos[0]}" alt="">`:shirt(p)}</button><div class="tx"><b>${esc(p.title)}</b><span>Размер: ${esc(c.size)}${p.auth==='original'?' · Оригинал':''}</span><i>${p.byn?`${rub(p).toLocaleString('ru')} ₽ / ${p.byn} BYN`:'Цена по запросу'}</i></div><button class="rm" data-rm="${p.id}">✕</button></div>`).join('')+
- `<div class="box"><div class="total"><span>Итого, ${r.length} шт.</span><b>${byn?`${rb.toLocaleString('ru')} ₽`:'—'}</b></div>${byn?`<div class="total" style="margin-top:0"><span></span><span>${byn} BYN${ask?' + товары с ценой по запросу':''}</span></div>`:''}<div style="font-size:13px;color:var(--mut);margin-top:6px">Нажми «Оформить заказ» — откроется чат с менеджером, список товаров уже будет в сообщении.</div></div>
- <div style="height:90px"></div><div class="fixed"><a class="btn btn-y" id="checkout" href="https://t.me/${MANAGER}?text=${encodeURIComponent(msg)}">Оформить заказ · ${r.length} шт.</a></div>`;
- $('#checkout').onclick=e=>{r.forEach(x=>track('order',x.p));if(tg){e.preventDefault();tg.openTelegramLink(e.currentTarget.href)}}}
+ `<div class="box"><div class="total"><span>Итого, ${r.length} шт.</span><b>${byn?`${rb.toLocaleString('ru')} ₽`:'—'}</b></div>${byn?`<div class="total" style="margin-top:0"><span></span><span>${byn} BYN${ask?' + товары с ценой по запросу':''}</span></div>`:''}<div style="font-size:13px;color:var(--mut);margin-top:6px">Дальше укажешь страну, город и контакты — менеджеру уйдёт готовый заказ одним сообщением.</div></div>
+ <div style="height:90px"></div><div class="fixed"><button class="btn btn-y" id="checkout">Оформить заказ · ${r.length} шт.</button></div>`;
+ $('#checkout').onclick=()=>go('checkout',{buy:null})}
 // статистика (Яндекс Метрика): просмотры товаров и нажатия «Заказать»
 const YM=0; // номер счётчика Метрики
 if(YM){(function(m,e,t,r,i,k,a){m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};m[i].l=1*new Date();k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)})(window,document,'script','https://mc.yandex.ru/metrika/tag.js','ym');ym(YM,'init',{clickmap:true,trackLinks:true,accurateTrackBounce:true})}
 function track(kind,p){try{if(!YM||!window.ym||!p)return;const lbl={view:'👁 Просмотр',cart:'🛒 В корзину',fav:'❤️ В избранное',order:'✅ Заказать'}[kind]+' — '+p.title+' ('+p.size+')';ym(YM,'hit',location.origin+location.pathname+'#'+kind+'-'+p.id,{title:lbl});if(kind==='order')ym(YM,'reachGoal','order',{product:p.title})}catch(e){}}
 const HIST=[];
-function go(page,extra={}){if(page===st.page&&page!=='prod'&&page!=='cat')return;HIST.push({page:st.page,cat:st.cat,prod:st.prod});st.size=null;if(page==='prod')track('view',P.find(x=>x.id===extra.prod));if(page!=='prod')st.prod=null;Object.assign(st,{page},extra);history.pushState(null,'');render()}
+function go(page,extra={}){if(page===st.page&&page!=='prod'&&page!=='cat')return;HIST.push({page:st.page,cat:st.cat,prod:st.prod,buy:st.buy});st.size=null;if(page!=='checkout')st.buy=null;if(page==='prod')track('view',P.find(x=>x.id===extra.prod));if(page!=='prod')st.prod=null;Object.assign(st,{page},extra);history.pushState(null,'');render()}
 // фильтры
 function openF(){const base=P.filter(p=>p.cat===st.cat&&(st.auth==='all'||p.auth===st.auth));
  $('#fbody').innerHTML=FILTERS[st.cat].map(([k,t])=>{const v=vals(base,k);if(!v.length)return'';return`<div class="fgroup"><p>${t}</p><div class="opts">${v.map(x=>`<button class="chip ${(st.f[k]||[]).includes(x)?'on':''}" data-fk="${k}" data-fv="${esc(x)}">${esc(x)}</button>`).join('')}</div></div>`}).join('')+
@@ -262,7 +336,9 @@ view.onclick=e=>{const hf=e.target.closest('[data-fav]');if(hf){e.stopPropagatio
  else if(t.dataset.id){go('prod',{prod:+t.dataset.id})}
  else if(t.dataset.auth){st.auth=t.dataset.auth;st.f={};render()}
  else if(t.dataset.sort){st.sort=st.sort===t.dataset.sort?'new':t.dataset.sort;render()}
- else if(t.id==='fopen')openF()};
+ else if(t.id==='fopen')openF()
+ else if(t.id==='mine'){st.mine=!st.mine;render()}
+ else if(t.dataset.go){go(t.dataset.go)}};
 const back=()=>{closeF();st.size=null;const h=HIST.pop();if(h)Object.assign(st,h);else st.page='home';render()};
 $('#back').onclick=back;$('#favBtn').onclick=()=>go('fav');$('#cartBtn').onclick=()=>go('cart'); if(tg)tg.BackButton.onClick(back);
 window.onpopstate=()=>{if(st.page!=='home')back()};
