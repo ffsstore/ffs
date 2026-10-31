@@ -1,5 +1,30 @@
 [
  {
+  "id": 24,
+  "cat": "jersey",
+  "auth": "replica",
+  "title": "Ливерпуль 06/07 третья",
+  "club": "Ливерпуль",
+  "league": "АПЛ",
+  "era": "Ретро",
+  "named": "Без фамилии",
+  "sleeve": "Короткий",
+  "version": "Фанатская",
+  "size": "S",
+  "byn": 70,
+  "rub": 2490,
+  "stock": "В наличии",
+  "photos": [
+   "img/liv0607_1.jpg",
+   "img/liv0607_2.jpg",
+   "img/liv0607_3.jpg",
+   "img/liv0607_4.jpg",
+   "img/liv0607_5.jpg",
+   "img/liv0607_6.jpg",
+   "img/liv0607_7.jpg"
+  ]
+ },
+ {
   "id": 23,
   "cat": "jersey",
   "auth": "replica",
