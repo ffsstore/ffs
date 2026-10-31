@@ -183,14 +183,16 @@
   "id": 14,
   "cat": "boots",
   "auth": "original",
-  "title": "Adidas Predator",
+  "title": "Adidas Predator Elite FG",
   "brand": "Adidas",
   "model": "Predator",
-  "size": "уточняйте",
+  "size": "42 (26.5 см)",
   "surface": "FG",
-  "state": "Б/у",
-  "byn": 0,
-  "stock": "В наличии",
+  "byn": 500,
+  "rub": 14490,
+  "kzt": 78000,
+  "stock": "Со склада",
+  "ship": "warehouse",
   "photos": [
    "img/b_1e761445.jpg"
   ]
