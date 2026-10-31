@@ -284,7 +284,7 @@ function checkoutView(){const r=coItems();if(!r.length){view.innerHTML=`<div cla
   const msg='Здравствуйте! Хочу заказать:\n'+r.map((x,i)=>`${i+1}. ${x.p.title}, размер ${x.c.size} — ${priceFor(x.p,PROF.country)}`).join('\n')+(tot?`\nИтого: ${tot}`:'')+
    `\n\nСтрана: ${cn}\nГород: ${PROF.city}\nДоставка: ${PROF.ship}${PROF.addr?`, ${PROF.addr}`:''}\nПолучатель: ${PROF.name}\nТелефон: ${PROF.phone}\nОплата: ${PROF.pay}`+(PROF.tgnick?`\nTelegram: ${PROF.tgnick}`:'')+(PROF.comment?`\nКомментарий: ${PROF.comment}`:'');
   r.forEach(x=>track('order',x.p));const url=`https://t.me/${MANAGER}?text=${encodeURIComponent(msg)}`;
-  if(tg)tg.openTelegramLink(url);else location.href=url}}
+  openTg(url)}}
 
 // ---- вопросы и ответы ----
 const FAQ=[
@@ -301,6 +301,9 @@ const FAQ=[
 ];
 function faqView(){view.innerHTML=`<div class="faq">${FAQ.map(([q,a])=>`<details><summary>${q}</summary><div>${a}</div></details>`).join('')}</div><a class="btn btn-y" style="margin-top:14px" href="https://t.me/${MANAGER}">Не нашёл ответ — написать @${MANAGER}</a><div style="height:20px"></div>`}
 
+// открыть ссылку t.me: в Telegram — нативно, в браузере — в новой вкладке (во встроенном окне t.me не открывается)
+function openTg(url){try{if(tg&&tg.openTelegramLink){tg.openTelegramLink(url);return}}catch(e){}const w=window.open(url,'_blank');if(!w)location.href=url}
+document.addEventListener('click',e=>{const a=e.target.closest('a[href^="https://t.me/"]');if(!a)return;e.preventDefault();openTg(a.href)});
 let tt;function toast(t){const e=$('#toast');e.textContent=t;e.classList.add('on');clearTimeout(tt);tt=setTimeout(()=>e.classList.remove('on'),1600);try{tg&&tg.HapticFeedback.impactOccurred('light')}catch(e){}}
 function toggleFav(p){if(isFav(p.id)){FAV=FAV.filter(x=>x!==p.id);toast('Убрано из избранного')}else{FAV.unshift(p.id);track('fav',p);toast('❤️ Добавлено в избранное')}save()}
 function addCart(p,size){if(inCart(p.id))return;CART.push({id:p.id,size});track('cart',p);save();toast('🛒 Добавлено в корзину')}
