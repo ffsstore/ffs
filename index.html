@@ -176,7 +176,7 @@ function shirt(p){const [a,b,c]=p.shirt;return `<svg viewBox="0 0 200 200"><path
 const pic=p=>p.photos&&p.photos.length?`<img src="${p.photos[0]}" alt="${esc(p.title)}" loading="lazy">`:shirt(p);
 const gallery=p=>p.photos&&p.photos.length?`<div class="slides" id="sl">${p.photos.map(u=>`<img src="${u}" alt="">`).join('')}</div>${p.photos.length>1?`<div class="dots">${p.photos.map((_,i)=>`<i class="${i?'':'on'}"></i>`).join('')}</div>`:''}`:shirt(p);
 const badge=p=>`<span class="badge ${p.auth==='original'?'b-orig':'b-rep'}">${p.auth==='original'?'Оригинал':'Реплика'}</span>`+(p.stock&&p.stock!=='В наличии'?`<span class="b-ord">${esc(p.stock)}</span>`:'');
-const card=p=>`<button class="item" data-id="${p.id}"><div class="ph" style="--glow:${p.glow||'#333'}">${pic(p)}${badge(p)}<span class="heart" data-fav="${p.id}">${isFav(p.id)?'❤️':'🤍'}</span></div><div class="info"><b>${esc(p.title)}</b><div class="sz">Размер: ${esc(p.size)}</div>${fitDiff(p)===0?'<span class="mine">✅ твой размер</span>':''}<div class="pr">${priceTxt(p)}</div></div></button>`;
+const card=p=>`<button class="item" data-id="${p.id}"><div class="ph" style="--glow:${p.glow||'#333'}">${pic(p)}<span class="heart" data-fav="${p.id}">${isFav(p.id)?'❤️':'🤍'}</span></div><div class="info"><b>${esc(p.title)}</b><div class="sz">Размер: ${esc(p.size)}${p.auth==='original'?' · <span style="color:var(--grn);font-weight:700">Оригинал</span>':''}${p.stock&&p.stock!=='В наличии'?' · '+esc(p.stock):''}</div>${fitDiff(p)===0?'<span class="mine">✅ твой размер</span>':''}<div class="pr">${priceTxt(p)}</div></div></button>`;
 const CHART={fan:[['S','160–170','50–60',50],['M','170–176','60–68',52],['L','176–182','68–78',54],['XL','182–188','78–88',56],['2XL','188–195','88–100',59]],
  pl:[['S','160–170','50–57',46],['M','170–176','57–65',48],['L','176–182','65–74',50],['XL','182–188','74–84',52],['2XL','188–195','84–94',54]]};
 function fit(p){if(!p.w)return'';const t=CHART[p.version==='Игровая'?'pl':'fan'];let best=t[0];for(const r of t)if(Math.abs(r[3]-p.w)<Math.abs(best[3]-p.w))best=r;
@@ -214,7 +214,7 @@ function catView(){const r=filtered();const nf=Object.values(st.f).reduce((a,v)=
 function prodView(){const p=P.find(x=>x.id===st.prod);if(!p){go('home');return}
  const rows=FILTERS[p.cat].filter(([k])=>p[k]&&k!=='stock').map(([k,t])=>`<div class="row"><span>${t}</span><b>${esc(p[k])}</b></div>`).join('');
  const msg=`Здравствуйте! Хочу заказать: ${p.title}, размер ${st.size||p.size}${p.byn?`, ${p.byn} BYN`:''}`;
- view.innerHTML=`<div class="gal" style="--glow:${p.glow||'#333'}">${gallery(p)}${badge(p)}</div>
+ view.innerHTML=`<div class="gal" style="--glow:${p.glow||'#333'}">${gallery(p)}</div>
  <div class="pt">${esc(p.title)}</div>
  <div class="tags"><span class="tag">${p.auth==='original'?'✅ Оригинал':'Реплика'}</span><span class="tag">${esc(p.stock)}</span>${p.sleeve==='Длинный'?'<span class="tag">Длинный рукав</span>':''}${p.version==='Игровая'?'<span class="tag">Игровая версия</span>':''}${p.state==='Б/у'?'<span class="tag">Б/у</span>':''}</div>
  <div class="pp">${p.byn?`<b>${rub(p).toLocaleString('ru')} ₽</b><span>${p.byn} BYN${p.ship==='warehouse'?'':' для РБ'}</span>`:'<b style="font-size:22px">Цена по запросу</b>'}</div>${p.kzt?`<div class="note">🇰🇿 Казахстан: ${p.kzt.toLocaleString('ru')} ₸</div>`:''}
