@@ -190,11 +190,15 @@ function prodView(){const p=P.find(x=>x.id===st.prod);if(!p){go('home');return}
  <div class="box"><h4>Доставка и оплата</h4>${p.ship==='warehouse'?'🚚 Бесплатная доставка в любую страну<br>🇧🇾🇷🇺 Беларусь и Россия — 4–10 дней<br>🇰🇿 Казахстан — 8–14 дней<br>🇷🇺 Оплата для России — через Сбербанк<br>🪙 Возможна оплата криптовалютой':'🚚 Бесплатная доставка по СНГ<br>🇧🇾 Беларусь — 2–5 дней, Белпочта / Европочта, оплата при получении<br>🇷🇺 Россия — 2–5 дней, только СДЭК, оплата через Сбербанк<br>🇰🇿 Казахстан — 8–14 дней<br>🪙 Возможна оплата криптовалютой<br>Для дальних регионов цена может немного отличаться'}<br><br><a href="https://t.me/sksbvwsis" style="color:var(--acc)">Последние отправки и отзывы →</a></div>
  <div style="height:80px"></div>
  <div class="fixed"><a class="btn btn-y" id="order" href="https://t.me/${MANAGER}?text=${encodeURIComponent(msg)}">Заказать в Telegram</a></div>`;
- $('#order').onclick=e=>{if(tg){e.preventDefault();tg.openTelegramLink(e.currentTarget.href)}};
+ $('#order').onclick=e=>{track('order',p);if(tg){e.preventDefault();tg.openTelegramLink(e.currentTarget.href)}};
  const cb=$('#chartBtn');if(cb)cb.onclick=()=>{$('#chart').classList.add('open')};
  const sl=$('#sl');if(sl)sl.onscroll=()=>{const i=Math.round(sl.scrollLeft/sl.clientWidth);document.querySelectorAll('.dots i').forEach((d,j)=>d.classList.toggle('on',i===j))}}
 function render(){header();st.page==='home'?home():st.page==='cat'?catView():prodView();window.scrollTo(0,0)}
-function go(page,extra={}){if(page!=='prod')st.prod=null;Object.assign(st,{page},extra);history.pushState(null,'');render()}
+// статистика (Яндекс Метрика): просмотры товаров и нажатия «Заказать»
+const YM=0; // номер счётчика Метрики
+if(YM){(function(m,e,t,r,i,k,a){m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};m[i].l=1*new Date();k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)})(window,document,'script','https://mc.yandex.ru/metrika/tag.js','ym');ym(YM,'init',{clickmap:true,trackLinks:true,accurateTrackBounce:true})}
+function track(kind,p){try{if(!YM||!window.ym||!p)return;const lbl=(kind==='view'?'👁 Просмотр':'🛒 Заказать')+' — '+p.title+' ('+p.size+')';ym(YM,'hit',location.origin+location.pathname+'#'+kind+'-'+p.id,{title:lbl});if(kind==='order')ym(YM,'reachGoal','order',{product:p.title})}catch(e){}}
+function go(page,extra={}){if(page==='prod')track('view',P.find(x=>x.id===extra.prod));if(page!=='prod')st.prod=null;Object.assign(st,{page},extra);history.pushState(null,'');render()}
 // фильтры
 function openF(){const base=P.filter(p=>p.cat===st.cat&&(st.auth==='all'||p.auth===st.auth));
  $('#fbody').innerHTML=FILTERS[st.cat].map(([k,t])=>{const v=vals(base,k);if(!v.length)return'';return`<div class="fgroup"><p>${t}</p><div class="opts">${v.map(x=>`<button class="chip ${(st.f[k]||[]).includes(x)?'on':''}" data-fk="${k}" data-fv="${esc(x)}">${esc(x)}</button>`).join('')}</div></div>`}).join('')+
