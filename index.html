@@ -246,11 +246,12 @@ function loadSaved(){try{FAV=JSON.parse(localStorage.getItem('ffs_fav')||'[]');C
 function cleanSaved(){if(!P.length)return;FAV=FAV.filter(id=>P.some(p=>p.id===id));CART=CART.filter(c=>P.some(p=>p.id===c.id));updIcons()}
 function updIcons(){const f=$('#favN'),c=$('#cartN');f.textContent=FAV.length;f.classList.toggle('hidden',!FAV.length);c.textContent=CART.length;c.classList.toggle('hidden',!CART.length);$('#favBtn').firstChild.textContent=FAV.length?'❤️':'🤍'}
 // ---- подбор размера по росту и весу ----
-const hasFit=()=>!!(PROF.h||PROF.w);
+const FIT_ON=false; // подбор размера по росту/весу: true — включить
+const hasFit=()=>FIT_ON&&!!(PROF.h||PROF.w);
 const rng=s=>String(s).split('–').map(Number);
 function recSize(p){if(!hasFit())return null;const t=CHART[p.version==='Игровая'?'pl':'fan'];const by=(v,k)=>{if(!v)return 0;const i=t.findIndex(r=>v<=rng(r[k])[1]);return i<0?t.length-1:i};return t[Math.max(by(+PROF.h,1),by(+PROF.w,2))][0]}
 function fitDiff(p){if(p.cat!=='jersey'||!hasFit())return null;const a=SIZE_ORDER.indexOf(p.size),b=SIZE_ORDER.indexOf(recSize(p));if(a<0||b<0)return null;return a-b}
-function fitBox(p){if(!hasFit())return `<div style="font-size:14px">Введи рост и вес — подскажем размер:</div><div class="fitin"><input id="hh" inputmode="numeric" placeholder="Рост, см"><input id="ww" inputmode="numeric" placeholder="Вес, кг"><button class="btn btn-y" id="fitgo">Подобрать</button></div><div style="height:8px"></div>`;
+function fitBox(p){if(!FIT_ON)return'';if(!hasFit())return `<div style="font-size:14px">Введи рост и вес — подскажем размер:</div><div class="fitin"><input id="hh" inputmode="numeric" placeholder="Рост, см"><input id="ww" inputmode="numeric" placeholder="Вес, кг"><button class="btn btn-y" id="fitgo">Подобрать</button></div><div style="height:8px"></div>`;
  const r=recSize(p),d=fitDiff(p);
  const v=d===0?'<span class="ok">✅ Этот размер тебе подходит</span>':d===1?'<span class="warn">Будет посвободнее, чем обычно</span>':d>1?'<span class="warn">⚠️ Скорее всего будет велика</span>':d===-1?'<span class="warn">⚠️ Будет в обтяжку или мала</span>':d<-1?'<span class="warn">❌ Скорее всего будет мала</span>':'';
  return `<div class="myfit">Твой рост ${PROF.h||'—'} см, вес ${PROF.w||'—'} кг <a href="#" id="fitedit">изменить</a><br>Тебе подойдёт: <b>${r}</b>${p.version==='Игровая'?' (с учётом плотной посадки игровой версии)':''}<br>${v}</div>`}
@@ -291,7 +292,7 @@ const FAQ=[
  ['Как оплатить?','🇧🇾 Беларусь — оплата при получении на почте.<br>🇷🇺 Россия — перевод на Сбербанк.<br>🇰🇿 Казахстан — перевод на Kaspi.<br>🪙 Из любой страны можно оплатить криптовалютой.<br>Товары «под заказ» — по предоплате.'],
  ['Сколько стоит и идёт доставка?','Доставка по СНГ бесплатная.<br>🇧🇾 Беларусь — 2–5 дней, Европочта или Белпочта.<br>🇷🇺 Россия — 2–5 дней, только СДЭК.<br>🇰🇿 Казахстан — 8–14 дней.<br>Оригинальные бутсы со склада: Беларусь и Россия 4–10 дней, Казахстан 8–14 дней.<br>Для дальних регионов цена может немного отличаться.'],
  ['Что значит «под заказ»?','Товара сейчас нет на руках: ты вносишь предоплату, мы заказываем, и примерно через 3–5 недель он приезжает и отправляется тебе.'],
- ['Как подобрать размер?','Открой любую джерси и введи рост и вес — приложение подскажет твой размер и покажет, подходит ли эта джерси. В каталоге появится кнопка «✅ Мой размер», чтобы видеть только подходящие. Если сомневаешься — напиши менеджеру, он пришлёт замеры конкретной джерси.'],
+ ['Как подобрать размер?','В карточке каждой джерси есть кнопка «Таблица размеров» — по ней можно ориентироваться по росту и весу. Игровая версия сидит плотнее, чем фанатская. Если сомневаешься — напиши менеджеру, он пришлёт замеры конкретной джерси.'],
  ['Игровая или фанатская версия — в чём разница?','<b>Игровая</b> — как у футболистов на поле: лёгкая дышащая ткань, сидит плотно по фигуре. Если ты между размерами — бери на размер больше.<br><b>Фанатская</b> — посадка свободнее, как у обычной футболки, бери свой размер.'],
  ['Оригинал или реплика — в чём разница?','<b>Оригинал</b> — товар бренда (Nike, Adidas, Puma), отправляется со склада.<br><b>Реплика</b> — качественная копия: те же цвета, эмблемы и спонсоры, но цена в разы ниже. На каждом товаре есть отметка «Оригинал» или «Реплика».'],
  ['Можно вернуть или обменять?','Возврата и обмена нет, поэтому перед заказом сверь размер. Если не уверен — спроси менеджера, он пришлёт замеры и поможет выбрать.'],
