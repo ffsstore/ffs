@@ -92,6 +92,18 @@ h2 small{font-size:13px;color:var(--mut);font-weight:600}
 .row{display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid #222228;font-size:14px}
 .row:last-child{border:0}.row span{color:var(--mut)}
 .fixed{position:fixed;left:0;right:0;bottom:0;max-width:560px;margin:0 auto;padding:12px 16px 18px;background:linear-gradient(180deg,rgba(11,11,13,0),#0b0b0d 30%);z-index:30}
+.icons{margin-left:auto;display:flex;gap:8px}
+.ic{position:relative;width:38px;height:38px;border-radius:12px;background:var(--card2);border:1px solid var(--line);display:grid;place-items:center;font-size:17px}
+.ic em{position:absolute;top:-5px;right:-5px;min-width:18px;height:18px;padding:0 5px;border-radius:9px;background:var(--acc);color:#000;font-style:normal;font-size:11px;font-weight:900;display:grid;place-items:center}
+.heart{position:absolute;top:6px;right:6px;z-index:2;width:34px;height:34px;border-radius:50%;background:rgba(0,0,0,.55);display:grid;place-items:center;font-size:16px;line-height:1}
+.fixed .row3{display:flex;gap:8px}.fixed .row3 .sq{flex:none;width:52px;font-size:20px;padding:12px 0}
+.szpick{display:flex;flex-wrap:wrap;gap:8px;margin:4px 0 12px}.szpick p{width:100%;font-size:13px;color:var(--mut);font-weight:600}
+.cl{display:flex;gap:12px;align-items:center;background:var(--card);border:1px solid #1d1d22;border-radius:16px;padding:10px;margin-bottom:10px}
+.cl .im{position:relative;flex:none;width:76px;height:76px;border-radius:12px;overflow:hidden;background:#121215}.cl .im img{width:100%;height:100%;object-fit:cover}.cl .im svg{width:100%;height:100%}
+.cl .tx{flex:1;min-width:0;text-align:left}.cl .tx b{display:block;font-size:14px;line-height:1.25}.cl .tx span{display:block;font-size:12px;color:var(--mut);margin-top:3px}.cl .tx i{display:block;font-style:normal;font-weight:900;margin-top:5px}
+.cl .rm{flex:none;width:34px;height:34px;border-radius:10px;background:var(--card2);color:var(--mut);font-size:15px}
+.total{display:flex;justify-content:space-between;align-items:baseline;margin:6px 2px 4px;font-size:15px;color:var(--mut);font-weight:700}.total b{color:var(--txt);font-size:24px;font-weight:900}
+.toast{position:fixed;left:50%;bottom:96px;transform:translateX(-50%) translateY(20px);background:#26262c;border:1px solid var(--line);padding:10px 16px;border-radius:12px;font-size:14px;font-weight:700;opacity:0;transition:.25s;z-index:60;pointer-events:none;white-space:nowrap}.toast.on{opacity:1;transform:translateX(-50%)}
 .hidden{display:none!important}
 .fit{background:#0f2a1c;border:1px solid #1f5a3a;border-radius:12px;padding:12px;margin-bottom:10px}.fit>b{display:block;margin-bottom:6px}.fitrow{display:flex;justify-content:space-between;font-size:14px;padding:3px 0}.fitrow span{color:var(--mut)}.fitrec{margin-top:8px;font-size:13.5px;color:#cfe9d8}
 .modal{position:fixed;inset:0;background:rgba(0,0,0,.85);z-index:60;display:none;align-items:center;justify-content:center;padding:16px}.modal.open{display:flex}.modal img{max-width:100%;max-height:85vh;border-radius:14px}.modal button{position:absolute;top:14px;right:14px;width:40px;height:40px;border-radius:50%;background:#222;font-size:20px}
@@ -103,10 +115,12 @@ h2 small{font-size:13px;color:var(--mut);font-weight:600}
     <button class="back hidden" id="back" aria-label="Назад">←</button>
     <img class="logo" id="logo" src="img/logo.jpg" alt="FFS">
     <div><b id="ttl">FootballFitStore</b><span id="sub">Джерси · Бутсы · Мячи</span></div>
+    <div class="icons"><button class="ic" id="favBtn" aria-label="Избранное">🤍<em id="favN" class="hidden"></em></button><button class="ic" id="cartBtn" aria-label="Корзина">🛒<em id="cartN" class="hidden"></em></button></div>
   </div>
   <div class="search"><span>🔍</span><input id="q" placeholder="Клуб, игрок, бренд…" autocomplete="off"></div>
 </div>
 <main class="wrap" id="view"></main>
+<div class="toast" id="toast"></div>
 
 <div class="modal" id="chart"><img src="img/size_chart.jpg" alt="Таблица размеров"><button id="chartX">✕</button></div>
 <div class="sheet-bg" id="sbg"></div>
@@ -148,7 +162,7 @@ function shirt(p){const [a,b,c]=p.shirt;return `<svg viewBox="0 0 200 200"><path
 const pic=p=>p.photos&&p.photos.length?`<img src="${p.photos[0]}" alt="${esc(p.title)}" loading="lazy">`:shirt(p);
 const gallery=p=>p.photos&&p.photos.length?`<div class="slides" id="sl">${p.photos.map(u=>`<img src="${u}" alt="">`).join('')}</div>${p.photos.length>1?`<div class="dots">${p.photos.map((_,i)=>`<i class="${i?'':'on'}"></i>`).join('')}</div>`:''}`:shirt(p);
 const badge=p=>`<span class="badge ${p.auth==='original'?'b-orig':'b-rep'}">${p.auth==='original'?'Оригинал':'Реплика'}</span>`+(p.stock&&p.stock!=='В наличии'?`<span class="b-ord">${esc(p.stock)}</span>`:'');
-const card=p=>`<button class="item" data-id="${p.id}"><div class="ph" style="--glow:${p.glow||'#333'}">${pic(p)}${badge(p)}</div><div class="info"><b>${esc(p.title)}</b><div class="sz">Размер: ${esc(p.size)}</div><div class="pr">${priceTxt(p)}</div></div></button>`;
+const card=p=>`<button class="item" data-id="${p.id}"><div class="ph" style="--glow:${p.glow||'#333'}">${pic(p)}${badge(p)}<span class="heart" data-fav="${p.id}">${isFav(p.id)?'❤️':'🤍'}</span></div><div class="info"><b>${esc(p.title)}</b><div class="sz">Размер: ${esc(p.size)}</div><div class="pr">${priceTxt(p)}</div></div></button>`;
 const CHART={fan:[['S','160–170','50–60',50],['M','170–176','60–68',52],['L','176–182','68–78',54],['XL','182–188','78–88',56],['2XL','188–195','88–100',59]],
  pl:[['S','160–170','50–57',46],['M','170–176','57–65',48],['L','176–182','65–74',50],['XL','182–188','74–84',52],['2XL','188–195','84–94',54]]};
 function fit(p){if(!p.w)return'';const t=CHART[p.version==='Игровая'?'pl':'fan'];let best=t[0];for(const r of t)if(Math.abs(r[3]-p.w)<Math.abs(best[3]-p.w))best=r;
@@ -156,7 +170,10 @@ function fit(p){if(!p.w)return'';const t=CHART[p.version==='Игровая'?'pl'
 function header(){const home=st.page==='home';$('#back').classList.toggle('hidden',home);$('#logo').classList.toggle('hidden',!home);
  if(home){$('#ttl').textContent='FootballFitStore';$('#sub').textContent='Джерси · Бутсы · Мячи'}
  else if(st.page==='cat'){$('#ttl').textContent=CATS.find(c=>c.id===st.cat).name;$('#sub').textContent='FootballFitStore'}
+ else if(st.page==='cart'){$('#ttl').textContent='Корзина';$('#sub').textContent='FootballFitStore'}
+ else if(st.page==='fav'){$('#ttl').textContent='Избранное';$('#sub').textContent='FootballFitStore'}
  else {$('#ttl').textContent='Товар';$('#sub').textContent='FootballFitStore'}
+ updIcons();
  if(tg){st.page==='home'?tg.BackButton.hide():tg.BackButton.show()}}
 function match(p){const q=st.q.trim().toLowerCase();if(!q)return true;return [p.title,p.club,p.brand,p.model,p.league].join(' ').toLowerCase().includes(q)}
 function home(){
@@ -179,26 +196,55 @@ function catView(){const r=filtered();const nf=Object.values(st.f).reduce((a,v)=
  <div class="count">Найдено: ${r.length}</div>`+(r.length?`<div class="grid">${r.map(card).join('')}</div>`:`<div class="empty"><b>${P.some(p=>p.cat===st.cat)?'Ничего не подошло':'Скоро в продаже'}</b>Напиши менеджеру — подберём или привезём под заказ<br><br><a class="btn btn-y" href="https://t.me/${MANAGER}">Написать @${MANAGER}</a></div>`)}
 function prodView(){const p=P.find(x=>x.id===st.prod);if(!p){go('home');return}
  const rows=FILTERS[p.cat].filter(([k])=>p[k]&&k!=='stock').map(([k,t])=>`<div class="row"><span>${t}</span><b>${esc(p[k])}</b></div>`).join('');
- const msg=`Здравствуйте! Хочу заказать: ${p.title}, размер ${p.size}${p.byn?`, ${p.byn} BYN`:''}`;
+ const msg=`Здравствуйте! Хочу заказать: ${p.title}, размер ${st.size||p.size}${p.byn?`, ${p.byn} BYN`:''}`;
  view.innerHTML=`<div class="gal" style="--glow:${p.glow||'#333'}">${gallery(p)}${badge(p)}</div>
  <div class="pt">${esc(p.title)}</div>
  <div class="tags"><span class="tag">${p.auth==='original'?'✅ Оригинал':'Реплика'}</span><span class="tag">${esc(p.stock)}</span>${p.sleeve==='Длинный'?'<span class="tag">Длинный рукав</span>':''}${p.version==='Игровая'?'<span class="tag">Игровая версия</span>':''}${p.state==='Б/у'?'<span class="tag">Б/у</span>':''}</div>
  <div class="pp">${p.byn?`<b>${rub(p).toLocaleString('ru')} ₽</b><span>${p.byn} BYN${p.ship==='warehouse'?'':' для РБ'}</span>`:'<b style="font-size:22px">Цена по запросу</b>'}</div>${p.kzt?`<div class="note">🇰🇿 Казахстан: ${p.kzt.toLocaleString('ru')} ₸</div>`:''}
  <div class="note">${p.ship==='warehouse'?'Со склада, бесплатная доставка':p.stock==='Скоро в наличии'?'Скоро в наличии — можно забронировать заранее':p.stock==='Под заказ'?'Под заказ: предоплата, срок 3–5 недель':'В наличии · 1 шт'}</div>
+ ${sizesOf(p).length>1?`<div class="szpick" id="szpick"><p>Выбери размер:</p>${sizesOf(p).map(z=>`<button class="chip ${st.size===z?'on':''}" data-pick="${esc(z)}">${esc(z)}</button>`).join('')}</div>`:''}
  <div class="box">${rows}</div>
  ${p.cat==='jersey'?`<div class="box"><h4>Как подобрать размер</h4>${fit(p)}${p.version==='Игровая'?'Игровая версия сидит плотно — если сомневаешься, бери на размер больше.<br>':''}${p.w?'Сравни с шириной своей футболки от подмышки до подмышки.':'Общая таблица — ориентир, у разных клубов сетка отличается. Точные замеры этой джерси спроси у менеджера.'}<br><button class="btn btn-g" id="chartBtn" style="margin-top:12px">Таблица размеров</button></div>`:''}
  <div class="box"><h4>Доставка и оплата</h4>${p.ship==='warehouse'?'🚚 Бесплатная доставка в любую страну<br>🇧🇾🇷🇺 Беларусь и Россия — 4–10 дней<br>🇰🇿 Казахстан — 8–14 дней<br>🇷🇺 Оплата для России — через Сбербанк<br>🪙 Возможна оплата криптовалютой':'🚚 Бесплатная доставка по СНГ<br>🇧🇾 Беларусь — 2–5 дней, Белпочта / Европочта, оплата при получении<br>🇷🇺 Россия — 2–5 дней, только СДЭК, оплата через Сбербанк<br>🇰🇿 Казахстан — 8–14 дней<br>🪙 Возможна оплата криптовалютой<br>Для дальних регионов цена может немного отличаться'}<br><br><a href="https://t.me/sksbvwsis" style="color:var(--acc)">Последние отправки и отзывы →</a></div>
  <div style="height:80px"></div>
- <div class="fixed"><a class="btn btn-y" id="order" href="https://t.me/${MANAGER}?text=${encodeURIComponent(msg)}">Заказать в Telegram</a></div>`;
- $('#order').onclick=e=>{track('order',p);if(tg){e.preventDefault();tg.openTelegramLink(e.currentTarget.href)}};
+ <div class="fixed"><div class="row3"><button class="btn btn-g sq" id="pfav">${isFav(p.id)?'❤️':'🤍'}</button><button class="btn btn-g" id="pcart">${inCart(p.id)?'В корзине ✓':'В корзину'}</button><a class="btn btn-y" id="order" href="https://t.me/${MANAGER}?text=${encodeURIComponent(msg)}">Заказать</a></div></div>`;
+ $('#pfav').onclick=()=>{toggleFav(p);$('#pfav').textContent=isFav(p.id)?'❤️':'🤍'};
+ $('#pcart').onclick=()=>{if(inCart(p.id)){go('cart');return}const z=sizesOf(p);if(z.length>1&&!st.size){toast('Сначала выбери размер');$('#szpick').scrollIntoView({behavior:'smooth',block:'center'});return}
+  addCart(p,z.length>1?st.size:p.size);$('#pcart').textContent='В корзине ✓'};
+ document.querySelectorAll('[data-pick]').forEach(b=>b.onclick=()=>{st.size=b.dataset.pick;document.querySelectorAll('[data-pick]').forEach(x=>x.classList.toggle('on',x===b))});
+ $('#order').onclick=e=>{const z=sizesOf(p);if(z.length>1&&!st.size){e.preventDefault();toast('Сначала выбери размер');$('#szpick').scrollIntoView({behavior:'smooth',block:'center'});return}track('order',p);if(tg){e.preventDefault();tg.openTelegramLink(e.currentTarget.href)}};
  const cb=$('#chartBtn');if(cb)cb.onclick=()=>{$('#chart').classList.add('open')};
  const sl=$('#sl');if(sl)sl.onscroll=()=>{const i=Math.round(sl.scrollLeft/sl.clientWidth);document.querySelectorAll('.dots i').forEach((d,j)=>d.classList.toggle('on',i===j))}}
-function render(){header();st.page==='home'?home():st.page==='cat'?catView():prodView();window.scrollTo(0,0)}
+function render(){header();st.page==='home'?home():st.page==='cat'?catView():st.page==='cart'?cartView():st.page==='fav'?favView():prodView();window.scrollTo(0,0)}
+// ---- избранное и корзина (хранятся у покупателя: в Telegram CloudStorage + в браузере) ----
+let FAV=[],CART=[];
+const sizesOf=p=>String(p.size||'').split('/').map(x=>x.trim()).filter(Boolean);
+const isFav=id=>FAV.includes(id), inCart=id=>CART.some(c=>c.id===id);
+const cloud=tg&&tg.CloudStorage&&tg.isVersionAtLeast&&tg.isVersionAtLeast('6.9')?tg.CloudStorage:null;
+function save(){const f=JSON.stringify(FAV),c=JSON.stringify(CART);try{localStorage.setItem('ffs_fav',f);localStorage.setItem('ffs_cart',c)}catch(e){}if(cloud){try{cloud.setItem('fav',f);cloud.setItem('cart',c)}catch(e){}}updIcons()}
+function loadSaved(){try{FAV=JSON.parse(localStorage.getItem('ffs_fav')||'[]');CART=JSON.parse(localStorage.getItem('ffs_cart')||'[]')}catch(e){}
+ if(cloud){try{cloud.getItems(['fav','cart'],(err,v)=>{if(err||!v)return;try{if(v.fav)FAV=[...new Set([...FAV,...JSON.parse(v.fav)])];if(v.cart){for(const c of JSON.parse(v.cart))if(!inCart(c.id))CART.push(c)}}catch(e){}cleanSaved();if(st.page==='cart'||st.page==='fav')render();else{updIcons();if(st.page!=='prod')render()}})}catch(e){}}}
+function cleanSaved(){if(!P.length)return;FAV=FAV.filter(id=>P.some(p=>p.id===id));CART=CART.filter(c=>P.some(p=>p.id===c.id));updIcons()}
+function updIcons(){const f=$('#favN'),c=$('#cartN');f.textContent=FAV.length;f.classList.toggle('hidden',!FAV.length);c.textContent=CART.length;c.classList.toggle('hidden',!CART.length);$('#favBtn').firstChild.textContent=FAV.length?'❤️':'🤍'}
+let tt;function toast(t){const e=$('#toast');e.textContent=t;e.classList.add('on');clearTimeout(tt);tt=setTimeout(()=>e.classList.remove('on'),1600);try{tg&&tg.HapticFeedback.impactOccurred('light')}catch(e){}}
+function toggleFav(p){if(isFav(p.id)){FAV=FAV.filter(x=>x!==p.id);toast('Убрано из избранного')}else{FAV.unshift(p.id);track('fav',p);toast('❤️ Добавлено в избранное')}save()}
+function addCart(p,size){if(inCart(p.id))return;CART.push({id:p.id,size});track('cart',p);save();toast('🛒 Добавлено в корзину')}
+function favView(){const r=FAV.map(id=>P.find(p=>p.id===id)).filter(Boolean);
+ view.innerHTML=r.length?`<div class="count">${r.length} шт.</div><div class="grid">${r.map(card).join('')}</div>`:`<div class="empty"><b>Пока пусто</b>Нажми 🤍 на товаре, чтобы сохранить его сюда</div>`}
+function cartView(){const r=CART.map(c=>({c,p:P.find(p=>p.id===c.id)})).filter(x=>x.p);
+ if(!r.length){view.innerHTML=`<div class="empty"><b>Корзина пуста</b>Добавь товары кнопкой «В корзину»</div>`;return}
+ const byn=r.reduce((a,x)=>a+(x.p.byn||0),0),rb=r.reduce((a,x)=>a+(x.p.byn?rub(x.p):0),0),ask=r.some(x=>!x.p.byn);
+ const msg='Здравствуйте! Хочу заказать:\n'+r.map((x,i)=>`${i+1}. ${x.p.title}, размер ${x.c.size}${x.p.byn?`, ${x.p.byn} BYN / ${rub(x.p)} ₽`:''}`).join('\n')+(byn?`\nИтого: ${byn} BYN / ${rb.toLocaleString('ru')} ₽`:'');
+ view.innerHTML=r.map(({c,p})=>`<div class="cl"><button class="im" data-id="${p.id}">${p.photos&&p.photos.length?`<img src="${p.photos[0]}" alt="">`:shirt(p)}</button><div class="tx"><b>${esc(p.title)}</b><span>Размер: ${esc(c.size)}${p.auth==='original'?' · Оригинал':''}</span><i>${p.byn?`${rub(p).toLocaleString('ru')} ₽ / ${p.byn} BYN`:'Цена по запросу'}</i></div><button class="rm" data-rm="${p.id}">✕</button></div>`).join('')+
+ `<div class="box"><div class="total"><span>Итого, ${r.length} шт.</span><b>${byn?`${rb.toLocaleString('ru')} ₽`:'—'}</b></div>${byn?`<div class="total" style="margin-top:0"><span></span><span>${byn} BYN${ask?' + товары с ценой по запросу':''}</span></div>`:''}<div style="font-size:13px;color:var(--mut);margin-top:6px">Нажми «Оформить заказ» — откроется чат с менеджером, список товаров уже будет в сообщении.</div></div>
+ <div style="height:90px"></div><div class="fixed"><a class="btn btn-y" id="checkout" href="https://t.me/${MANAGER}?text=${encodeURIComponent(msg)}">Оформить заказ · ${r.length} шт.</a></div>`;
+ $('#checkout').onclick=e=>{r.forEach(x=>track('order',x.p));if(tg){e.preventDefault();tg.openTelegramLink(e.currentTarget.href)}}}
 // статистика (Яндекс Метрика): просмотры товаров и нажатия «Заказать»
 const YM=0; // номер счётчика Метрики
 if(YM){(function(m,e,t,r,i,k,a){m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};m[i].l=1*new Date();k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)})(window,document,'script','https://mc.yandex.ru/metrika/tag.js','ym');ym(YM,'init',{clickmap:true,trackLinks:true,accurateTrackBounce:true})}
-function track(kind,p){try{if(!YM||!window.ym||!p)return;const lbl=(kind==='view'?'👁 Просмотр':'🛒 Заказать')+' — '+p.title+' ('+p.size+')';ym(YM,'hit',location.origin+location.pathname+'#'+kind+'-'+p.id,{title:lbl});if(kind==='order')ym(YM,'reachGoal','order',{product:p.title})}catch(e){}}
-function go(page,extra={}){if(page==='prod')track('view',P.find(x=>x.id===extra.prod));if(page!=='prod')st.prod=null;Object.assign(st,{page},extra);history.pushState(null,'');render()}
+function track(kind,p){try{if(!YM||!window.ym||!p)return;const lbl={view:'👁 Просмотр',cart:'🛒 В корзину',fav:'❤️ В избранное',order:'✅ Заказать'}[kind]+' — '+p.title+' ('+p.size+')';ym(YM,'hit',location.origin+location.pathname+'#'+kind+'-'+p.id,{title:lbl});if(kind==='order')ym(YM,'reachGoal','order',{product:p.title})}catch(e){}}
+const HIST=[];
+function go(page,extra={}){if(page===st.page&&page!=='prod'&&page!=='cat')return;HIST.push({page:st.page,cat:st.cat,prod:st.prod});st.size=null;if(page==='prod')track('view',P.find(x=>x.id===extra.prod));if(page!=='prod')st.prod=null;Object.assign(st,{page},extra);history.pushState(null,'');render()}
 // фильтры
 function openF(){const base=P.filter(p=>p.cat===st.cat&&(st.auth==='all'||p.auth===st.auth));
  $('#fbody').innerHTML=FILTERS[st.cat].map(([k,t])=>{const v=vals(base,k);if(!v.length)return'';return`<div class="fgroup"><p>${t}</p><div class="opts">${v.map(x=>`<button class="chip ${(st.f[k]||[]).includes(x)?'on':''}" data-fk="${k}" data-fv="${esc(x)}">${esc(x)}</button>`).join('')}</div></div>`}).join('')+
@@ -209,14 +255,16 @@ $('#fbody').onclick=e=>{const b=e.target.closest('[data-fk]');if(!b)return;b.cla
 $('#fapply').onclick=()=>{st.f={};document.querySelectorAll('#fbody .chip.on').forEach(b=>{(st.f[b.dataset.fk]??=[]).push(b.dataset.fv)});st.pmin=$('#pmin').value;st.pmax=$('#pmax').value;closeF();render()};
 $('#freset').onclick=()=>{st.f={};st.pmin=st.pmax='';closeF();render()};
 $('#sbg').onclick=closeF;$('#chart').onclick=()=>$('#chart').classList.remove('open');
-view.onclick=e=>{const t=e.target.closest('button');if(!t)return;
+view.onclick=e=>{const hf=e.target.closest('[data-fav]');if(hf){e.stopPropagation();const p=P.find(x=>x.id===+hf.dataset.fav);if(p){toggleFav(p);if(st.page==='fav')render();else hf.textContent=isFav(p.id)?'❤️':'🤍'}return}
+ const rm=e.target.closest('[data-rm]');if(rm){CART=CART.filter(c=>c.id!==+rm.dataset.rm);save();render();return}
+ const t=e.target.closest('button');if(!t)return;
  if(t.dataset.cat){go('cat',{cat:t.dataset.cat,auth:'all',f:{},pmin:'',pmax:'',sort:'new'})}
  else if(t.dataset.id){go('prod',{prod:+t.dataset.id})}
  else if(t.dataset.auth){st.auth=t.dataset.auth;st.f={};render()}
  else if(t.dataset.sort){st.sort=st.sort===t.dataset.sort?'new':t.dataset.sort;render()}
  else if(t.id==='fopen')openF()};
-const back=()=>{closeF();if(st.page==='prod'&&st.cat)st.page='cat';else st.page='home';render()};
-$('#back').onclick=back; if(tg)tg.BackButton.onClick(back);
+const back=()=>{closeF();st.size=null;const h=HIST.pop();if(h)Object.assign(st,h);else st.page='home';render()};
+$('#back').onclick=back;$('#favBtn').onclick=()=>go('fav');$('#cartBtn').onclick=()=>go('cart'); if(tg)tg.BackButton.onClick(back);
 window.onpopstate=()=>{if(st.page!=='home')back()};
 let qt;$('#q').oninput=e=>{clearTimeout(qt);qt=setTimeout(()=>{st.q=e.target.value;if(st.page==='prod')st.page=st.cat?'cat':'home';render()},150)};
 // ---- загрузка товаров из Google Таблицы ----
@@ -227,8 +275,8 @@ const PHOTO_BASE='img/';
 async function loadSheet(){try{const t=await (await fetch(SHEET_CSV,{cache:'no-store'})).text();const rows=parseCSV(t);const head=rows.shift().map(h=>COLS[h.trim().toLowerCase()]||h);
  P=rows.map((r,i)=>{const o={};head.forEach((h,j)=>o[h]=(r[j]||'').trim());o.id=i+1;o.added=i+1;o.cat=CATMAP[o.cat.toLowerCase()]||o.cat;o.auth=/ориг/i.test(o.auth)?'original':'replica';o.byn=+o.byn||0;o.w=parseFloat(String(o.w).replace(',','.'))||0;o.l=parseFloat(String(o.l).replace(',','.'))||0;o.rub=+o.rub||0;o.kzt=+o.kzt||0;o.ship=/склад/i.test(o.ship)?'warehouse':'';o.photos=o.photos?o.photos.split(/[\s,;]+/).filter(Boolean).map(u=>/^https?:/.test(u)?u:PHOTO_BASE+u):[];if(!o.photos.length)o.shirt=['#3a3a44','#26262c','#fff'];return o}).filter(o=>o.title&&!/^нет$/i.test(o.show||''));
 }catch(e){console.error(e)}render()}
-async function loadProducts(){try{const r=await fetch('products.json?t='+Date.now(),{cache:'no-store'});P=await r.json();P.forEach((p,i)=>{if(p.added==null)p.added=P.length-i})}catch(e){console.error(e)}render()}
-if(SHEET_CSV)loadSheet();else{render();loadProducts();}
+async function loadProducts(){try{const r=await fetch('products.json?t='+Date.now(),{cache:'no-store'});P=await r.json();P.forEach((p,i)=>{if(p.added==null)p.added=P.length-i})}catch(e){console.error(e)}cleanSaved();render()}
+loadSaved();if(SHEET_CSV)loadSheet();else{render();loadProducts();}
 </script>
 </body>
 </html>
