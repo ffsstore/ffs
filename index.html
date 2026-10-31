@@ -4,6 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
 <title>FootballFitStore</title>
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <script src="https://telegram.org/js/telegram-web-app.js"></script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
@@ -132,19 +133,7 @@ const FILTERS={
 const SIZE_ORDER=['XS','S','M','L','XL','2XL','3XL'];
 // ======= ДЕМО-ТОВАРЫ (потом будут из Google Таблицы) =======
 const J=(c1,c2,c3)=>({shirt:[c1,c2,c3||'#ffffff']});
-let P=[
- {id:23,cat:'jersey',auth:'replica',title:'Манчестер Сити 13/14 домашняя · игровая',club:'Манчестер Сити',league:'АПЛ',era:'Ретро',named:'Без фамилии',sleeve:'Короткий',version:'Игровая',size:'S',byn:65,rub:2190,stock:'В наличии',photos:['img/mci1314_1.jpg','img/mci1314_2.jpg','img/mci1314_3.jpg','img/mci1314_4.jpg','img/mci1314_5.jpg','img/mci1314_6.jpg','img/mci1314_7.jpg']},
- {id:22,cat:'jersey',auth:'replica',title:'Милан 23/24 × Pleasures Тео 19 · игровая',club:'Милан',league:'Серия А',era:'Современные',named:'С фамилией',sleeve:'Короткий',version:'Игровая',size:'S',byn:80,rub:2790,stock:'В наличии',photos:['img/mil2324_1.jpg','img/mil2324_2.jpg','img/mil2324_3.jpg','img/mil2324_4.jpg','img/mil2324_5.jpg','img/mil2324_6.jpg','img/mil2324_7.jpg']},
- {id:20,cat:'jersey',auth:'replica',title:'Бавария 19/20 третья · Лига Чемпионов',club:'Бавария',league:'Бундеслига',era:'Ретро',named:'Без фамилии',sleeve:'Короткий',version:'Фанатская',size:'XL',byn:75,rub:2590,stock:'В наличии',photos:['img/bay1920_1.jpg','img/bay1920_2.jpg','img/bay1920_3.jpg','img/bay1920_4.jpg','img/bay1920_5.jpg','img/bay1920_6.jpg']},
- {id:21,cat:'jersey',auth:'replica',title:'Ювентус 19/20 Де Лигт 4',club:'Ювентус',league:'Серия А',era:'Ретро',named:'С фамилией',sleeve:'Короткий',version:'Фанатская',size:'S',byn:70,rub:2490,stock:'В наличии',photos:['img/juv1920_2.jpg','img/juv1920_1.jpg','img/juv1920_3.jpg','img/juv1920_4.jpg','img/juv1920_5.jpg','img/juv1920_6.jpg']},
- {id:10,cat:'boots',auth:'original',title:'Adidas F50 HyperFast Elite FG',brand:'Adidas',model:'F50',size:'41 (26 см)',surface:'FG',state:'Новые',byn:650,rub:18790,kzt:105000,stock:'Со склада',ship:'warehouse',photos:['img/f50hf_1.jpg','img/f50hf_2.jpg','img/f50hf_3.jpg','img/f50hf_4.jpg','img/f50hf_5.jpg','img/f50hf_6.jpg','img/f50hf_7.jpg']},
- {id:11,cat:'boots',auth:'original',title:'Adidas F50 Messi',brand:'Adidas',model:'F50',size:'уточняйте',surface:'FG',state:'Новые',byn:0,stock:'В наличии',photos:['img/b_66b7f59d.jpg']},
- {id:12,cat:'boots',auth:'original',title:'Puma Ultra',brand:'Puma',model:'Ultra',size:'уточняйте',surface:'FG',state:'Новые',byn:0,stock:'В наличии',photos:['img/b_114a22e8.jpg']},
- {id:13,cat:'boots',auth:'original',title:'Nike × Jordan',brand:'Nike',model:'Jordan',size:'уточняйте',surface:'FG',state:'Новые',byn:0,stock:'В наличии',photos:['img/b_b6ae40de.jpg']},
- {id:14,cat:'boots',auth:'original',title:'Adidas Predator',brand:'Adidas',model:'Predator',size:'уточняйте',surface:'FG',state:'Б/у',byn:0,stock:'В наличии',photos:['img/b_1e761445.jpg']},
- {id:15,cat:'boots',auth:'original',title:'Adidas X',brand:'Adidas',model:'X',size:'уточняйте',surface:'FG',state:'Б/у',byn:0,stock:'В наличии',photos:['img/b_3555eb18.jpg']},
- {id:16,cat:'boots',auth:'original',title:'Nike Phantom',brand:'Nike',model:'Phantom',size:'уточняйте',surface:'FG',state:'Б/у',byn:0,stock:'В наличии',photos:['img/b_bb5fe63a.jpg']}
-];
+let P=[];
 P.forEach((p,i)=>p.added=P.length-i);
 // Google Таблица: вставь сюда ссылку «Опубликовать в интернете → CSV». Пусто = демо-товары.
 const SHEET_CSV='';
@@ -234,7 +223,8 @@ const PHOTO_BASE='img/';
 async function loadSheet(){try{const t=await (await fetch(SHEET_CSV,{cache:'no-store'})).text();const rows=parseCSV(t);const head=rows.shift().map(h=>COLS[h.trim().toLowerCase()]||h);
  P=rows.map((r,i)=>{const o={};head.forEach((h,j)=>o[h]=(r[j]||'').trim());o.id=i+1;o.added=i+1;o.cat=CATMAP[o.cat.toLowerCase()]||o.cat;o.auth=/ориг/i.test(o.auth)?'original':'replica';o.byn=+o.byn||0;o.w=parseFloat(String(o.w).replace(',','.'))||0;o.l=parseFloat(String(o.l).replace(',','.'))||0;o.rub=+o.rub||0;o.kzt=+o.kzt||0;o.ship=/склад/i.test(o.ship)?'warehouse':'';o.photos=o.photos?o.photos.split(/[\s,;]+/).filter(Boolean).map(u=>/^https?:/.test(u)?u:PHOTO_BASE+u):[];if(!o.photos.length)o.shirt=['#3a3a44','#26262c','#fff'];return o}).filter(o=>o.title&&!/^нет$/i.test(o.show||''));
 }catch(e){console.error(e)}render()}
-if(SHEET_CSV)loadSheet();else render();
+async function loadProducts(){try{const r=await fetch('products.json?t='+Date.now(),{cache:'no-store'});P=await r.json();P.forEach((p,i)=>{if(p.added==null)p.added=P.length-i})}catch(e){console.error(e)}render()}
+if(SHEET_CSV)loadSheet();else{render();loadProducts();}
 </script>
 </body>
 </html>
