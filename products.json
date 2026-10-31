@@ -1,5 +1,47 @@
 [
  {
+  "id": 26,
+  "cat": "jersey",
+  "auth": "replica",
+  "title": "Бавария 16/17 домашняя · игровая",
+  "club": "Бавария",
+  "league": "Бундеслига",
+  "era": "Ретро",
+  "named": "Без фамилии",
+  "sleeve": "Короткий",
+  "version": "Игровая",
+  "size": "XL",
+  "byn": 55,
+  "rub": 2190,
+  "stock": "В наличии",
+  "photos": [
+   "img/bay1617_1.jpg",
+   "img/bay1617_2.jpg",
+   "img/bay1617_3.jpg"
+  ]
+ },
+ {
+  "id": 25,
+  "cat": "jersey",
+  "auth": "replica",
+  "title": "Ювентус 22/23 гостевая · игровая",
+  "club": "Ювентус",
+  "league": "Серия А",
+  "era": "Современные",
+  "named": "Без фамилии",
+  "sleeve": "Короткий",
+  "version": "Игровая",
+  "size": "M",
+  "byn": 70,
+  "rub": 2490,
+  "stock": "В наличии",
+  "photos": [
+   "img/juv2223_1.jpg",
+   "img/juv2223_2.jpg",
+   "img/juv2223_3.jpg"
+  ]
+ },
+ {
   "id": 24,
   "cat": "jersey",
   "auth": "replica",
