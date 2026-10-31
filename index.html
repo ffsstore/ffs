@@ -320,7 +320,7 @@ function cartView(){const r=CART.map(c=>({c,p:P.find(p=>p.id===c.id)})).filter(x
  <div style="height:90px"></div><div class="fixed"><button class="btn btn-y" id="checkout">Оформить заказ · ${r.length} шт.</button></div>`;
  $('#checkout').onclick=()=>go('checkout',{buy:null})}
 // статистика (Яндекс Метрика): просмотры товаров и нажатия «Заказать»
-const YM=0; // номер счётчика Метрики
+const YM=113965941; // номер счётчика Метрики
 if(YM){(function(m,e,t,r,i,k,a){m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};m[i].l=1*new Date();k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)})(window,document,'script','https://mc.yandex.ru/metrika/tag.js','ym');ym(YM,'init',{clickmap:true,trackLinks:true,accurateTrackBounce:true})}
 function track(kind,p){try{if(!YM||!window.ym||!p)return;const lbl={view:'👁 Просмотр',cart:'🛒 В корзину',fav:'❤️ В избранное',order:'✅ Заказать'}[kind]+' — '+p.title+' ('+p.size+')';ym(YM,'hit',location.origin+location.pathname+'#'+kind+'-'+p.id,{title:lbl});if(kind==='order')ym(YM,'reachGoal','order',{product:p.title})}catch(e){}}
 const HIST=[];
