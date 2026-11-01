@@ -1,5 +1,25 @@
 [
  {
+  "id": 27,
+  "cat": "jersey",
+  "auth": "replica",
+  "title": "Манчестер Юнайтед 11/12 гостевая Пак 13",
+  "club": "Манчестер Юнайтед",
+  "league": "АПЛ",
+  "era": "Ретро",
+  "named": "С фамилией",
+  "sleeve": "Короткий",
+  "version": "Фанатская",
+  "size": "S / M / L / XL / 2XL",
+  "byn": 102,
+  "stock": "Под заказ",
+  "sup": true,
+  "photos": [
+   "img/mun1112_1.jpg",
+   "img/mun1112_2.jpg"
+  ]
+ },
+ {
   "id": 26,
   "cat": "jersey",
   "auth": "replica",
