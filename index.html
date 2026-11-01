@@ -170,7 +170,7 @@ const tg=window.Telegram&&Telegram.WebApp; if(tg){tg.ready();tg.expand();try{tg.
 const $=s=>document.querySelector(s), view=$('#view');
 let st={page:'home',cat:null,auth:'all',f:{},pmin:'',pmax:'',sort:'new',q:'',prod:null};
 const esc=s=>String(s??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
-const rub=p=>p.rub||Math.ceil((p.byn+20)*RUB/10)*10; // +20 BYN доставка для РФ, округление вверх до 10 ₽
+const rub=p=>p.rub||Math.ceil((p.byn+(p.stock==='Под заказ'?0:20))*RUB/10)*10; // под заказ: доставка уже в цене; иначе +20 BYN для РФ. Округление вверх до 10 ₽
 const priceTxt=p=>p.byn?`${rub(p).toLocaleString('ru')} ₽<i>/ ${p.byn} BYN</i>`:`Цена по запросу`;
 function shirt(p){const [a,b,c]=p.shirt;return `<svg viewBox="0 0 200 200"><path d="M62 28 L84 20 Q100 34 116 20 L138 28 L176 54 L160 86 L142 76 L142 178 L58 178 L58 76 L40 86 L24 54 Z" fill="${a}" stroke="rgba(0,0,0,.25)" stroke-width="2"/><path d="M84 20 Q100 34 116 20 L112 18 Q100 28 88 18Z" fill="${c}"/><path d="M58 150 H142 V160 H58Z" fill="${b}" opacity=".9"/><path d="M24 54 L40 86 L50 81 L34 49Z" fill="${b}"/><path d="M176 54 L160 86 L150 81 L166 49Z" fill="${b}"/></svg>`}
 const pic=p=>p.photos&&p.photos.length?`<img src="${p.photos[0]}" alt="${esc(p.title)}" loading="lazy">`:shirt(p);
