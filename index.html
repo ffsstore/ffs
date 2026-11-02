@@ -118,6 +118,7 @@ h2 small{font-size:13px;color:var(--mut);font-weight:600}
 .faq summary{list-style:none;cursor:pointer;padding:14px 0;font-weight:800;font-size:15px;display:flex;justify-content:space-between;gap:10px}.faq summary::-webkit-details-marker{display:none}
 .faq summary:after{content:'+';color:var(--acc);font-size:20px;line-height:1}.faq details[open] summary:after{content:'–'}
 .faq details div{padding:0 0 14px;color:#d4d4dc;font-size:14px;line-height:1.55}
+.ph.tall,.gal.tall{aspect-ratio:4/5}
 .hidden{display:none!important}
 .fit{background:#0f2a1c;border:1px solid #1f5a3a;border-radius:12px;padding:12px;margin-bottom:10px}.fit>b{display:block;margin-bottom:6px}.fitrow{display:flex;justify-content:space-between;font-size:14px;padding:3px 0}.fitrow span{color:var(--mut)}.fitrec{margin-top:8px;font-size:13.5px;color:#cfe9d8}
 .modal{position:fixed;inset:0;background:rgba(0,0,0,.85);z-index:60;display:none;align-items:center;justify-content:center;padding:16px}.modal.open{display:flex}.modal img{max-width:100%;max-height:85vh;border-radius:14px}.modal button{position:absolute;top:14px;right:14px;width:40px;height:40px;border-radius:50%;background:#222;font-size:20px}
@@ -176,7 +177,7 @@ function shirt(p){const [a,b,c]=p.shirt;return `<svg viewBox="0 0 200 200"><path
 const pic=p=>p.photos&&p.photos.length?`<img src="${p.photos[0]}" alt="${esc(p.title)}" loading="lazy">`:shirt(p);
 const gallery=p=>p.photos&&p.photos.length?`<div class="slides" id="sl">${p.photos.map(u=>`<img src="${u}" alt="">`).join('')}</div>${p.photos.length>1?`<div class="dots">${p.photos.map((_,i)=>`<i class="${i?'':'on'}"></i>`).join('')}</div>`:''}`:shirt(p);
 const badge=p=>`<span class="badge ${p.auth==='original'?'b-orig':'b-rep'}">${p.auth==='original'?'Оригинал':'Реплика'}</span>`+(p.stock&&p.stock!=='В наличии'?`<span class="b-ord">${esc(p.stock)}</span>`:'');
-const card=p=>`<button class="item" data-id="${p.id}"><div class="ph" style="--glow:${p.glow||'#333'}">${pic(p)}<span class="heart" data-fav="${p.id}">${isFav(p.id)?'❤️':'🤍'}</span></div><div class="info"><b>${esc(p.title)}</b><div class="sz">Размер: ${esc(p.size)}${p.auth==='original'?' · <span style="color:var(--grn);font-weight:700">Оригинал</span>':''}${p.stock&&p.stock!=='В наличии'?' · '+esc(p.stock):''}</div>${fitDiff(p)===0?'<span class="mine">✅ твой размер</span>':''}<div class="pr">${priceTxt(p)}</div></div></button>`;
+const card=p=>`<button class="item" data-id="${p.id}"><div class="ph${p.cat==='jersey'?' tall':''}" style="--glow:${p.glow||'#333'}">${pic(p)}<span class="heart" data-fav="${p.id}">${isFav(p.id)?'❤️':'🤍'}</span></div><div class="info"><b>${esc(p.title)}</b><div class="sz">Размер: ${esc(p.size)}${p.auth==='original'?' · <span style="color:var(--grn);font-weight:700">Оригинал</span>':''}${p.stock&&p.stock!=='В наличии'?' · '+esc(p.stock):''}</div>${fitDiff(p)===0?'<span class="mine">✅ твой размер</span>':''}<div class="pr">${priceTxt(p)}</div></div></button>`;
 const CHART={fan:[['S','160–170','50–60',50],['M','170–176','60–68',52],['L','176–182','68–78',54],['XL','182–188','78–88',56],['2XL','188–195','88–100',59]],
  pl:[['S','160–170','50–57',46],['M','170–176','57–65',48],['L','176–182','65–74',50],['XL','182–188','74–84',52],['2XL','188–195','84–94',54]]};
 function fit(p){if(!p.w)return'';const t=CHART[p.version==='Игровая'?'pl':'fan'];let best=t[0];for(const r of t)if(Math.abs(r[3]-p.w)<Math.abs(best[3]-p.w))best=r;
@@ -214,7 +215,7 @@ function catView(){const r=filtered();const nf=Object.values(st.f).reduce((a,v)=
 function prodView(){const p=P.find(x=>x.id===st.prod);if(!p){go('home');return}
  const rows=FILTERS[p.cat].filter(([k])=>p[k]&&k!=='stock').map(([k,t])=>`<div class="row"><span>${t}</span><b>${esc(p[k])}</b></div>`).join('');
  const msg=`Здравствуйте! Хочу заказать: ${p.title}, размер ${st.size||p.size}${p.byn?`, ${p.byn} BYN`:''}`;
- view.innerHTML=`<div class="gal" style="--glow:${p.glow||'#333'}">${gallery(p)}</div>
+ view.innerHTML=`<div class="gal${p.cat==='jersey'?' tall':''}" style="--glow:${p.glow||'#333'}">${gallery(p)}</div>
  ${p.sup?'<div class="note" style="margin:-8px 0 10px">📷 Фото поставщика · реальные фото этой джерси пришлём перед отправкой</div>':''}<div class="pt">${esc(p.title)}</div>
  <div class="tags"><span class="tag">${p.auth==='original'?'✅ Оригинал':'Реплика'}</span><span class="tag">${esc(p.stock)}</span>${p.sleeve==='Длинный'?'<span class="tag">Длинный рукав</span>':''}${p.version==='Игровая'?'<span class="tag">Игровая версия</span>':''}${p.state==='Б/у'?'<span class="tag">Б/у</span>':''}</div>
  <div class="pp">${p.byn?`<b>${rub(p).toLocaleString('ru')} ₽</b><span>${p.byn} BYN${p.ship==='warehouse'?'':' для РБ'}</span>`:'<b style="font-size:22px">Цена по запросу</b>'}</div>${p.kzt?`<div class="note">🇰🇿 Казахстан: ${p.kzt.toLocaleString('ru')} ₸</div>`:''}
