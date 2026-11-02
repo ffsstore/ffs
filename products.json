@@ -1,5 +1,125 @@
 [
  {
+  "id": 28,
+  "cat": "jersey",
+  "auth": "replica",
+  "title": "Челси 23/24 гостевая · игровая",
+  "club": "Челси",
+  "league": "АПЛ",
+  "era": "Современные",
+  "named": "Без фамилии",
+  "sleeve": "Короткий",
+  "version": "Игровая",
+  "size": "M",
+  "byn": 70,
+  "rub": 2490,
+  "stock": "В наличии",
+  "photos": [
+   "img/che2324_1_w.jpg",
+   "img/che2324_2_w.jpg"
+  ]
+ },
+ {
+  "id": 29,
+  "cat": "jersey",
+  "auth": "replica",
+  "title": "Наполи 23/24 Halloween · специальная",
+  "club": "Наполи",
+  "league": "Серия А",
+  "era": "Современные",
+  "named": "Без фамилии",
+  "sleeve": "Короткий",
+  "version": "Фанатская",
+  "size": "M",
+  "byn": 65,
+  "rub": 2490,
+  "stock": "В наличии",
+  "photos": [
+   "img/nap2324_1_w.jpg",
+   "img/nap2324_2_w.jpg"
+  ]
+ },
+ {
+  "id": 30,
+  "cat": "jersey",
+  "auth": "replica",
+  "title": "Боруссия Дортмунд 11/12 домашняя",
+  "club": "Боруссия Дортмунд",
+  "league": "Бундеслига",
+  "era": "Ретро",
+  "named": "Без фамилии",
+  "sleeve": "Короткий",
+  "version": "Фанатская",
+  "size": "S",
+  "byn": 80,
+  "rub": 2690,
+  "stock": "В наличии",
+  "photos": [
+   "img/bvb1112_1_w.jpg",
+   "img/bvb1112_2_w.jpg"
+  ]
+ },
+ {
+  "id": 31,
+  "cat": "jersey",
+  "auth": "replica",
+  "title": "Манчестер Сити 11/12 домашняя Сильва 21",
+  "club": "Манчестер Сити",
+  "league": "АПЛ",
+  "era": "Ретро",
+  "named": "С фамилией",
+  "sleeve": "Короткий",
+  "version": "Фанатская",
+  "size": "M",
+  "byn": 75,
+  "rub": 2790,
+  "stock": "В наличии",
+  "photos": [
+   "img/mci1112_1_w.jpg",
+   "img/mci1112_2_w.jpg"
+  ]
+ },
+ {
+  "id": 32,
+  "cat": "jersey",
+  "auth": "replica",
+  "title": "Манчестер Юнайтед 16/17 гостевая · игровая",
+  "club": "Манчестер Юнайтед",
+  "league": "АПЛ",
+  "era": "Ретро",
+  "named": "Без фамилии",
+  "sleeve": "Короткий",
+  "version": "Игровая",
+  "size": "S",
+  "byn": 50,
+  "rub": 1990,
+  "stock": "В наличии",
+  "photos": [
+   "img/mun1617_1_w.jpg",
+   "img/mun1617_2_w.jpg"
+  ]
+ },
+ {
+  "id": 33,
+  "cat": "jersey",
+  "auth": "replica",
+  "title": "Наполи 25/26 бежевая",
+  "club": "Наполи",
+  "league": "Серия А",
+  "era": "Современные",
+  "named": "Без фамилии",
+  "sleeve": "Короткий",
+  "version": "Фанатская",
+  "size": "S",
+  "byn": 50,
+  "rub": 1990,
+  "stock": "В наличии",
+  "photos": [
+   "img/nap2526_1_w.jpg",
+   "img/nap2526_2_w.jpg"
+  ]
+ },
+ {
   "id": 27,
   "cat": "jersey",
   "auth": "replica",
