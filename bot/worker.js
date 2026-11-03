@@ -192,10 +192,9 @@ async function handle(env, update) {
       chat_id: jr.user_chat_id || jr.from.id, parse_mode: 'HTML',
       text: '👋 Привет! Чтобы мы приняли заявку в <b>' + esc(jr.chat.title) + '</b>, подпишись на наш основной канал ' +
         '<b>FootballFitStore</b> — там джерси клубов и бутсы с доставкой по СНГ.\n\n' +
-        '1️⃣ Подпишись на канал\n2️⃣ Нажми «✅ Я подписался» — и заявка сразу будет принята',
+        'После подписки заявку примут вручную, обычно в течение дня 🙌',
       reply_markup: { inline_keyboard: [
         [{ text: '📢 Подписаться на FootballFitStore', url: 'https://t.me/' + MAIN_CHANNEL }],
-        [{ text: '✅ Я подписался', callback_data: 'chk:' + jr.chat.id }],
         [{ text: '🛍 Каталог джерси и бутс', web_app: { url: SHOP } }],
       ] },
     }).catch(() => {});
