@@ -1,5 +1,85 @@
 [
  {
+  "id": 37,
+  "cat": "jersey",
+  "auth": "replica",
+  "title": "Наполи 19/20 третья Кулибали 26 · Лига Чемпионов",
+  "club": "Наполи",
+  "league": "Серия А",
+  "era": "Ретро",
+  "named": "С фамилией",
+  "sleeve": "Короткий",
+  "version": "Фанатская",
+  "size": "S",
+  "byn": 85,
+  "rub": 2990,
+  "stock": "В наличии",
+  "photos": [
+   "img/nap1920_1_w.jpg",
+   "img/nap1920_2_w.jpg"
+  ]
+ },
+ {
+  "id": 36,
+  "cat": "jersey",
+  "auth": "replica",
+  "title": "Ювентус 19/20 домашняя Дибала 10 · игровая",
+  "club": "Ювентус",
+  "league": "Серия А",
+  "era": "Ретро",
+  "named": "С фамилией",
+  "sleeve": "Короткий",
+  "version": "Игровая",
+  "size": "2XL",
+  "byn": 70,
+  "rub": 2490,
+  "stock": "В наличии",
+  "photos": [
+   "img/juv1920d_1_w.jpg",
+   "img/juv1920d_2_w.jpg"
+  ]
+ },
+ {
+  "id": 35,
+  "cat": "jersey",
+  "auth": "replica",
+  "title": "Арсенал 14/15 третья",
+  "club": "Арсенал",
+  "league": "АПЛ",
+  "era": "Ретро",
+  "named": "Без фамилии",
+  "sleeve": "Короткий",
+  "version": "Фанатская",
+  "size": "L",
+  "byn": 65,
+  "rub": 2490,
+  "stock": "В наличии",
+  "photos": [
+   "img/ars1415_1_w.jpg",
+   "img/ars1415_2_w.jpg"
+  ]
+ },
+ {
+  "id": 34,
+  "cat": "jersey",
+  "auth": "replica",
+  "title": "Челси 21/22 домашняя · игровая",
+  "club": "Челси",
+  "league": "АПЛ",
+  "era": "Современные",
+  "named": "Без фамилии",
+  "sleeve": "Короткий",
+  "version": "Игровая",
+  "size": "L",
+  "byn": 60,
+  "rub": 2190,
+  "stock": "В наличии",
+  "photos": [
+   "img/che2122_1_w.jpg",
+   "img/che2122_2_w.jpg"
+  ]
+ },
+ {
   "id": 28,
   "cat": "jersey",
   "auth": "replica",
