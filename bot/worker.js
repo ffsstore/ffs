@@ -62,13 +62,19 @@ async function tgUser(env, initData) {
 let ready = false;
 async function db(env) {
   if (!ready) {
-    await env.DB.prepare('CREATE TABLE IF NOT EXISTS ev (pid INTEGER, kind TEXT, uid INTEGER, ts INTEGER, PRIMARY KEY (pid, kind, uid))').run();
+    for (const q of [
+      'CREATE TABLE IF NOT EXISTS ev (pid INTEGER, kind TEXT, uid INTEGER, ts INTEGER, PRIMARY KEY (pid, kind, uid))',
+      'CREATE TABLE IF NOT EXISTS rem (pid INTEGER, uid INTEGER, PRIMARY KEY (pid, uid))',
+      'CREATE TABLE IF NOT EXISTS sub (uid INTEGER, kind TEXT, key TEXT, ts INTEGER, PRIMARY KEY (uid, kind, key))',
+      'CREATE TABLE IF NOT EXISTS seen (pid INTEGER PRIMARY KEY)',
+      'CREATE TABLE IF NOT EXISTS optout (uid INTEGER PRIMARY KEY)',
+    ]) await env.DB.prepare(q).run();
     ready = true;
   }
   return env.DB;
 }
 async function track(env, body) {
-  const kinds = ['view', 'fav', 'cart', 'unfav', 'uncart'];
+  const kinds = ['view', 'fav', 'cart', 'order', 'unfav', 'uncart'];
   const pid = Number(body.pid), kind = String(body.kind);
   if (!pid || !kinds.includes(kind)) return json({ ok: false }, 400);
   const uid = await tgUser(env, body.initData);
@@ -80,16 +86,116 @@ async function track(env, body) {
 }
 async function stats(env) {
   const d = await db(env);
-  const { results } = await d.prepare('SELECT pid, kind, COUNT(*) AS n FROM ev GROUP BY pid, kind').all();
+  const { results } = await d.prepare("SELECT pid, kind, COUNT(*) AS n FROM ev WHERE kind IN ('view','fav','cart') GROUP BY pid, kind").all();
   const out = {};
   for (const r of results) (out[r.pid] ??= {})[r.kind] = r.n;
   return json(out, 200, { 'cache-control': 'public, max-age=60' });
 }
 
+// ---------- подписки «сообщить о новинках» ----------
+async function subscribe(env, body) {
+  const uid = await tgUser(env, body.initData);
+  if (!uid) return json({ ok: false, reason: 'not telegram' });
+  const kind = String(body.kind), key = String(body.key || '').slice(0, 60);
+  if (!['cat', 'club'].includes(kind) || !key) return json({ ok: false }, 400);
+  const d = await db(env);
+  if (body.on) {
+    await d.prepare('INSERT OR REPLACE INTO sub (uid, kind, key, ts) VALUES (?, ?, ?, ?)').bind(uid, kind, key, Date.now()).run();
+    await d.prepare('DELETE FROM optout WHERE uid=?').bind(uid).run();
+  } else await d.prepare('DELETE FROM sub WHERE uid=? AND kind=? AND key=?').bind(uid, kind, key).run();
+  return json({ ok: true });
+}
+async function mysubs(env, body) {
+  const uid = await tgUser(env, body.initData);
+  if (!uid) return json({ subs: [] });
+  const d = await db(env);
+  const { results } = await d.prepare('SELECT kind, key FROM sub WHERE uid=?').bind(uid).all();
+  return json({ subs: results });
+}
+
+// ---------- рассылки по расписанию (раз в час) ----------
+const REMIND_AFTER = 24 * 3600000; // напоминание о корзине через сутки
+const esc = s => String(s ?? '').replace(/[&<>]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;' }[c]));
+const plur = (n, a, b, c) => { const m = n % 10, h = n % 100; return m === 1 && h !== 11 ? a : m >= 2 && m <= 4 && (h < 12 || h > 14) ? b : c; };
+const line = p => '• ' + esc(p.title) + (p.size && !String(p.size).includes('/') ? ', размер ' + esc(p.size) : '') + (p.byn ? ' — ' + p.byn + ' BYN' : '');
+const appBtn = (text, q) => ({ inline_keyboard: [[{ text, web_app: { url: SHOP + (q || '') } }]] });
+
+async function cron(env) {
+  if (!env.DB) return;
+  const d = await db(env);
+  const P = await (await fetch(SHOP + 'products.json?t=' + Date.now())).json();
+  const byId = new Map(P.map(p => [p.id, p]));
+
+  // 1) новые товары → подписчикам
+  const seen = new Set((await d.prepare('SELECT pid FROM seen').all()).results.map(r => r.pid));
+  const fresh = P.filter(p => !seen.has(p.id));
+  if (fresh.length) {
+    if (seen.size) {
+      const subs = (await d.prepare('SELECT uid, kind, key FROM sub WHERE uid NOT IN (SELECT uid FROM optout)').all()).results;
+      const per = new Map();
+      for (const s of subs) for (const p of fresh)
+        if ((s.kind === 'cat' && p.cat === s.key) || (s.kind === 'club' && p.club === s.key)) {
+          if (!per.has(s.uid)) per.set(s.uid, new Map());
+          per.get(s.uid).set(p.id, p);
+        }
+      for (const [uid, m] of per) {
+        const items = [...m.values()];
+        await tg(env, 'sendMessage', {
+          chat_id: uid, parse_mode: 'HTML',
+          text: '🔔 <b>Новинка в FootballFitStore!</b>\n\n' + items.map(line).join('\n') +
+            '\n\nТы просил сообщить о новых поступлениях.\n<i>Не присылать уведомления — /stop</i>',
+          reply_markup: items.length === 1 ? appBtn('👀 Посмотреть', '?p=' + items[0].id) : appBtn('🛍 Открыть магазин'),
+        }).catch(() => {});
+      }
+    }
+    for (const p of fresh) await d.prepare('INSERT OR IGNORE INTO seen (pid) VALUES (?)').bind(p.id).run();
+  }
+
+  // 2) напоминание о корзине (только днём: 9:00–21:59 по Минску)
+  const h = new Date().getUTCHours();
+  if (h < 6 || h > 18) return;
+  const now = Date.now();
+  const rows = (await d.prepare(
+    "SELECT e.pid, e.uid FROM ev e WHERE e.kind='cart' AND e.ts < ? AND e.ts > ? " +
+    "AND NOT EXISTS (SELECT 1 FROM rem r WHERE r.pid=e.pid AND r.uid=e.uid) " +
+    "AND NOT EXISTS (SELECT 1 FROM ev o WHERE o.kind='order' AND o.pid=e.pid AND o.uid=e.uid) " +
+    'AND e.uid NOT IN (SELECT uid FROM optout)').bind(now - REMIND_AFTER, now - 7 * 86400000).all()).results;
+  if (!rows.length) return;
+  const counts = new Map((await d.prepare("SELECT pid, COUNT(*) AS n FROM ev WHERE kind='cart' GROUP BY pid").all()).results.map(r => [r.pid, r.n]));
+  const per = new Map();
+  for (const r of rows) { if (!per.has(r.uid)) per.set(r.uid, []); per.get(r.uid).push(r.pid); }
+  for (const [uid, pids] of per) {
+    const items = pids.map(id => byId.get(id)).filter(p => p && p.stock !== 'Продано');
+    if (items.length) {
+      const body = items.map(p => {
+        const others = (counts.get(p.id) || 1) - 1;
+        return line(p) + (others > 0 ? '\n   🔥 в корзине ещё у ' + others + ' ' + plur(others, 'человека', 'человек', 'человек') : '');
+      }).join('\n');
+      await tg(env, 'sendMessage', {
+        chat_id: uid, parse_mode: 'HTML',
+        text: '🛒 <b>Ты оставил в корзине:</b>\n\n' + body +
+          '\n\nВещи в одном экземпляре — оформи, пока их не забрали 👇\n<i>Не присылать напоминания — /stop</i>',
+        reply_markup: appBtn('🛒 Открыть корзину', '?open=cart'),
+      }).catch(() => {});
+    }
+    for (const pid of pids) await d.prepare('INSERT OR IGNORE INTO rem (pid, uid) VALUES (?, ?)').bind(pid, uid).run();
+  }
+}
+
 async function handle(env, update) {
   const msg = update.message;
   if (!msg || !msg.chat || msg.chat.type !== 'private') return;
-  const isStart = (msg.text || '').startsWith('/start');
+  const text = msg.text || '';
+  if (env.DB && (text.startsWith('/stop') || text.startsWith('/notify'))) {
+    const d = await db(env), stop = text.startsWith('/stop');
+    if (stop) await d.prepare('INSERT OR IGNORE INTO optout (uid) VALUES (?)').bind(msg.chat.id).run();
+    else await d.prepare('DELETE FROM optout WHERE uid=?').bind(msg.chat.id).run();
+    await tg(env, 'sendMessage', { chat_id: msg.chat.id,
+      text: stop ? '🔕 Готово, больше не буду присылать напоминания и уведомления.\nВключить снова — /notify' : '🔔 Уведомления снова включены.',
+      reply_markup: KEYBOARD });
+    return;
+  }
+  const isStart = text.startsWith('/start');
   await tg(env, 'sendMessage', {
     chat_id: msg.chat.id,
     text: isStart ? WELCOME : OTHER,
@@ -99,15 +205,21 @@ async function handle(env, update) {
 }
 
 export default {
+  async scheduled(event, env, ctx) { ctx.waitUntil(cron(env)); },
   async fetch(request, env, ctx) {
     const url = new URL(request.url);
     if (!env.BOT_TOKEN) return new Response('Не задан секрет BOT_TOKEN', { status: 500 });
 
     if (request.method === 'OPTIONS') return new Response(null, { headers: CORS });
-    if (url.pathname === '/stats' || url.pathname === '/track') {
+    if (['/stats', '/track', '/sub', '/mysubs'].includes(url.pathname)) {
       if (!env.DB) return json({ ok: false, reason: 'no DB binding' }, 503);
       if (url.pathname === '/stats') return stats(env);
-      if (request.method === 'POST') return track(env, await request.json().catch(() => ({})));
+      if (request.method === 'POST') {
+        const body = await request.json().catch(() => ({}));
+        if (url.pathname === '/track') return track(env, body);
+        if (url.pathname === '/sub') return subscribe(env, body);
+        if (url.pathname === '/mysubs') return mysubs(env, body);
+      }
     }
 
     // один раз открыть в браузере: …workers.dev/setup

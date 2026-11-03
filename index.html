@@ -121,6 +121,7 @@ h2 small{font-size:13px;color:var(--mut);font-weight:600}
 .info .vw{float:right;margin-left:6px;color:var(--mut);font-weight:700}
 .info .hot{display:block;margin-top:5px;font-size:11px;font-weight:800;color:#ff8a3d}
 .fomo{display:flex;flex-direction:column;gap:6px;margin:2px 0 12px}.fomo span{align-self:flex-start;background:rgba(255,138,61,.12);color:#ffb27a;border:1px solid rgba(255,138,61,.3);border-radius:10px;padding:6px 10px;font-size:13px;font-weight:700}
+.subbtn{width:100%;margin-top:14px;font-size:14px}.subbtn.on{border-color:var(--grn);color:var(--grn)}.subbtn small{display:block;font-size:11.5px;color:var(--mut);font-weight:600;margin-top:2px}
 .hidden{display:none!important}
 .fit{background:#0f2a1c;border:1px solid #1f5a3a;border-radius:12px;padding:12px;margin-bottom:10px}.fit>b{display:block;margin-bottom:6px}.fitrow{display:flex;justify-content:space-between;font-size:14px;padding:3px 0}.fitrow span{color:var(--mut)}.fitrec{margin-top:8px;font-size:13.5px;color:#cfe9d8}
 .modal{position:fixed;inset:0;background:rgba(0,0,0,.85);z-index:60;display:none;align-items:center;justify-content:center;padding:16px}.modal.open{display:flex}.modal img{max-width:100%;max-height:85vh;border-radius:14px}.modal button{position:absolute;top:14px;right:14px;width:40px;height:40px;border-radius:50%;background:#222;font-size:20px}
@@ -213,7 +214,7 @@ function filtered(){let r=P.filter(p=>p.cat===st.cat&&(st.auth==='all'||p.auth==
 function catView(){const r=filtered();const nf=Object.values(st.f).reduce((a,v)=>a+v.length,0)+(st.pmin||st.pmax?1:0);
  view.innerHTML=`<div class="seg">${[['all','Все'],['original','Оригинал'],['replica','Реплика']].map(([k,t])=>`<button data-auth="${k}" class="${st.auth===k?'on':''}">${t}</button>`).join('')}</div>
  <div class="bar"><button class="chip ${nf?'on':''}" id="fopen">⚙️ Фильтры${nf?' · '+nf:''}</button>${st.cat==='jersey'&&hasFit()?`<button class="chip ${st.mine?'on':''}" id="mine">✅ Мой размер</button>`:''}${[['asc','Дешевле'],['desc','Дороже']].map(([k,t])=>`<button class="chip ${st.sort===k?'on':''}" data-sort="${k}">${t}</button>`).join('')}</div>
- <div class="count">Найдено: ${r.length}</div>`+(r.length?`<div class="grid">${r.map(card).join('')}</div>`:`<div class="empty"><b>${P.some(p=>p.cat===st.cat)?'Ничего не подошло':'Скоро в продаже'}</b>Напиши менеджеру — подберём или привезём под заказ<br><br><a class="btn btn-y" href="https://t.me/${MANAGER}">Написать @${MANAGER}</a></div>`)}
+ <div class="count">Найдено: ${r.length}</div>`+(r.length?`<div class="grid">${r.map(card).join('')}</div>${subBtn('cat',st.cat,catLabel(st.cat))}`:`<div class="empty"><b>${P.some(p=>p.cat===st.cat)?'Ничего не подошло':'Скоро в продаже'}</b>Напиши менеджеру — подберём или привезём под заказ<br><br><a class="btn btn-y" href="https://t.me/${MANAGER}">Написать @${MANAGER}</a>${subBtn('cat',st.cat,catLabel(st.cat))}</div>`)}
 function prodView(){const p=P.find(x=>x.id===st.prod);if(!p){go('home');return}
  const rows=FILTERS[p.cat].filter(([k])=>p[k]&&k!=='stock').map(([k,t])=>`<div class="row"><span>${t}</span><b>${esc(p[k])}</b></div>`).join('');
  const msg=`Здравствуйте! Хочу заказать: ${p.title}, размер ${st.size||p.size}${p.byn?`, ${p.byn} BYN`:''}`;
@@ -224,6 +225,7 @@ function prodView(){const p=P.find(x=>x.id===st.prod);if(!p){go('home');return}
  <div class="note">${p.ship==='warehouse'?'Со склада, бесплатная доставка':p.stock==='Скоро в наличии'?'Скоро в наличии — можно забронировать заранее':p.stock==='Под заказ'?'Под заказ: предоплата, доставка со склада 18–35 дней':'В наличии · 1 шт'}</div>
  ${sizesOf(p).length>1?`<div class="szpick" id="szpick"><p>Выбери размер:</p>${sizesOf(p).map(z=>`<button class="chip ${st.size===z?'on':''}" data-pick="${esc(z)}">${esc(z)}</button>`).join('')}</div>`:''}
  <div class="box">${rows}</div>
+ ${p.cat==='jersey'&&p.club?subBtn('club',p.club,'новых джерси '+p.club):subBtn('cat',p.cat,catLabel(p.cat))}
  ${p.cat==='jersey'?`<div class="box"><h4>Как подобрать размер</h4>${fitBox(p)}${fit(p)}${p.version==='Игровая'?'Игровая версия сидит плотно — если сомневаешься, бери на размер больше.<br>':''}${p.w?'Сравни с шириной своей футболки от подмышки до подмышки.':'Общая таблица — ориентир, у разных клубов сетка отличается. Точные замеры этой джерси спроси у менеджера.'}<br><button class="btn btn-g" id="chartBtn" style="margin-top:12px">Таблица размеров</button></div>`:''}
  <div class="box"><h4>Доставка и оплата</h4>${p.stock==='Под заказ'&&p.ship!=='warehouse'?'📦 Под заказ: доставка со склада — 18–35 дней<br>':''}${p.ship==='warehouse'?'🚚 Бесплатная доставка в любую страну<br>🇧🇾🇷🇺 Беларусь и Россия — 4–10 дней<br>🇰🇿 Казахстан — 8–14 дней<br>🇧🇾 Оплата для Беларуси — переводом с карты любого банка<br><span style="font-size:12.5px;color:var(--mut)">'+BY_BANKS+' и др.</span><br>🇷🇺 Оплата для России — через Сбербанк<br>🇰🇿 Оплата для Казахстана — через Kaspi<br>🪙 Возможна оплата криптовалютой':'🚚 Бесплатная доставка по СНГ<br>'+(p.stock==='Под заказ'?'🇧🇾 Беларусь — 2–5 дней, Белпочта / Европочта<br>💳 Оплата для Беларуси — предоплата переводом с карты любого банка<br><span style="font-size:12.5px;color:var(--mut)">'+BY_BANKS+' и др.</span><br>':'🇧🇾 Беларусь — 2–5 дней, Белпочта / Европочта, оплата при получении<br>')+'🇷🇺 Россия — 2–5 дней, только СДЭК, оплата через Сбербанк<br>🇰🇿 Казахстан — 8–14 дней, оплата через Kaspi<br>🪙 Возможна оплата криптовалютой<br>Для дальних регионов цена может немного отличаться'}<br><br><a href="https://t.me/sksbvwsis" style="color:var(--acc)">Последние отправки и отзывы →</a><button class="btn btn-g" data-go="faq" style="margin-top:12px">❓ Вопросы и ответы</button></div>
  <div style="height:80px"></div>
@@ -341,7 +343,24 @@ function fomoLines(p){const s=STATS[p.id]||{},o=[];
  if((s.view||0)>=FOMO.view)o.push(`👁 ${ppl(s.view)} ${plur(s.view,'смотрел','смотрели','смотрели')} этот товар`);
  if((s.fav||0)>=FOMO.fav)o.push(`❤️ ${ppl(s.fav)} ${plur(s.fav,'добавил','добавили','добавили')} в избранное`);
  return o}
-function track(kind,p){if(p&&(kind==='view'||kind==='fav'||kind==='cart'))srv(kind,p.id);try{if(!YM||!window.ym||!p)return;const lbl={view:'👁 Просмотр',cart:'🛒 В корзину',fav:'❤️ В избранное',order:'✅ Заказать'}[kind]+' — '+p.title+' ('+p.size+')';ym(YM,'hit',location.origin+location.pathname+'#'+kind+'-'+p.id,{title:lbl});if(kind==='order')ym(YM,'reachGoal','order',{product:p.title})}catch(e){}}
+// ---- «сообщить о новинках» ----
+let SUBS=new Set();
+const subOn=(k,key)=>SUBS.has(k+':'+key);
+async function loadSubs(){try{if(!(tg&&tg.initData))return;const r=await fetch(API+'/mysubs',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({initData:tg.initData})});const j=await r.json();SUBS=new Set((j.subs||[]).map(x=>x.kind+':'+x.key));if(st.page==='cat'||st.page==='prod')render()}catch(e){}}
+function subBtn(kind,key,label){if(!(tg&&tg.initData))return'';const on=subOn(kind,key);
+ return `<button class="btn btn-g subbtn ${on?'on':''}" data-sub="${kind}" data-key="${esc(key)}" data-label="${esc(label)}">${on?`✅ Сообщим о ${esc(label)}<small>нажми, чтобы отключить</small>`:`🔔 Сообщить о ${esc(label)}`}</button>`}
+function toggleSub(kind,key,label){const on=!subOn(kind,key);
+ const send=()=>{fetch(API+'/sub',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({kind,key,on,initData:tg.initData})}).catch(()=>{});
+  on?SUBS.add(kind+':'+key):SUBS.delete(kind+':'+key);toast(on?'🔔 Пришлём сообщение в Telegram':'Уведомления отключены');const y=window.scrollY;render();window.scrollTo(0,y)};
+ const u=tg.initDataUnsafe&&tg.initDataUnsafe.user;
+ if(on&&u&&!u.allows_write_to_pm&&tg.requestWriteAccess){try{tg.requestWriteAccess(ok=>{if(ok)send();else toast('Без разрешения бот не сможет написать')})}catch(e){send()}}else send()}
+const catLabel=c=>'новинках в «'+(CATS.find(x=>x.id===c)||{name:c}).name+'»';
+// ---- ссылки: ?open=cart, ?p=ID, startapp=cart / p26 ----
+let DEEP_DONE=false;
+function deepLink(){if(DEEP_DONE||!P.length)return;DEEP_DONE=true;try{const q=new URLSearchParams(location.search);const sp=(tg&&tg.initDataUnsafe&&tg.initDataUnsafe.start_param)||'';
+ const pid=+(q.get('p')||(/^p\d+$/.test(sp)?sp.slice(1):0));
+ if(q.get('open')==='cart'||sp==='cart')go('cart');else if(pid&&P.some(p=>p.id===pid))go('prod',{prod:pid,cat:P.find(p=>p.id===pid).cat})}catch(e){}}
+function track(kind,p){if(p&&['view','fav','cart','order'].includes(kind))srv(kind,p.id);try{if(!YM||!window.ym||!p)return;const lbl={view:'👁 Просмотр',cart:'🛒 В корзину',fav:'❤️ В избранное',order:'✅ Заказать'}[kind]+' — '+p.title+' ('+p.size+')';ym(YM,'hit',location.origin+location.pathname+'#'+kind+'-'+p.id,{title:lbl});if(kind==='order')ym(YM,'reachGoal','order',{product:p.title})}catch(e){}}
 const HIST=[];
 function go(page,extra={}){if(page===st.page&&page!=='prod'&&page!=='cat')return;HIST.push({page:st.page,cat:st.cat,prod:st.prod,buy:st.buy});st.size=null;if(page!=='checkout')st.buy=null;if(page==='prod')track('view',P.find(x=>x.id===extra.prod));if(page!=='prod')st.prod=null;Object.assign(st,{page},extra);history.pushState(null,'');render()}
 // фильтры
@@ -355,6 +374,7 @@ $('#fapply').onclick=()=>{st.f={};document.querySelectorAll('#fbody .chip.on').f
 $('#freset').onclick=()=>{st.f={};st.pmin=st.pmax='';closeF();render()};
 $('#sbg').onclick=closeF;$('#chart').onclick=()=>$('#chart').classList.remove('open');
 view.onclick=e=>{const hf=e.target.closest('[data-fav]');if(hf){e.stopPropagation();const p=P.find(x=>x.id===+hf.dataset.fav);if(p){toggleFav(p);if(st.page==='fav')render();else hf.textContent=isFav(p.id)?'❤️':'🤍'}return}
+ const sb=e.target.closest('[data-sub]');if(sb){toggleSub(sb.dataset.sub,sb.dataset.key,sb.dataset.label);return}
  const rm=e.target.closest('[data-rm]');if(rm){CART=CART.filter(c=>c.id!==+rm.dataset.rm);srv('uncart',+rm.dataset.rm);save();render();return}
  const t=e.target.closest('button');if(!t)return;
  if(t.dataset.cat){go('cat',{cat:t.dataset.cat,auth:'all',f:{},pmin:'',pmax:'',sort:'new'})}
@@ -376,8 +396,8 @@ const PHOTO_BASE='img/';
 async function loadSheet(){try{const t=await (await fetch(SHEET_CSV,{cache:'no-store'})).text();const rows=parseCSV(t);const head=rows.shift().map(h=>COLS[h.trim().toLowerCase()]||h);
  P=rows.map((r,i)=>{const o={};head.forEach((h,j)=>o[h]=(r[j]||'').trim());o.id=i+1;o.added=i+1;o.cat=CATMAP[o.cat.toLowerCase()]||o.cat;o.auth=/ориг/i.test(o.auth)?'original':'replica';o.byn=+o.byn||0;o.w=parseFloat(String(o.w).replace(',','.'))||0;o.l=parseFloat(String(o.l).replace(',','.'))||0;o.rub=+o.rub||0;o.kzt=+o.kzt||0;o.ship=/склад/i.test(o.ship)?'warehouse':'';o.photos=o.photos?o.photos.split(/[\s,;]+/).filter(Boolean).map(u=>/^https?:/.test(u)?u:PHOTO_BASE+u):[];if(!o.photos.length)o.shirt=['#3a3a44','#26262c','#fff'];return o}).filter(o=>o.title&&!/^нет$/i.test(o.show||''));
 }catch(e){console.error(e)}render()}
-async function loadProducts(){try{const r=await fetch('products.json?t='+Date.now(),{cache:'no-store'});P=await r.json();P.forEach((p,i)=>{if(p.added==null)p.added=P.length-i})}catch(e){console.error(e)}cleanSaved();render()}
-loadSaved();loadStats();if(SHEET_CSV)loadSheet();else{render();loadProducts();}
+async function loadProducts(){try{const r=await fetch('products.json?t='+Date.now(),{cache:'no-store'});P=await r.json();P.forEach((p,i)=>{if(p.added==null)p.added=P.length-i})}catch(e){console.error(e)}cleanSaved();render();deepLink()}
+loadSaved();loadStats();loadSubs();if(SHEET_CSV)loadSheet();else{render();loadProducts();}
 </script>
 </body>
 </html>
