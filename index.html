@@ -118,6 +118,7 @@ h2 small{font-size:13px;color:var(--mut);font-weight:600}
 .faq summary{list-style:none;cursor:pointer;padding:14px 0;font-weight:800;font-size:15px;display:flex;justify-content:space-between;gap:10px}.faq summary::-webkit-details-marker{display:none}
 .faq summary:after{content:'+';color:var(--acc);font-size:20px;line-height:1}.faq details[open] summary:after{content:'–'}
 .faq details div{padding:0 0 14px;color:#d4d4dc;font-size:14px;line-height:1.55}
+.info .vw{float:right;margin-left:6px;color:var(--mut);font-weight:700}
 .info .hot{display:block;margin-top:5px;font-size:11px;font-weight:800;color:#ff8a3d}
 .fomo{display:flex;flex-direction:column;gap:6px;margin:2px 0 12px}.fomo span{align-self:flex-start;background:rgba(255,138,61,.12);color:#ffb27a;border:1px solid rgba(255,138,61,.3);border-radius:10px;padding:6px 10px;font-size:13px;font-weight:700}
 .hidden{display:none!important}
@@ -178,7 +179,7 @@ function shirt(p){const [a,b,c]=p.shirt;return `<svg viewBox="0 0 200 200"><path
 const pic=p=>p.photos&&p.photos.length?`<img src="${p.photos[0]}" alt="${esc(p.title)}" loading="lazy">`:shirt(p);
 const gallery=p=>p.photos&&p.photos.length?`<div class="slides" id="sl">${p.photos.map(u=>`<img src="${u}" alt="">`).join('')}</div>${p.photos.length>1?`<div class="dots">${p.photos.map((_,i)=>`<i class="${i?'':'on'}"></i>`).join('')}</div>`:''}`:shirt(p);
 const badge=p=>`<span class="badge ${p.auth==='original'?'b-orig':'b-rep'}">${p.auth==='original'?'Оригинал':'Реплика'}</span>`+(p.stock&&p.stock!=='В наличии'?`<span class="b-ord">${esc(p.stock)}</span>`:'');
-const card=p=>`<button class="item" data-id="${p.id}"><div class="ph" style="--glow:${p.glow||'#333'}">${pic(p)}<span class="heart" data-fav="${p.id}">${isFav(p.id)?'❤️':'🤍'}</span></div><div class="info"><b>${esc(p.title)}</b><div class="sz">Размер: ${esc(p.size)}${p.auth==='original'?' · <span style="color:var(--grn);font-weight:700">Оригинал</span>':''}${p.stock&&p.stock!=='В наличии'?' · '+esc(p.stock):''}</div>${fitDiff(p)===0?'<span class="mine">✅ твой размер</span>':''}${(STATS[p.id]?.cart||0)>=FOMO.cart?`<span class="hot">🔥 В корзине у ${ppl(STATS[p.id].cart)}</span>`:''}<div class="pr">${priceTxt(p)}</div></div></button>`;
+const card=p=>`<button class="item" data-id="${p.id}"><div class="ph" style="--glow:${p.glow||'#333'}">${pic(p)}<span class="heart" data-fav="${p.id}">${isFav(p.id)?'❤️':'🤍'}</span></div><div class="info"><b>${esc(p.title)}</b><div class="sz">${(STATS[p.id]?.view||0)>=FOMO.view?`<span class="vw">👁 ${STATS[p.id].view}</span>`:''}Размер: ${esc(p.size)}${p.auth==='original'?' · <span style="color:var(--grn);font-weight:700">Оригинал</span>':''}${p.stock&&p.stock!=='В наличии'?' · '+esc(p.stock):''}</div>${fitDiff(p)===0?'<span class="mine">✅ твой размер</span>':''}${(STATS[p.id]?.cart||0)>=FOMO.cart?`<span class="hot">🔥 В корзине у ${uppl(STATS[p.id].cart)}</span>`:''}<div class="pr">${priceTxt(p)}</div></div></button>`;
 const CHART={fan:[['S','160–170','50–60',50],['M','170–176','60–68',52],['L','176–182','68–78',54],['XL','182–188','78–88',56],['2XL','188–195','88–100',59]],
  pl:[['S','160–170','50–57',46],['M','170–176','57–65',48],['L','176–182','65–74',50],['XL','182–188','74–84',52],['2XL','188–195','84–94',54]]};
 function fit(p){if(!p.w)return'';const t=CHART[p.version==='Игровая'?'pl':'fan'];let best=t[0];for(const r of t)if(Math.abs(r[3]-p.w)<Math.abs(best[3]-p.w))best=r;
@@ -332,8 +333,9 @@ function srv(kind,pid){try{const initData=tg&&tg.initData;if(!initData||!pid)ret
 async function loadStats(){try{const r=await fetch(API+'/stats');if(r.ok){STATS=await r.json();if(st.page==='cat'||st.page==='prod'||st.page==='fav')render()}}catch(e){}}
 const plur=(n,a,b,c)=>{const m=n%10,h=n%100;return m===1&&h!==11?a:m>=2&&m<=4&&(h<12||h>14)?b:c};
 const ppl=n=>n+' '+plur(n,'человек','человека','человек');
+const uppl=n=>n+' '+plur(n,'человека','человек','человек'); // «у 1 человека», «у 3 человек»
 function fomoLines(p){const s=STATS[p.id]||{},o=[];
- if((s.cart||0)>=FOMO.cart)o.push(`🛒 В корзине у ${ppl(s.cart)}`);
+ if((s.cart||0)>=FOMO.cart)o.push(`🛒 В корзине у ${uppl(s.cart)}`);
  if((s.view||0)>=FOMO.view)o.push(`👁 ${ppl(s.view)} ${plur(s.view,'смотрел','смотрели','смотрели')} этот товар`);
  if((s.fav||0)>=FOMO.fav)o.push(`❤️ ${ppl(s.fav)} ${plur(s.fav,'добавил','добавили','добавили')} в избранное`);
  return o}
