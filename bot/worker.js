@@ -1,3 +1,4 @@
+// v2: счётчики просмотров, избранного и корзины
 // Бот FootballFitStore: на /start присылает кнопку «Открыть магазин».
 // Cloudflare Worker. Токен бота хранится в секрете BOT_TOKEN (Settings → Variables and Secrets).
 
