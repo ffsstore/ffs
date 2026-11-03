@@ -21,8 +21,10 @@ const KEYBOARD = {
   ],
 };
 
+const token = env => String(env.BOT_TOKEN || '').replace(/\s+/g, '').replace(/^bot/i, '');
+
 async function tg(env, method, body) {
-  return fetch(`https://api.telegram.org/bot${env.BOT_TOKEN}/${method}`, {
+  return fetch('https://api.telegram.org/bot' + token(env) + '/' + method, {
     method: 'POST',
     headers: { 'content-type': 'application/json' },
     body: JSON.stringify(body),
@@ -31,7 +33,7 @@ async function tg(env, method, body) {
 
 // секрет для вебхука, вычисляется из токена (чтобы чужие не могли слать запросы)
 async function hookSecret(env) {
-  const d = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(env.BOT_TOKEN));
+  const d = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(token(env)));
   return [...new Uint8Array(d)].map(b => b.toString(16).padStart(2, '0')).join('').slice(0, 40);
 }
 
@@ -54,6 +56,16 @@ export default {
 
     // один раз открыть в браузере: …workers.dev/setup
     if (url.pathname === '/setup') {
+      const t = token(env);
+      const me = await (await tg(env, 'getMe', {})).json();
+      if (!me.ok) {
+        const ok = /^\d{6,12}:[A-Za-z0-9_-]{30,}$/.test(t);
+        return new Response('❌ Telegram не принял токен.\n' +
+          'Длина токена: ' + t.length + ' символов (должно быть около 46).\n' +
+          'Формат: ' + (ok ? 'похож на правильный — возможно, токен устарел, возьми новый в @BotFather' : 'неправильный — скопируй токен заново, только сам токен') + '\n' +
+          'Начинается с: ' + t.slice(0, 4) + '…',
+          { headers: { 'content-type': 'text/plain; charset=utf-8' } });
+      }
       const r = await tg(env, 'setWebhook', {
         url: url.origin + '/webhook',
         secret_token: await hookSecret(env),
@@ -64,7 +76,7 @@ export default {
         menu_button: { type: 'web_app', text: 'Магазин', web_app: { url: SHOP } },
       });
       const j = await r.json();
-      return new Response(j.ok ? '✅ Бот подключён! Напиши ему /start' : '❌ Ошибка: ' + j.description,
+      return new Response(j.ok ? '✅ Бот @' + me.result.username + ' подключён! Напиши ему /start' : '❌ Ошибка: ' + j.description,
         { headers: { 'content-type': 'text/plain; charset=utf-8' } });
     }
 
