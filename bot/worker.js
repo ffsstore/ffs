@@ -183,6 +183,20 @@ async function cron(env) {
 }
 
 async function handle(env, update) {
+  // заявка на вступление в канал → приветствие с каталогом, затем одобряем заявку
+  const jr = update.chat_join_request;
+  if (jr) {
+    const name = esc(jr.from && jr.from.first_name || '');
+    await tg(env, 'sendMessage', {
+      chat_id: jr.user_chat_id || jr.from.id, parse_mode: 'HTML',
+      text: '👋 ' + (name ? name + ', с' : 'С') + 'пасибо за подписку на <b>' + esc(jr.chat.title) + '</b>!\n\n' +
+        '⚽️ Все джерси, бутсы и мячи с ценами и размерами — в нашем каталоге\n' +
+        '🚚 Бесплатная доставка по СНГ\n\n👇 Открой каталог прямо в Telegram',
+      reply_markup: KEYBOARD,
+    }).catch(() => {});
+    await tg(env, 'approveChatJoinRequest', { chat_id: jr.chat.id, user_id: jr.from.id }).catch(() => {});
+    return;
+  }
   const msg = update.message;
   if (!msg || !msg.chat || msg.chat.type !== 'private') return;
   const text = msg.text || '';
@@ -237,7 +251,7 @@ export default {
       const r = await tg(env, 'setWebhook', {
         url: url.origin + '/webhook',
         secret_token: await hookSecret(env),
-        allowed_updates: ['message'],
+        allowed_updates: ['message', 'chat_join_request'],
         drop_pending_updates: true,
       });
       await tg(env, 'setChatMenuButton', {
