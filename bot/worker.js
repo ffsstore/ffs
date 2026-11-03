@@ -4,6 +4,7 @@
 
 const SHOP = 'https://ffsstore.github.io/ffs/';
 const MANAGER = 'ffs_mngr';
+const MAIN_CHANNEL = 'footballfitstore'; // основной канал: на него нужно подписаться, чтобы попасть в другие каналы
 
 const WELCOME =
   '👋 Привет! Это магазин <b>FootballFitStore</b>\n\n' +
@@ -185,6 +186,21 @@ async function cron(env) {
 async function handle(env, update) {
   // заявка на вступление в канал → приветствие с каталогом, затем одобряем заявку
   const jr = update.chat_join_request;
+  // заявка в другой канал (например, «Футбольные вещи из WB & OZON») → сначала подписка на FFS
+  if (jr && (jr.chat.username || '').toLowerCase() !== MAIN_CHANNEL) {
+    await tg(env, 'sendMessage', {
+      chat_id: jr.user_chat_id || jr.from.id, parse_mode: 'HTML',
+      text: '👋 Привет! Чтобы мы приняли заявку в <b>' + esc(jr.chat.title) + '</b>, подпишись на наш основной канал ' +
+        '<b>FootballFitStore</b> — там джерси клубов и бутсы с доставкой по СНГ.\n\n' +
+        '1️⃣ Подпишись на канал\n2️⃣ Нажми «✅ Я подписался» — и заявка сразу будет принята',
+      reply_markup: { inline_keyboard: [
+        [{ text: '📢 Подписаться на FootballFitStore', url: 'https://t.me/' + MAIN_CHANNEL }],
+        [{ text: '✅ Я подписался', callback_data: 'chk:' + jr.chat.id }],
+        [{ text: '🛍 Каталог джерси и бутс', web_app: { url: SHOP } }],
+      ] },
+    }).catch(() => {});
+    return;
+  }
   if (jr) {
     const name = esc(jr.from && jr.from.first_name || '');
     await tg(env, 'sendMessage', {
@@ -195,6 +211,27 @@ async function handle(env, update) {
       reply_markup: KEYBOARD,
     }).catch(() => {});
     await tg(env, 'approveChatJoinRequest', { chat_id: jr.chat.id, user_id: jr.from.id }).catch(() => {});
+    return;
+  }
+  const cq = update.callback_query;
+  if (cq && String(cq.data || '').startsWith('chk:')) {
+    const chatId = Number(cq.data.slice(4)), uid = cq.from.id;
+    const m = await (await tg(env, 'getChatMember', { chat_id: '@' + MAIN_CHANNEL, user_id: uid })).json().catch(() => ({}));
+    const st = m.ok && m.result.status;
+    const subscribed = ['member', 'administrator', 'creator'].includes(st) || (st === 'restricted' && m.result.is_member);
+    if (m.ok && !subscribed) {
+      await tg(env, 'answerCallbackQuery', { callback_query_id: cq.id, show_alert: true,
+        text: 'Ты ещё не подписан на FootballFitStore 🙂 Подпишись и нажми «✅ Я подписался» ещё раз.' });
+      return;
+    }
+    // подписан (или проверить не удалось — тогда не задерживаем человека)
+    await tg(env, 'approveChatJoinRequest', { chat_id: chatId, user_id: uid }).catch(() => {});
+    await tg(env, 'answerCallbackQuery', { callback_query_id: cq.id, text: '✅ Заявка принята!' });
+    if (cq.message) await tg(env, 'editMessageText', {
+      chat_id: cq.message.chat.id, message_id: cq.message.message_id, parse_mode: 'HTML',
+      text: '✅ <b>Готово! Заявка принята</b> — добро пожаловать!\n\n🛍 А вот наш каталог джерси и бутс с ценами и размерами 👇',
+      reply_markup: KEYBOARD,
+    });
     return;
   }
   const msg = update.message;
@@ -251,7 +288,7 @@ export default {
       const r = await tg(env, 'setWebhook', {
         url: url.origin + '/webhook',
         secret_token: await hookSecret(env),
-        allowed_updates: ['message', 'chat_join_request'],
+        allowed_updates: ['message', 'chat_join_request', 'callback_query'],
         drop_pending_updates: true,
       });
       await tg(env, 'setChatMenuButton', {
