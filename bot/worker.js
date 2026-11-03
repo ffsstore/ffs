@@ -38,7 +38,6 @@ async function hookSecret(env) {
 }
 
 // ---------- счётчики товаров (D1, привязка DB) ----------
-const DAYS = 7;
 const CORS = { 'access-control-allow-origin': '*', 'access-control-allow-methods': 'GET,POST,OPTIONS', 'access-control-allow-headers': 'content-type' };
 const json = (o, st = 200, extra = {}) => new Response(JSON.stringify(o), { status: st, headers: { 'content-type': 'application/json', ...CORS, ...extra } });
 
@@ -80,8 +79,7 @@ async function track(env, body) {
 }
 async function stats(env) {
   const d = await db(env);
-  const since = Date.now() - DAYS * 86400000;
-  const { results } = await d.prepare('SELECT pid, kind, COUNT(*) AS n FROM ev WHERE ts > ? GROUP BY pid, kind').bind(since).all();
+  const { results } = await d.prepare('SELECT pid, kind, COUNT(*) AS n FROM ev GROUP BY pid, kind').all();
   const out = {};
   for (const r of results) (out[r.pid] ??= {})[r.kind] = r.n;
   return json(out, 200, { 'cache-control': 'public, max-age=60' });

@@ -326,7 +326,7 @@ const YM=113965941; // номер счётчика Метрики
 if(YM){(function(m,e,t,r,i,k,a){m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};m[i].l=1*new Date();k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)})(window,document,'script','https://mc.yandex.ru/metrika/tag.js','ym');ym(YM,'init',{clickmap:true,trackLinks:true,accurateTrackBounce:true})}
 // ---- счётчики для покупателей (сервер бота) ----
 const API='https://ffs-bot.vovapronin87.workers.dev';
-const FOMO={view:5,cart:2,fav:3}; // показывать, начиная с этих чисел
+const FOMO={view:1,cart:1,fav:1}; // показывать, начиная с этих чисел
 let STATS={};
 function srv(kind,pid){try{const initData=tg&&tg.initData;if(!initData||!pid)return;fetch(API+'/track',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({kind,pid,initData}),keepalive:true}).catch(()=>{})}catch(e){}}
 async function loadStats(){try{const r=await fetch(API+'/stats');if(r.ok){STATS=await r.json();if(st.page==='cat'||st.page==='prod'||st.page==='fav')render()}}catch(e){}}
@@ -334,7 +334,7 @@ const plur=(n,a,b,c)=>{const m=n%10,h=n%100;return m===1&&h!==11?a:m>=2&&m<=4&&(
 const ppl=n=>n+' '+plur(n,'человек','человека','человек');
 function fomoLines(p){const s=STATS[p.id]||{},o=[];
  if((s.cart||0)>=FOMO.cart)o.push(`🛒 В корзине у ${ppl(s.cart)}`);
- if((s.view||0)>=FOMO.view)o.push(`👁 ${ppl(s.view)} ${plur(s.view,'смотрел','смотрели','смотрели')} за неделю`);
+ if((s.view||0)>=FOMO.view)o.push(`👁 ${ppl(s.view)} ${plur(s.view,'смотрел','смотрели','смотрели')} этот товар`);
  if((s.fav||0)>=FOMO.fav)o.push(`❤️ ${ppl(s.fav)} ${plur(s.fav,'добавил','добавили','добавили')} в избранное`);
  return o}
 function track(kind,p){if(p&&(kind==='view'||kind==='fav'||kind==='cart'))srv(kind,p.id);try{if(!YM||!window.ym||!p)return;const lbl={view:'👁 Просмотр',cart:'🛒 В корзину',fav:'❤️ В избранное',order:'✅ Заказать'}[kind]+' — '+p.title+' ('+p.size+')';ym(YM,'hit',location.origin+location.pathname+'#'+kind+'-'+p.id,{title:lbl});if(kind==='order')ym(YM,'reachGoal','order',{product:p.title})}catch(e){}}
