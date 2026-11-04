@@ -1,5 +1,65 @@
 [
  {
+  "id": 47,
+  "cat": "jersey",
+  "auth": "replica",
+  "title": "Манчестер Юнайтед 18/19 домашняя Лингард 14 · Лига Чемпионов",
+  "club": "Манчестер Юнайтед",
+  "league": "АПЛ",
+  "era": "Ретро",
+  "named": "С фамилией",
+  "sleeve": "Короткий",
+  "version": "Фанатская",
+  "size": "M",
+  "byn": 85,
+  "rub": 2890,
+  "stock": "В наличии",
+  "photos": [
+   "img/mun1819_1_w.jpg",
+   "img/mun1819_2_w.jpg"
+  ]
+ },
+ {
+  "id": 46,
+  "cat": "jersey",
+  "auth": "replica",
+  "title": "Интер 19/20 гостевая",
+  "club": "Интер",
+  "league": "Серия А",
+  "era": "Ретро",
+  "named": "Без фамилии",
+  "sleeve": "Короткий",
+  "version": "Фанатская",
+  "size": "M",
+  "byn": 70,
+  "rub": 2190,
+  "stock": "В наличии",
+  "photos": [
+   "img/int1920_1_w.jpg",
+   "img/int1920_2_w.jpg"
+  ]
+ },
+ {
+  "id": 45,
+  "cat": "jersey",
+  "auth": "replica",
+  "title": "Атлетико Мадрид 13/14 гостевая Диего Коста 19",
+  "club": "Атлетико Мадрид",
+  "league": "Ла Лига",
+  "era": "Ретро",
+  "named": "С фамилией",
+  "sleeve": "Короткий",
+  "version": "Фанатская",
+  "size": "M",
+  "byn": 80,
+  "rub": 2790,
+  "stock": "В наличии",
+  "photos": [
+   "img/atm1314_1_w.jpg",
+   "img/atm1314_2_w.jpg"
+  ]
+ },
+ {
   "id": 44,
   "cat": "boots",
   "auth": "original",
