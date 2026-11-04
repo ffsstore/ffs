@@ -1,5 +1,53 @@
 [
  {
+  "id": 39,
+  "title": "Nike Phantom 6 Low Elite AG-Pro · розовые",
+  "size": "42.5 (27 см)",
+  "byn": 694,
+  "note": "Б/у: лёгкие следы носки, шипы немного стёрты. Полный комплект с коробкой",
+  "photos": [
+   "img/ph6p_1.jpg",
+   "img/ph6p_2.jpg",
+   "img/ph6p_3.jpg",
+   "img/ph6p_4.jpg",
+   "img/ph6p_5.jpg",
+   "img/ph6p_6.jpg",
+   "img/ph6p_7.jpg"
+  ],
+  "cat": "boots",
+  "auth": "original",
+  "brand": "Nike",
+  "model": "Phantom 6 Elite",
+  "surface": "AG (искусственный газон)",
+  "state": "Б/у",
+  "stock": "Под заказ",
+  "sup": true
+ },
+ {
+  "id": 38,
+  "title": "Nike Phantom 6 Elite AG · белые",
+  "size": "44 (28 см)",
+  "byn": 730,
+  "note": "Б/у, почти новые: выходили на поле 1–2 раза. Полный комплект с коробкой",
+  "photos": [
+   "img/ph6w_1.jpg",
+   "img/ph6w_2.jpg",
+   "img/ph6w_3.jpg",
+   "img/ph6w_4.jpg",
+   "img/ph6w_5.jpg",
+   "img/ph6w_6.jpg",
+   "img/ph6w_7.jpg"
+  ],
+  "cat": "boots",
+  "auth": "original",
+  "brand": "Nike",
+  "model": "Phantom 6 Elite",
+  "surface": "AG (искусственный газон)",
+  "state": "Б/у",
+  "stock": "Под заказ",
+  "sup": true
+ },
+ {
   "id": 37,
   "cat": "jersey",
   "auth": "replica",
