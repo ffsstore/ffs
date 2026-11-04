@@ -69,6 +69,7 @@ async function db(env) {
       'CREATE TABLE IF NOT EXISTS sub (uid INTEGER, kind TEXT, key TEXT, ts INTEGER, PRIMARY KEY (uid, kind, key))',
       'CREATE TABLE IF NOT EXISTS seen (pid INTEGER PRIMARY KEY)',
       'CREATE TABLE IF NOT EXISTS optout (uid INTEGER PRIMARY KEY)',
+      'CREATE TABLE IF NOT EXISTS draft (uid INTEGER, mid INTEGER, file_id TEXT, PRIMARY KEY (uid, mid))',
     ]) await env.DB.prepare(q).run();
     ready = true;
   }
@@ -183,6 +184,133 @@ async function cron(env) {
   }
 }
 
+
+// ---------- админ: добавление товаров через бота ----------
+// секреты в Cloudflare: GH_TOKEN (GitHub, доступ Contents: write к ffsstore/ffs), ADMIN_ID (твой Telegram ID, узнать — /myid)
+const REPO = 'ffsstore/ffs';
+const CLUBS = { 'Реал Мадрид': 'Ла Лига', 'Барселона': 'Ла Лига', 'Атлетико Мадрид': 'Ла Лига', 'Атлетико': 'Ла Лига',
+  'Манчестер Юнайтед': 'АПЛ', 'Манчестер Сити': 'АПЛ', 'Ливерпуль': 'АПЛ', 'Челси': 'АПЛ', 'Арсенал': 'АПЛ', 'Тоттенхэм': 'АПЛ', 'Ньюкасл': 'АПЛ',
+  'Бавария': 'Бундеслига', 'Боруссия Дортмунд': 'Бундеслига', 'Боруссия': 'Бундеслига', 'Байер': 'Бундеслига',
+  'Ювентус': 'Серия А', 'Милан': 'Серия А', 'Интер': 'Серия А', 'Наполи': 'Серия А', 'Рома': 'Серия А', 'Лацио': 'Серия А',
+  'ПСЖ': 'Лига 1', 'Марсель': 'Лига 1', 'Аякс': 'Эредивизи', 'Бенфика': 'Португалия', 'Порту': 'Португалия',
+  'Аргентина': 'Сборные', 'Бразилия': 'Сборные', 'Португалия': 'Сборные', 'Франция': 'Сборные', 'Германия': 'Сборные', 'Испания': 'Сборные', 'Англия': 'Сборные', 'Италия': 'Сборные' };
+const admin = (env, id) => env.ADMIN_ID && String(env.ADMIN_ID).split(',').map(s => s.trim()).includes(String(id));
+const b64 = bytes => { let s = ''; for (let i = 0; i < bytes.length; i += 0x8000) s += String.fromCharCode(...bytes.subarray(i, i + 0x8000)); return btoa(s); };
+const unb64 = s => Uint8Array.from(atob(s.replace(/\s/g, '')), c => c.charCodeAt(0));
+async function gh(env, path, opt = {}) {
+  const r = await fetch('https://api.github.com/repos/' + REPO + '/contents/' + path, {
+    ...opt, headers: { authorization: 'Bearer ' + env.GH_TOKEN, accept: 'application/vnd.github+json', 'user-agent': 'ffs-bot', 'content-type': 'application/json' } });
+  const j = await r.json().catch(() => ({}));
+  if (!r.ok && !(opt.method == null && r.status === 404)) throw new Error('GitHub: ' + (j.message || r.status));
+  return r.ok ? j : null;
+}
+async function loadP(env) { const f = await gh(env, 'products.json'); return { sha: f.sha, P: JSON.parse(new TextDecoder().decode(unb64(f.content))) }; }
+async function saveP(env, P, sha, message) {
+  await gh(env, 'products.json', { method: 'PUT', body: JSON.stringify({ message, sha, content: b64(new TextEncoder().encode(JSON.stringify(P, null, 1))) }) });
+}
+function parseItem(text, P) {
+  const parts = text.replace(/^\/add(@\w+)?\s*/i, '').split('|').map(s => s.trim());
+  if (parts.length < 3) return null;
+  const [title, size, bynS, rubS, ...rest] = parts;
+  const flags = rest.join(' ').toLowerCase() + ' ' + title.toLowerCase();
+  const byn = parseInt(bynS, 10), rub = parseInt(String(rubS || '').replace(/\D/g, ''), 10) || 0;
+  if (!title || !size || !byn) return null;
+  const boots = /бутс|boots|nike|adidas|puma|mizuno|predator|mercurial|phantom|tiempo|f50|copa|future/i.test(flags) && !/джерси/i.test(flags);
+  const o = { id: Math.max(0, ...P.map(p => p.id)) + 1, cat: boots ? 'boots' : 'jersey', auth: /оригинал/.test(flags) ? 'original' : 'replica', title };
+  if (!boots) {
+    const club = Object.keys(CLUBS).sort((a, b) => b.length - a.length).find(c => title.toLowerCase().startsWith(c.toLowerCase()));
+    const same = club && P.find(p => p.club === club);
+    const y = (title.match(/\b(\d{2})\/\d{2}\b/) || [])[1];
+    Object.assign(o, {
+      club: club || title.split(/\s\d/)[0], league: same ? same.league : CLUBS[club] || '',
+      era: y ? (+y <= 19 || +y >= 80 ? 'Ретро' : 'Современные') : 'Современные',
+      named: /\s\d{1,2}$/.test(title.replace(/·.*$/, '').trim()) ? 'С фамилией' : 'Без фамилии',
+      sleeve: /длинн/.test(flags) ? 'Длинный' : 'Короткий', version: /игров/.test(flags) ? 'Игровая' : 'Фанатская' });
+  } else {
+    const brand = (title.match(/^(Nike|Adidas|Puma|Mizuno|New Balance)/i) || [])[1] || '';
+    Object.assign(o, { brand, model: title.replace(new RegExp('^' + brand + '\\s*', 'i'), '').split('·')[0].trim(),
+      surface: /\bag\b/i.test(title) ? 'AG (искусственный газон)' : /\bfg\b/i.test(title) ? 'FG (натуральный газон)' : '' });
+    if (/б\/у/.test(flags)) o.state = 'Б/у';
+  }
+  Object.assign(o, { size, byn });
+  if (rub) o.rub = rub;
+  o.stock = /под заказ/.test(flags) ? 'Под заказ' : 'В наличии';
+  if (o.stock === 'Под заказ') o.sup = true;
+  return o;
+}
+const say = (env, chat, text, extra = {}) => tg(env, 'sendMessage', { chat_id: chat, text, parse_mode: 'HTML', disable_web_page_preview: true, ...extra });
+const HELP =
+  '🛠 <b>Добавить товар</b>\n' +
+  '1. Пришли сюда фото (по одному или альбомом). Первое фото будет главным.\n' +
+  '2. Отправь строку:\n<code>/add Название | Размер | BYN | ₽ | метки</code>\n\n' +
+  'Примеры:\n<code>/add Челси 19/20 третья Ковачич 17 | S | 75 | 2690</code>\n' +
+  '<code>/add Арсенал 26/27 домашняя | M | 50 | 1890 | игровая</code>\n' +
+  '<code>/add Nike Phantom GT2 Elite FG | 42.5 (27 см) | 360 | 11490 | оригинал б/у</code>\n\n' +
+  'Метки (необязательно): игровая, оригинал, под заказ, б/у, длинный рукав. ₽ можно не писать — посчитается по курсу.\n\n' +
+  '<b>Другое:</b>\n/list — последние товары с номерами\n/sold 45 — убрать проданный товар\n/price 45 70 2490 — новая цена (BYN и ₽)\n/cancel — сбросить присланные фото';
+
+async function adminCmd(env, msg) {
+  const chat = msg.chat.id, text = (msg.text || msg.caption || '').trim(), d = await db(env);
+  if (msg.photo) {
+    const f = msg.photo[msg.photo.length - 1];
+    await d.prepare('INSERT INTO draft (uid, mid, file_id) VALUES (?, ?, ?)').bind(chat, msg.message_id, f.file_id).run();
+    const n = (await d.prepare('SELECT COUNT(*) AS n FROM draft WHERE uid=?').bind(chat).all()).results[0].n;
+    if (n === 1) await say(env, chat, '📷 Фото принимаю. Когда пришлёшь все — отправь строку <code>/add Название | Размер | BYN | ₽</code>\n(подсказка — /help)');
+    return true;
+  }
+  if (/^\/(help|admin)/.test(text)) { await say(env, chat, HELP); return true; }
+  if (/^\/cancel/.test(text)) { await d.prepare('DELETE FROM draft WHERE uid=?').bind(chat).run(); await say(env, chat, '🗑 Фото сброшены.'); return true; }
+  if (!/^\/(add|list|sold|del|price)/.test(text)) return false;
+  if (!env.GH_TOKEN) { await say(env, chat, '❌ Не задан секрет GH_TOKEN в Cloudflare.'); return true; }
+  try {
+    const { sha, P } = await loadP(env);
+    if (/^\/list/.test(text)) {
+      await say(env, chat, '📋 <b>Товары</b> (номер — название — размер — цена):\n\n' + P.slice(0, 40).map(p => `<b>${p.id}</b> — ${esc(p.title)} — ${esc(p.size)} — ${p.byn || '?'} BYN`).join('\n'));
+      return true;
+    }
+    if (/^\/(sold|del)/.test(text)) {
+      const id = parseInt(text.split(/\s+/)[1], 10), p = P.find(x => x.id === id);
+      if (!p) { await say(env, chat, '❌ Нет товара с номером ' + (id || '?') + '. Номера — /list'); return true; }
+      await saveP(env, P.filter(x => x.id !== id), sha, 'Продано: ' + p.title);
+      await say(env, chat, '✅ Убрал с сайта: <b>' + esc(p.title) + '</b>\nНа сайте обновится через 1–2 минуты.');
+      return true;
+    }
+    if (/^\/price/.test(text)) {
+      const [, idS, bynS, rubS] = text.split(/\s+/), p = P.find(x => x.id === parseInt(idS, 10));
+      if (!p || !parseInt(bynS, 10)) { await say(env, chat, '❌ Формат: <code>/price 45 70 2490</code> (номер, BYN, ₽)'); return true; }
+      p.byn = parseInt(bynS, 10); if (parseInt(rubS, 10)) p.rub = parseInt(rubS, 10); else delete p.rub;
+      await saveP(env, P, sha, 'Цена: ' + p.title);
+      await say(env, chat, '✅ Новая цена у <b>' + esc(p.title) + '</b>: ' + p.byn + ' BYN' + (p.rub ? ' / ' + p.rub + ' ₽' : ''));
+      return true;
+    }
+    // /add
+    const o = parseItem(text, P);
+    if (!o) { await say(env, chat, '❌ Не понял строку. Нужно так:\n<code>/add Название | Размер | BYN | ₽</code>\nПодробнее — /help'); return true; }
+    const ph = (await d.prepare('SELECT file_id FROM draft WHERE uid=? ORDER BY mid').bind(chat).all()).results;
+    if (!ph.length) { await say(env, chat, '❌ Сначала пришли фото товара, потом строку /add.'); return true; }
+    await say(env, chat, '⏳ Загружаю ' + ph.length + ' фото…');
+    o.photos = [];
+    for (let i = 0; i < ph.length; i++) {
+      const f = await (await tg(env, 'getFile', { file_id: ph[i].file_id })).json();
+      const bytes = new Uint8Array(await (await fetch('https://api.telegram.org/file/bot' + token(env) + '/' + f.result.file_path)).arrayBuffer());
+      const path = 'img/p' + o.id + '_' + (i + 1) + '.jpg';
+      const old = await gh(env, path);
+      await gh(env, path, { method: 'PUT', body: JSON.stringify({ message: 'Фото: ' + o.title, content: b64(bytes), ...(old ? { sha: old.sha } : {}) }) });
+      o.photos.push(path);
+    }
+    const fresh = await loadP(env);
+    o.id = Math.max(o.id, ...fresh.P.map(p => p.id + 1));
+    await saveP(env, [o, ...fresh.P], fresh.sha, 'Добавлен: ' + o.title);
+    await d.prepare('DELETE FROM draft WHERE uid=?').bind(chat).run();
+    const rows = [['Категория', o.cat === 'boots' ? 'Бутсы' : 'Джерси'], ['Клуб', o.club], ['Лига', o.league], ['Тип', o.era], ['Версия', o.version],
+      ['Размер', o.size], ['Цена', o.byn + ' BYN' + (o.rub ? ' / ' + o.rub + ' ₽' : ' (₽ по курсу)')], ['Наличие', o.stock], ['Оригинал/реплика', o.auth === 'original' ? 'Оригинал' : 'Реплика']]
+      .filter(r => r[1]).map(r => r[0] + ': ' + esc(r[1])).join('\n');
+    await say(env, chat, '✅ <b>Добавлено на сайт</b> (номер ' + o.id + ')\n' + esc(o.title) + '\n\n' + rows + '\n\nПоявится через 1–2 минуты. Ошибся — /sold ' + o.id + ' и добавь заново.',
+      { reply_markup: appBtn('👀 Посмотреть', '?p=' + o.id) });
+  } catch (e) { await say(env, chat, '❌ Ошибка: ' + esc(e.message)); }
+  return true;
+}
+
 async function handle(env, update) {
   // заявка на вступление в канал → приветствие с каталогом, затем одобряем заявку
   const jr = update.chat_join_request;
@@ -235,6 +363,8 @@ async function handle(env, update) {
   const msg = update.message;
   if (!msg || !msg.chat || msg.chat.type !== 'private') return;
   const text = msg.text || '';
+  if (text.startsWith('/myid')) { await say(env, msg.chat.id, 'Твой Telegram ID: <code>' + msg.chat.id + '</code>'); return; }
+  if (env.DB && admin(env, msg.chat.id) && await adminCmd(env, msg)) return;
   if (env.DB && (text.startsWith('/stop') || text.startsWith('/notify'))) {
     const d = await db(env), stop = text.startsWith('/stop');
     if (stop) await d.prepare('INSERT OR IGNORE INTO optout (uid) VALUES (?)').bind(msg.chat.id).run();
