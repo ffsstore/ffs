@@ -265,7 +265,7 @@ async function adminCmd(env, msg) {
   try {
     const { sha, P } = await loadP(env);
     if (/^\/list/.test(text)) {
-      await say(env, chat, '📋 <b>Товары</b> (номер — название — размер — цена):\n\n' + P.slice(0, 40).map(p => `<b>${p.id}</b> — ${esc(p.title)} — ${esc(p.size)} — ${p.byn || '?'} BYN`).join('\n'));
+      await say(env, chat, '📋 <b>Товары</b> (номер — название — размер — цена):\n\n' + [...P].sort((a, b) => b.id - a.id).slice(0, 40).map(p => `<b>${p.id}</b> — ${esc(p.title)} — ${esc(p.size)} — ${p.byn || '?'} BYN`).join('\n'));
       return true;
     }
     if (/^\/(sold|del)/.test(text)) {
@@ -300,7 +300,7 @@ async function adminCmd(env, msg) {
     }
     const fresh = await loadP(env);
     o.id = Math.max(o.id, ...fresh.P.map(p => p.id + 1));
-    await saveP(env, [o, ...fresh.P], fresh.sha, 'Добавлен: ' + o.title);
+    await saveP(env, [o, ...fresh.P].sort((a, b) => b.id - a.id), fresh.sha, 'Добавлен: ' + o.title);
     await d.prepare('DELETE FROM draft WHERE uid=?').bind(chat).run();
     const rows = [['Категория', o.cat === 'boots' ? 'Бутсы' : 'Джерси'], ['Клуб', o.club], ['Лига', o.league], ['Тип', o.era], ['Версия', o.version],
       ['Размер', o.size], ['Цена', o.byn + ' BYN' + (o.rub ? ' / ' + o.rub + ' ₽' : ' (₽ по курсу)')], ['Наличие', o.stock], ['Оригинал/реплика', o.auth === 'original' ? 'Оригинал' : 'Реплика']]

@@ -291,83 +291,23 @@
   ]
  },
  {
-  "id": 28,
+  "id": 33,
   "cat": "jersey",
   "auth": "replica",
-  "title": "Челси 23/24 гостевая · игровая",
-  "club": "Челси",
-  "league": "АПЛ",
-  "era": "Современные",
-  "named": "Без фамилии",
-  "sleeve": "Короткий",
-  "version": "Игровая",
-  "size": "M",
-  "byn": 70,
-  "rub": 2490,
-  "stock": "В наличии",
-  "photos": [
-   "img/che2324_1_w.jpg",
-   "img/che2324_2_w.jpg"
-  ]
- },
- {
-  "id": 29,
-  "cat": "jersey",
-  "auth": "replica",
-  "title": "Наполи 23/24 Halloween · специальная",
+  "title": "Наполи 25/26 бежевая",
   "club": "Наполи",
   "league": "Серия А",
   "era": "Современные",
   "named": "Без фамилии",
   "sleeve": "Короткий",
   "version": "Фанатская",
-  "size": "M",
-  "byn": 65,
-  "rub": 2490,
-  "stock": "В наличии",
-  "photos": [
-   "img/nap2324_1_w.jpg",
-   "img/nap2324_2_w.jpg"
-  ]
- },
- {
-  "id": 30,
-  "cat": "jersey",
-  "auth": "replica",
-  "title": "Боруссия Дортмунд 11/12 домашняя",
-  "club": "Боруссия Дортмунд",
-  "league": "Бундеслига",
-  "era": "Ретро",
-  "named": "Без фамилии",
-  "sleeve": "Короткий",
-  "version": "Фанатская",
   "size": "S",
-  "byn": 80,
-  "rub": 2690,
+  "byn": 50,
+  "rub": 1990,
   "stock": "В наличии",
   "photos": [
-   "img/bvb1112_1_w.jpg",
-   "img/bvb1112_2_w.jpg"
-  ]
- },
- {
-  "id": 31,
-  "cat": "jersey",
-  "auth": "replica",
-  "title": "Манчестер Сити 11/12 домашняя Сильва 21",
-  "club": "Манчестер Сити",
-  "league": "АПЛ",
-  "era": "Ретро",
-  "named": "С фамилией",
-  "sleeve": "Короткий",
-  "version": "Фанатская",
-  "size": "M",
-  "byn": 75,
-  "rub": 2790,
-  "stock": "В наличии",
-  "photos": [
-   "img/mci1112_1_w.jpg",
-   "img/mci1112_2_w.jpg"
+   "img/nap2526_1_w.jpg",
+   "img/nap2526_2_w.jpg"
   ]
  },
  {
@@ -391,23 +331,83 @@
   ]
  },
  {
-  "id": 33,
+  "id": 31,
   "cat": "jersey",
   "auth": "replica",
-  "title": "Наполи 25/26 бежевая",
+  "title": "Манчестер Сити 11/12 домашняя Сильва 21",
+  "club": "Манчестер Сити",
+  "league": "АПЛ",
+  "era": "Ретро",
+  "named": "С фамилией",
+  "sleeve": "Короткий",
+  "version": "Фанатская",
+  "size": "M",
+  "byn": 75,
+  "rub": 2790,
+  "stock": "В наличии",
+  "photos": [
+   "img/mci1112_1_w.jpg",
+   "img/mci1112_2_w.jpg"
+  ]
+ },
+ {
+  "id": 30,
+  "cat": "jersey",
+  "auth": "replica",
+  "title": "Боруссия Дортмунд 11/12 домашняя",
+  "club": "Боруссия Дортмунд",
+  "league": "Бундеслига",
+  "era": "Ретро",
+  "named": "Без фамилии",
+  "sleeve": "Короткий",
+  "version": "Фанатская",
+  "size": "S",
+  "byn": 80,
+  "rub": 2690,
+  "stock": "В наличии",
+  "photos": [
+   "img/bvb1112_1_w.jpg",
+   "img/bvb1112_2_w.jpg"
+  ]
+ },
+ {
+  "id": 29,
+  "cat": "jersey",
+  "auth": "replica",
+  "title": "Наполи 23/24 Halloween · специальная",
   "club": "Наполи",
   "league": "Серия А",
   "era": "Современные",
   "named": "Без фамилии",
   "sleeve": "Короткий",
   "version": "Фанатская",
-  "size": "S",
-  "byn": 50,
-  "rub": 1990,
+  "size": "M",
+  "byn": 65,
+  "rub": 2490,
   "stock": "В наличии",
   "photos": [
-   "img/nap2526_1_w.jpg",
-   "img/nap2526_2_w.jpg"
+   "img/nap2324_1_w.jpg",
+   "img/nap2324_2_w.jpg"
+  ]
+ },
+ {
+  "id": 28,
+  "cat": "jersey",
+  "auth": "replica",
+  "title": "Челси 23/24 гостевая · игровая",
+  "club": "Челси",
+  "league": "АПЛ",
+  "era": "Современные",
+  "named": "Без фамилии",
+  "sleeve": "Короткий",
+  "version": "Игровая",
+  "size": "M",
+  "byn": 70,
+  "rub": 2490,
+  "stock": "В наличии",
+  "photos": [
+   "img/che2324_1_w.jpg",
+   "img/che2324_2_w.jpg"
   ]
  },
  {
@@ -549,6 +549,30 @@
   ]
  },
  {
+  "id": 21,
+  "cat": "jersey",
+  "auth": "replica",
+  "title": "Ювентус 19/20 Де Лигт 4",
+  "club": "Ювентус",
+  "league": "Серия А",
+  "era": "Ретро",
+  "named": "С фамилией",
+  "sleeve": "Короткий",
+  "version": "Фанатская",
+  "size": "S",
+  "byn": 70,
+  "rub": 2490,
+  "stock": "В наличии",
+  "photos": [
+   "img/juv1920_2_w.jpg",
+   "img/juv1920_1_w.jpg",
+   "img/juv1920_3_e.jpg",
+   "img/juv1920_4_e.jpg",
+   "img/juv1920_5_e.jpg",
+   "img/juv1920_6_e.jpg"
+  ]
+ },
+ {
   "id": 20,
   "cat": "jersey",
   "auth": "replica",
@@ -573,27 +597,114 @@
   ]
  },
  {
-  "id": 21,
-  "cat": "jersey",
-  "auth": "replica",
-  "title": "Ювентус 19/20 Де Лигт 4",
-  "club": "Ювентус",
-  "league": "Серия А",
-  "era": "Ретро",
-  "named": "С фамилией",
-  "sleeve": "Короткий",
-  "version": "Фанатская",
-  "size": "S",
-  "byn": 70,
-  "rub": 2490,
-  "stock": "В наличии",
+  "id": 16,
+  "cat": "boots",
+  "auth": "original",
+  "title": "Nike Phantom GT2 Elite FG",
+  "brand": "Nike",
+  "model": "Phantom",
+  "size": "39 (24.5 см)",
+  "surface": "FG",
+  "byn": 450,
+  "rub": 12900,
+  "kzt": 70000,
+  "stock": "Со склада",
+  "ship": "warehouse",
   "photos": [
-   "img/juv1920_2_w.jpg",
-   "img/juv1920_1_w.jpg",
-   "img/juv1920_3_e.jpg",
-   "img/juv1920_4_e.jpg",
-   "img/juv1920_5_e.jpg",
-   "img/juv1920_6_e.jpg"
+   "img/b_bb5fe63a.jpg"
+  ]
+ },
+ {
+  "id": 15,
+  "cat": "boots",
+  "auth": "original",
+  "title": "Adidas F50 Elite FG",
+  "brand": "Adidas",
+  "model": "F50",
+  "size": "41 (26 см)",
+  "surface": "FG",
+  "byn": 450,
+  "rub": 13000,
+  "kzt": 70000,
+  "stock": "Со склада",
+  "ship": "warehouse",
+  "photos": [
+   "img/b_3555eb18.jpg"
+  ]
+ },
+ {
+  "id": 14,
+  "cat": "boots",
+  "auth": "original",
+  "title": "Adidas Predator Elite FG",
+  "brand": "Adidas",
+  "model": "Predator",
+  "size": "42 (26.5 см)",
+  "surface": "FG",
+  "byn": 500,
+  "rub": 14490,
+  "kzt": 78000,
+  "stock": "Со склада",
+  "ship": "warehouse",
+  "photos": [
+   "img/b_1e761445.jpg"
+  ]
+ },
+ {
+  "id": 13,
+  "cat": "boots",
+  "auth": "original",
+  "title": "Nike Tiempo Maestro Elite FG · Jordan",
+  "brand": "Nike",
+  "model": "Tiempo",
+  "size": "41 (26.5 см) / 44 (28 см)",
+  "surface": "FG",
+  "state": "Новые",
+  "byn": 700,
+  "rub": 20000,
+  "kzt": 113000,
+  "stock": "Со склада",
+  "ship": "warehouse",
+  "photos": [
+   "img/b_b6ae40de.jpg"
+  ]
+ },
+ {
+  "id": 12,
+  "cat": "boots",
+  "auth": "original",
+  "title": "Puma Ultra Nitro 7 Ultimate FG",
+  "brand": "Puma",
+  "model": "Ultra",
+  "size": "40 / 40.5 / 42 / 42.5 / 44 / 44.5",
+  "surface": "FG",
+  "state": "Новые",
+  "byn": 600,
+  "rub": 17300,
+  "kzt": 100000,
+  "stock": "Со склада",
+  "ship": "warehouse",
+  "photos": [
+   "img/b_114a22e8.jpg"
+  ]
+ },
+ {
+  "id": 11,
+  "cat": "boots",
+  "auth": "original",
+  "title": "Adidas F50 Elite FG · Messi",
+  "brand": "Adidas",
+  "model": "F50",
+  "size": "42.5 / 44 / 44.5",
+  "surface": "FG",
+  "state": "Новые",
+  "byn": 600,
+  "rub": 17300,
+  "kzt": 100000,
+  "stock": "Со склада",
+  "ship": "warehouse",
+  "photos": [
+   "img/b_66b7f59d.jpg"
   ]
  },
  {
@@ -619,117 +730,6 @@
    "img/f50hf_5.jpg",
    "img/f50hf_6.jpg",
    "img/f50hf_7.jpg"
-  ]
- },
- {
-  "id": 11,
-  "cat": "boots",
-  "auth": "original",
-  "title": "Adidas F50 Elite FG · Messi",
-  "brand": "Adidas",
-  "model": "F50",
-  "size": "42.5 / 44 / 44.5",
-  "surface": "FG",
-  "state": "Новые",
-  "byn": 600,
-  "rub": 17300,
-  "kzt": 100000,
-  "stock": "Со склада",
-  "ship": "warehouse",
-  "photos": [
-   "img/b_66b7f59d.jpg"
-  ]
- },
- {
-  "id": 12,
-  "cat": "boots",
-  "auth": "original",
-  "title": "Puma Ultra Nitro 7 Ultimate FG",
-  "brand": "Puma",
-  "model": "Ultra",
-  "size": "40 / 40.5 / 42 / 42.5 / 44 / 44.5",
-  "surface": "FG",
-  "state": "Новые",
-  "byn": 600,
-  "rub": 17300,
-  "kzt": 100000,
-  "stock": "Со склада",
-  "ship": "warehouse",
-  "photos": [
-   "img/b_114a22e8.jpg"
-  ]
- },
- {
-  "id": 13,
-  "cat": "boots",
-  "auth": "original",
-  "title": "Nike Tiempo Maestro Elite FG · Jordan",
-  "brand": "Nike",
-  "model": "Tiempo",
-  "size": "41 (26.5 см) / 44 (28 см)",
-  "surface": "FG",
-  "state": "Новые",
-  "byn": 700,
-  "rub": 20000,
-  "kzt": 113000,
-  "stock": "Со склада",
-  "ship": "warehouse",
-  "photos": [
-   "img/b_b6ae40de.jpg"
-  ]
- },
- {
-  "id": 14,
-  "cat": "boots",
-  "auth": "original",
-  "title": "Adidas Predator Elite FG",
-  "brand": "Adidas",
-  "model": "Predator",
-  "size": "42 (26.5 см)",
-  "surface": "FG",
-  "byn": 500,
-  "rub": 14490,
-  "kzt": 78000,
-  "stock": "Со склада",
-  "ship": "warehouse",
-  "photos": [
-   "img/b_1e761445.jpg"
-  ]
- },
- {
-  "id": 15,
-  "cat": "boots",
-  "auth": "original",
-  "title": "Adidas F50 Elite FG",
-  "brand": "Adidas",
-  "model": "F50",
-  "size": "41 (26 см)",
-  "surface": "FG",
-  "byn": 450,
-  "rub": 13000,
-  "kzt": 70000,
-  "stock": "Со склада",
-  "ship": "warehouse",
-  "photos": [
-   "img/b_3555eb18.jpg"
-  ]
- },
- {
-  "id": 16,
-  "cat": "boots",
-  "auth": "original",
-  "title": "Nike Phantom GT2 Elite FG",
-  "brand": "Nike",
-  "model": "Phantom",
-  "size": "39 (24.5 см)",
-  "surface": "FG",
-  "byn": 450,
-  "rub": 12900,
-  "kzt": 70000,
-  "stock": "Со склада",
-  "ship": "warehouse",
-  "photos": [
-   "img/b_bb5fe63a.jpg"
   ]
  }
 ]
