@@ -1,5 +1,108 @@
 [
  {
+  "id": 44,
+  "cat": "boots",
+  "auth": "original",
+  "title": "Nike Phantom GT2 Elite FG · Qatar (золото/чёрные)",
+  "brand": "Nike",
+  "model": "Phantom GT2 Elite",
+  "size": "42.5 (27 см)",
+  "surface": "FG (натуральный газон)",
+  "state": "Б/у",
+  "byn": 360,
+  "rub": 11490,
+  "stock": "В наличии",
+  "note": "Б/у, следы носки на подошве. В комплекте фирменный мешок Nike",
+  "photos": [
+   "img/gt2b_1.jpg",
+   "img/gt2b_2.jpg",
+   "img/gt2b_3.jpg",
+   "img/gt2b_4.jpg",
+   "img/gt2b_5.jpg",
+   "img/gt2b_6.jpg"
+  ]
+ },
+ {
+  "id": 43,
+  "cat": "jersey",
+  "auth": "replica",
+  "title": "Ювентус 19/20 третья Рабьо 25 · Лига Чемпионов",
+  "club": "Ювентус",
+  "league": "Серия А",
+  "era": "Ретро",
+  "named": "С фамилией",
+  "sleeve": "Короткий",
+  "version": "Фанатская",
+  "size": "S",
+  "byn": 70,
+  "rub": 2490,
+  "stock": "В наличии",
+  "photos": [
+   "img/juv1920r_1_w.jpg",
+   "img/juv1920r_2_w.jpg"
+  ]
+ },
+ {
+  "id": 42,
+  "cat": "jersey",
+  "auth": "replica",
+  "title": "Ювентус 14/15 домашняя Тевес 10",
+  "club": "Ювентус",
+  "league": "Серия А",
+  "era": "Ретро",
+  "named": "С фамилией",
+  "sleeve": "Короткий",
+  "version": "Фанатская",
+  "size": "L",
+  "byn": 80,
+  "rub": 2690,
+  "stock": "В наличии",
+  "photos": [
+   "img/juv1415_1_w.jpg",
+   "img/juv1415_2_w.jpg"
+  ]
+ },
+ {
+  "id": 41,
+  "cat": "jersey",
+  "auth": "replica",
+  "title": "Арсенал 26/27 домашняя · игровая",
+  "club": "Арсенал",
+  "league": "АПЛ",
+  "era": "Современные",
+  "named": "Без фамилии",
+  "sleeve": "Короткий",
+  "version": "Игровая",
+  "size": "M",
+  "byn": 50,
+  "rub": 1890,
+  "stock": "В наличии",
+  "photos": [
+   "img/ars2627_1_w.jpg",
+   "img/ars2627_2_w.jpg"
+  ]
+ },
+ {
+  "id": 40,
+  "cat": "jersey",
+  "auth": "replica",
+  "title": "Челси 19/20 третья Ковачич 17",
+  "club": "Челси",
+  "league": "АПЛ",
+  "era": "Ретро",
+  "named": "С фамилией",
+  "sleeve": "Короткий",
+  "version": "Фанатская",
+  "size": "S",
+  "byn": 75,
+  "rub": 2690,
+  "stock": "В наличии",
+  "photos": [
+   "img/che1920k_1_w.jpg",
+   "img/che1920k_2_w.jpg"
+  ]
+ },
+ {
   "id": 39,
   "title": "Nike Phantom 6 Low Elite AG-Pro · розовые",
   "size": "42.5 (27 см)",
