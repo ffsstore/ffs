@@ -1,5 +1,26 @@
 [
  {
+  "id": 55,
+  "cat": "boots",
+  "auth": "original",
+  "title": "Nike Phantom 6 Low Elite AG",
+  "brand": "Nike",
+  "model": "Phantom 6 Low Elite AG",
+  "surface": "AG (искусственный газон)",
+  "size": "44 (28 см)",
+  "byn": 600,
+  "rub": 17290,
+  "stock": "В наличии",
+  "ship": "warehouse",
+  "photos": [
+   "img/p55_1.jpg",
+   "img/p55_2.jpg",
+   "img/p55_3.jpg",
+   "img/p55_4.jpg",
+   "img/p55_5.jpg"
+  ]
+ },
+ {
   "id": 54,
   "cat": "jersey",
   "auth": "replica",
