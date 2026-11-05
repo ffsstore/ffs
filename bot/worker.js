@@ -239,6 +239,7 @@ function parseItem(text, P) {
   if (rub) o.rub = rub;
   o.stock = /под заказ/.test(flags) ? 'Под заказ' : 'В наличии';
   if (o.stock === 'Под заказ') o.sup = true;
+  else if (o.cat === 'boots') o.ship = 'warehouse'; // бутсы в наличии: доставка 4–10 дней
   return o;
 }
 const say = (env, chat, text, extra = {}) => tg(env, 'sendMessage', { chat_id: chat, text, parse_mode: 'HTML', disable_web_page_preview: true, ...extra });
