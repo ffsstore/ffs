@@ -211,9 +211,12 @@ async function saveP(env, P, sha, message) {
 function parseItem(text, P) {
   const parts = text.replace(/^\/add(@\w+)?\s*/i, '').split('|').map(s => s.trim());
   if (parts.length < 3) return null;
-  const [title, size, bynS, rubS, ...rest] = parts;
-  const flags = rest.join(' ').toLowerCase() + ' ' + title.toLowerCase();
-  const byn = parseInt(bynS, 10), rub = parseInt(String(rubS || '').replace(/\D/g, ''), 10) || 0;
+  let [title, size, bynS, rubS] = parts;
+  const flags = parts.join(' ').toLowerCase().replace(/ё/g, 'е');   // метки можно писать где угодно, даже без «|»
+  const byn = parseInt(bynS, 10), rub = parseInt((String(rubS || '').match(/\d[\d\s]*/) || ['0'])[0].replace(/\s/g, ''), 10) || 0;
+  const SZ = ['XS', 'S', 'M', 'L', 'XL', '2XL', '3XL', '4XL'];
+  const rg = String(size).toUpperCase().replace(/XXL/g, '2XL').match(/^(\d?X{0,1}[SML]|\dXL|XL)\s*[-–—]\s*(\d?X{0,1}[SML]|\dXL|XL)$/);
+  if (rg && SZ.includes(rg[1]) && SZ.includes(rg[2])) size = SZ.slice(SZ.indexOf(rg[1]), SZ.indexOf(rg[2]) + 1).join(' / ');
   if (!title || !size || !byn) return null;
   const boots = /бутс|boots|nike|adidas|puma|mizuno|predator|mercurial|phantom|tiempo|f50|copa|future/i.test(flags) && !/джерси/i.test(flags);
   const o = { id: Math.max(0, ...P.map(p => p.id)) + 1, cat: boots ? 'boots' : 'jersey', auth: /оригинал/.test(flags) ? 'original' : 'replica', title };
@@ -230,7 +233,7 @@ function parseItem(text, P) {
     const brand = (title.match(/^(Nike|Adidas|Puma|Mizuno|New Balance)/i) || [])[1] || '';
     Object.assign(o, { brand, model: title.replace(new RegExp('^' + brand + '\\s*', 'i'), '').split('·')[0].trim(),
       surface: /\bag\b/i.test(title) ? 'AG (искусственный газон)' : /\bfg\b/i.test(title) ? 'FG (натуральный газон)' : '' });
-    if (/б\/у/.test(flags)) o.state = 'Б/у';
+    if (/б\/у|бу\b/.test(flags)) o.state = 'Б/у';
   }
   Object.assign(o, { size, byn });
   if (rub) o.rub = rub;
