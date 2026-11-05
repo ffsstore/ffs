@@ -1,5 +1,25 @@
 [
  {
+  "id": 48,
+  "cat": "jersey",
+  "auth": "replica",
+  "title": "Интер Милан 16/17 домашняя",
+  "club": "Интер",
+  "league": "Серия А",
+  "era": "Ретро",
+  "named": "Без фамилии",
+  "sleeve": "Короткий",
+  "version": "Фанатская",
+  "size": "S",
+  "byn": 55,
+  "rub": 2190,
+  "stock": "В наличии",
+  "photos": [
+   "img/p48_1.jpg",
+   "img/p48_2.jpg"
+  ]
+ },
+ {
   "id": 47,
   "cat": "jersey",
   "auth": "replica",
