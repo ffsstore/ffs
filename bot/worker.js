@@ -251,20 +251,32 @@ const HELP =
   '<code>/add Арсенал 26/27 домашняя | M | 50 | 1890 | игровая</code>\n' +
   '<code>/add Nike Phantom GT2 Elite FG | 42.5 (27 см) | 360 | 11490 | оригинал б/у</code>\n\n' +
   'Метки (необязательно): игровая, оригинал, под заказ, б/у, длинный рукав. ₽ можно не писать — посчитается по курсу.\n\n' +
-  '<b>Другое:</b>\n/list — последние товары с номерами\n/sold 45 — убрать проданный товар\n/price 45 70 2490 — новая цена (BYN и ₽)\n/cancel — сбросить присланные фото';
+  '<b>Другое:</b>\n/photos 12 — заменить фото у товара (сначала пришли фото)\n/list — последние товары с номерами\n/sold 45 — убрать проданный товар\n/price 45 70 2490 — новая цена (BYN и ₽)\n/cancel — сбросить присланные фото';
 
+async function upload(env, ph, prefix, title) {
+  const out = [];
+  for (let i = 0; i < ph.length; i++) {
+    const f = await (await tg(env, 'getFile', { file_id: ph[i].file_id })).json();
+    const bytes = new Uint8Array(await (await fetch('https://api.telegram.org/file/bot' + token(env) + '/' + f.result.file_path)).arrayBuffer());
+    const path = prefix + '_' + (i + 1) + '.jpg';
+    const old = await gh(env, path);
+    await gh(env, path, { method: 'PUT', body: JSON.stringify({ message: 'Фото: ' + title, content: b64(bytes), ...(old ? { sha: old.sha } : {}) }) });
+    out.push(path);
+  }
+  return out;
+}
 async function adminCmd(env, msg) {
   const chat = msg.chat.id, text = (msg.text || msg.caption || '').trim(), d = await db(env);
   if (msg.photo) {
     const f = msg.photo[msg.photo.length - 1];
     await d.prepare('INSERT INTO draft (uid, mid, file_id) VALUES (?, ?, ?)').bind(chat, msg.message_id, f.file_id).run();
     const n = (await d.prepare('SELECT COUNT(*) AS n FROM draft WHERE uid=?').bind(chat).all()).results[0].n;
-    if (n === 1) await say(env, chat, '📷 Фото принимаю. Когда пришлёшь все — отправь строку <code>/add Название | Размер | BYN | ₽</code>\n(подсказка — /help)');
+    if (n === 1) await say(env, chat, '📷 Фото принимаю. Когда пришлёшь все, отправь:\n• новый товар — <code>/add Название | Размер | BYN | ₽</code>\n• или заменить фото у товара — <code>/photos номер</code>\n(подсказка — /help)');
     return true;
   }
   if (/^\/(help|admin)/.test(text)) { await say(env, chat, HELP); return true; }
   if (/^\/cancel/.test(text)) { await d.prepare('DELETE FROM draft WHERE uid=?').bind(chat).run(); await say(env, chat, '🗑 Фото сброшены.'); return true; }
-  if (!/^\/(add|list|sold|del|price)/.test(text)) return false;
+  if (!/^\/(add|list|sold|del|price|photos)/.test(text)) return false;
   if (!env.GH_TOKEN) { await say(env, chat, '❌ Не задан секрет GH_TOKEN в Cloudflare.'); return true; }
   try {
     const { sha, P } = await loadP(env);
@@ -287,21 +299,27 @@ async function adminCmd(env, msg) {
       await say(env, chat, '✅ Новая цена у <b>' + esc(p.title) + '</b>: ' + p.byn + ' BYN' + (p.rub ? ' / ' + p.rub + ' ₽' : ''));
       return true;
     }
+    if (/^\/photos/.test(text)) {
+      const id = parseInt(text.split(/\s+/)[1], 10), p = P.find(x => x.id === id);
+      if (!p) { await say(env, chat, '❌ Формат: <code>/photos 12</code> (номер товара из /list). Сначала пришли фото.'); return true; }
+      const ph = (await d.prepare('SELECT file_id FROM draft WHERE uid=? ORDER BY mid').bind(chat).all()).results;
+      if (!ph.length) { await say(env, chat, '❌ Сначала пришли фото, потом <code>/photos ' + id + '</code>'); return true; }
+      await say(env, chat, '⏳ Загружаю ' + ph.length + ' фото…');
+      const paths = await upload(env, ph, 'img/p' + id + '_' + Date.now().toString(36), p.title);
+      const fresh = await loadP(env), q = fresh.P.find(x => x.id === id);
+      q.photos = paths;
+      await saveP(env, fresh.P, fresh.sha, 'Новые фото: ' + q.title);
+      await d.prepare('DELETE FROM draft WHERE uid=?').bind(chat).run();
+      await say(env, chat, '✅ Заменил фото у <b>' + esc(q.title) + '</b>: теперь ' + paths.length + ' шт. Первое — главное.', { reply_markup: appBtn('👀 Посмотреть', '?p=' + id) });
+      return true;
+    }
     // /add
     const o = parseItem(text, P);
     if (!o) { await say(env, chat, '❌ Не понял строку. Нужно так:\n<code>/add Название | Размер | BYN | ₽</code>\nПодробнее — /help'); return true; }
     const ph = (await d.prepare('SELECT file_id FROM draft WHERE uid=? ORDER BY mid').bind(chat).all()).results;
     if (!ph.length) { await say(env, chat, '❌ Сначала пришли фото товара, потом строку /add.'); return true; }
     await say(env, chat, '⏳ Загружаю ' + ph.length + ' фото…');
-    o.photos = [];
-    for (let i = 0; i < ph.length; i++) {
-      const f = await (await tg(env, 'getFile', { file_id: ph[i].file_id })).json();
-      const bytes = new Uint8Array(await (await fetch('https://api.telegram.org/file/bot' + token(env) + '/' + f.result.file_path)).arrayBuffer());
-      const path = 'img/p' + o.id + '_' + (i + 1) + '.jpg';
-      const old = await gh(env, path);
-      await gh(env, path, { method: 'PUT', body: JSON.stringify({ message: 'Фото: ' + o.title, content: b64(bytes), ...(old ? { sha: old.sha } : {}) }) });
-      o.photos.push(path);
-    }
+    o.photos = await upload(env, ph, 'img/p' + o.id, o.title);
     const fresh = await loadP(env);
     o.id = Math.max(o.id, ...fresh.P.map(p => p.id + 1));
     await saveP(env, [o, ...fresh.P].sort((a, b) => b.id - a.id), fresh.sha, 'Добавлен: ' + o.title);
