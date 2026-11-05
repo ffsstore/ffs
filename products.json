@@ -21,27 +21,6 @@
   ]
  },
  {
-  "id": 51,
-  "cat": "jersey",
-  "auth": "replica",
-  "title": "Барселона 10 гостевая",
-  "club": "Барселона",
-  "league": "Ла Лига",
-  "era": "Современные",
-  "named": "Без фамилии",
-  "sleeve": "Короткий",
-  "version": "Фанатская",
-  "size": "S / M / L / XL / 2XL",
-  "byn": 100,
-  "rub": 2890,
-  "stock": "Под заказ",
-  "sup": true,
-  "photos": [
-   "img/p51_1.jpg",
-   "img/p51_2.jpg"
-  ]
- },
- {
   "id": 50,
   "cat": "jersey",
   "auth": "replica",
