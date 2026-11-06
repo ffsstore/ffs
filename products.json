@@ -1,5 +1,27 @@
 [
  {
+  "id": 60,
+  "cat": "boots",
+  "auth": "original",
+  "title": "Nike Phantom 6 Low Elite",
+  "brand": "Nike",
+  "model": "Phantom 6 Low Elite",
+  "surface": "",
+  "size": "42.5 (27 см)",
+  "byn": 450,
+  "rub": 12990,
+  "stock": "Под заказ",
+  "sup": true,
+  "photos": [
+   "img/p60_mw4rithp_1.jpg",
+   "img/p60_mw4rithp_2.jpg",
+   "img/p60_mw4rithp_3.jpg",
+   "img/p60_mw4rithp_4.jpg",
+   "img/p60_mw4rithp_5.jpg",
+   "img/p60_mw4rithp_6.jpg"
+  ]
+ },
+ {
   "id": 59,
   "cat": "boots",
   "auth": "original",
