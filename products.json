@@ -1,5 +1,26 @@
 [
  {
+  "id": 62,
+  "cat": "boots",
+  "auth": "original",
+  "title": "Adidas F50 Hyperfast Elite AG",
+  "brand": "Adidas",
+  "model": "F50 Hyperfast Elite AG",
+  "surface": "AG (искусственный газон)",
+  "size": "42.5 (27 см)",
+  "byn": 520,
+  "rub": 14990,
+  "stock": "Под заказ",
+  "sup": true,
+  "photos": [
+   "img/p62_mw4rqwpw_1.jpg",
+   "img/p62_mw4rqwpw_2.jpg",
+   "img/p62_mw4rqwpw_3.jpg",
+   "img/p62_mw4rqwpw_4.jpg",
+   "img/p62_mw4rqwpw_5.jpg"
+  ]
+ },
+ {
   "id": 61,
   "cat": "boots",
   "auth": "original",
