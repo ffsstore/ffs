@@ -1,5 +1,26 @@
 [
  {
+  "id": 65,
+  "cat": "boots",
+  "auth": "original",
+  "title": "Nike Phantom 6 Low Elite FG",
+  "brand": "Nike",
+  "model": "Phantom 6 Low Elite FG",
+  "surface": "FG (натуральный газон)",
+  "size": "41/42.5/44",
+  "byn": 700,
+  "rub": 20190,
+  "stock": "В наличии",
+  "ship": "warehouse",
+  "photos": [
+   "img/p65_mw4sufbx_1.jpg",
+   "img/p65_mw4sufbx_2.jpg",
+   "img/p65_mw4sufbx_3.jpg",
+   "img/p65_mw4sufbx_4.jpg",
+   "img/p65_mw4sufbx_5.jpg"
+  ]
+ },
+ {
   "id": 64,
   "cat": "boots",
   "auth": "original",
