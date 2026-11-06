@@ -1,5 +1,26 @@
 [
  {
+  "id": 70,
+  "cat": "boots",
+  "auth": "original",
+  "title": "Puma Future 7 Ultimate FG/AG",
+  "brand": "Puma",
+  "model": "Future 7 Ultimate FG/AG",
+  "surface": "AG (искусственный газон)",
+  "size": "43 (28 см)",
+  "byn": 400,
+  "rub": 11490,
+  "stock": "Под заказ",
+  "sup": true,
+  "photos": [
+   "img/p70_mw4u82g3_1.jpg",
+   "img/p70_mw4u82g3_2.jpg",
+   "img/p70_mw4u82g3_3.jpg",
+   "img/p70_mw4u82g3_4.jpg",
+   "img/p70_mw4u82g3_5.jpg"
+  ]
+ },
+ {
   "id": 69,
   "cat": "boots",
   "auth": "original",
