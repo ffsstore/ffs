@@ -1,5 +1,25 @@
 [
  {
+  "id": 68,
+  "cat": "boots",
+  "auth": "original",
+  "title": "Adidas Predator Elite FT FG",
+  "brand": "Adidas",
+  "model": "Predator Elite FT FG",
+  "surface": "FG (натуральный газон)",
+  "size": "40.5/42.5",
+  "byn": 550,
+  "rub": 15890,
+  "stock": "Под заказ",
+  "sup": true,
+  "photos": [
+   "img/p68_mw4tg5f3_1.jpg",
+   "img/p68_mw4tg5f3_2.jpg",
+   "img/p68_mw4tg5f3_3.jpg",
+   "img/p68_mw4tg5f3_4.jpg"
+  ]
+ },
+ {
   "id": 67,
   "cat": "boots",
   "auth": "original",
