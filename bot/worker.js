@@ -204,6 +204,27 @@ async function gh(env, path, opt = {}) {
   if (!r.ok && !(opt.method == null && r.status === 404)) throw new Error('GitHub: ' + (j.message || r.status));
   return r.ok ? j : null;
 }
+async function ghApi(env, path, method = 'GET', body) {
+  const r = await fetch('https://api.github.com/repos/' + REPO + '/' + path, { method, body: body && JSON.stringify(body),
+    headers: { authorization: 'Bearer ' + env.GH_TOKEN, accept: 'application/vnd.github+json', 'user-agent': 'ffs-bot', 'content-type': 'application/json' } });
+  const j = await r.json().catch(() => ({}));
+  if (!r.ok) throw new Error('GitHub: ' + (j.message || r.status));
+  return j;
+}
+// все файлы — одним коммитом (одна сборка сайта вместо десяти)
+async function commitFiles(env, files, message) {
+  const ref = await ghApi(env, 'git/ref/heads/main');
+  const base = await ghApi(env, 'git/commits/' + ref.object.sha);
+  const tree = [];
+  for (const f of files) {
+    const blob = await ghApi(env, 'git/blobs', 'POST', { content: b64(f.bytes), encoding: 'base64' });
+    tree.push({ path: f.path, mode: '100644', type: 'blob', sha: blob.sha });
+  }
+  const t = await ghApi(env, 'git/trees', 'POST', { base_tree: base.tree.sha, tree });
+  const c = await ghApi(env, 'git/commits', 'POST', { message, tree: t.sha, parents: [ref.object.sha] });
+  await ghApi(env, 'git/refs/heads/main', 'PATCH', { sha: c.sha });
+}
+const pjson = P => ({ path: 'products.json', bytes: new TextEncoder().encode(JSON.stringify(P, null, 1)) });
 async function loadP(env) { const f = await gh(env, 'products.json'); return { sha: f.sha, P: JSON.parse(new TextDecoder().decode(unb64(f.content))) }; }
 async function saveP(env, P, sha, message) {
   await gh(env, 'products.json', { method: 'PUT', body: JSON.stringify({ message, sha, content: b64(new TextEncoder().encode(JSON.stringify(P, null, 1))) }) });
@@ -253,15 +274,12 @@ const HELP =
   'Метки (необязательно): игровая, оригинал, под заказ, б/у, длинный рукав. ₽ можно не писать — посчитается по курсу.\n\n' +
   '<b>Другое:</b>\n/photos 12 — заменить фото у товара (сначала пришли фото)\n/list — последние товары с номерами\n/sold 45 — убрать проданный товар\n/price 45 70 2490 — новая цена (BYN и ₽)\n/cancel — сбросить присланные фото';
 
-async function upload(env, ph, prefix, title) {
+async function download(env, ph, prefix) {
   const out = [];
   for (let i = 0; i < ph.length; i++) {
     const f = await (await tg(env, 'getFile', { file_id: ph[i].file_id })).json();
     const bytes = new Uint8Array(await (await fetch('https://api.telegram.org/file/bot' + token(env) + '/' + f.result.file_path)).arrayBuffer());
-    const path = prefix + '_' + (i + 1) + '.jpg';
-    const old = await gh(env, path);
-    await gh(env, path, { method: 'PUT', body: JSON.stringify({ message: 'Фото: ' + title, content: b64(bytes), ...(old ? { sha: old.sha } : {}) }) });
-    out.push(path);
+    out.push({ path: prefix + '_' + (i + 1) + '.jpg', bytes });
   }
   return out;
 }
@@ -305,10 +323,11 @@ async function adminCmd(env, msg) {
       const ph = (await d.prepare('SELECT file_id FROM draft WHERE uid=? ORDER BY mid').bind(chat).all()).results;
       if (!ph.length) { await say(env, chat, '❌ Сначала пришли фото, потом <code>/photos ' + id + '</code>'); return true; }
       await say(env, chat, '⏳ Загружаю ' + ph.length + ' фото…');
-      const paths = await upload(env, ph, 'img/p' + id + '_' + Date.now().toString(36), p.title);
+      const imgs = await download(env, ph, 'img/p' + id + '_' + Date.now().toString(36));
+      const paths = imgs.map(f => f.path);
       const fresh = await loadP(env), q = fresh.P.find(x => x.id === id);
       q.photos = paths;
-      await saveP(env, fresh.P, fresh.sha, 'Новые фото: ' + q.title);
+      await commitFiles(env, [...imgs, pjson(fresh.P)], 'Новые фото: ' + q.title);
       await d.prepare('DELETE FROM draft WHERE uid=?').bind(chat).run();
       await say(env, chat, '✅ Заменил фото у <b>' + esc(q.title) + '</b>: теперь ' + paths.length + ' шт. Первое — главное.', { reply_markup: appBtn('👀 Посмотреть', '?p=' + id) });
       return true;
@@ -319,10 +338,11 @@ async function adminCmd(env, msg) {
     const ph = (await d.prepare('SELECT file_id FROM draft WHERE uid=? ORDER BY mid').bind(chat).all()).results;
     if (!ph.length) { await say(env, chat, '❌ Сначала пришли фото товара, потом строку /add.'); return true; }
     await say(env, chat, '⏳ Загружаю ' + ph.length + ' фото…');
-    o.photos = await upload(env, ph, 'img/p' + o.id, o.title);
     const fresh = await loadP(env);
     o.id = Math.max(o.id, ...fresh.P.map(p => p.id + 1));
-    await saveP(env, [o, ...fresh.P].sort((a, b) => b.id - a.id), fresh.sha, 'Добавлен: ' + o.title);
+    const imgs = await download(env, ph, 'img/p' + o.id + '_' + Date.now().toString(36));
+    o.photos = imgs.map(f => f.path);
+    await commitFiles(env, [...imgs, pjson([o, ...fresh.P].sort((a, b) => b.id - a.id))], 'Добавлен: ' + o.title);
     await d.prepare('DELETE FROM draft WHERE uid=?').bind(chat).run();
     const rows = [['Категория', o.cat === 'boots' ? 'Бутсы' : 'Джерси'], ['Клуб', o.club], ['Лига', o.league], ['Тип', o.era], ['Версия', o.version],
       ['Размер', o.size], ['Цена', o.byn + ' BYN' + (o.rub ? ' / ' + o.rub + ' ₽' : ' (₽ по курсу)')], ['Наличие', o.stock], ['Оригинал/реплика', o.auth === 'original' ? 'Оригинал' : 'Реплика']]
