@@ -1,5 +1,25 @@
 [
  {
+  "id": 80,
+  "cat": "jersey",
+  "auth": "replica",
+  "title": "Арсенал 17/18 Рэмси 8",
+  "club": "Арсенал",
+  "league": "АПЛ",
+  "era": "Ретро",
+  "named": "С фамилией",
+  "sleeve": "Короткий",
+  "version": "Фанатская",
+  "size": "L",
+  "byn": 60,
+  "rub": 2190,
+  "stock": "В наличии",
+  "photos": [
+   "img/p80_mw7m3113_1.jpg",
+   "img/p80_mw7m3113_2.jpg"
+  ]
+ },
+ {
   "id": 79,
   "cat": "jersey",
   "auth": "replica",
