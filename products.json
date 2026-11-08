@@ -1,25 +1,5 @@
 [
  {
-  "id": 72,
-  "cat": "jersey",
-  "auth": "replica",
-  "title": "Арсенал 18/19 третья Гендузи",
-  "club": "Арсенал",
-  "league": "АПЛ",
-  "era": "Ретро",
-  "named": "Без фамилии",
-  "sleeve": "Короткий",
-  "version": "Фанатская",
-  "size": "S",
-  "byn": 95,
-  "rub": 3190,
-  "stock": "В наличии",
-  "photos": [
-   "img/p72_mw7isl6e_1.jpg",
-   "img/p72_mw7isl6e_2.jpg"
-  ]
- },
- {
   "id": 71,
   "cat": "jersey",
   "auth": "replica",
