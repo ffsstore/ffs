@@ -1,5 +1,27 @@
 [
  {
+  "id": 74,
+  "cat": "jersey",
+  "auth": "replica",
+  "title": "Бавария домашняя 19/20 Перишич 14",
+  "club": "Бавария",
+  "league": "Бундеслига",
+  "era": "Ретро",
+  "named": "С фамилией",
+  "sleeve": "Короткий",
+  "version": "Фанатская",
+  "size": "M",
+  "byn": 50,
+  "rub": 1990,
+  "stock": "В наличии",
+  "photos": [
+   "img/p74_mw7kmyhp_1.jpg",
+   "img/p74_mw7kmyhp_2.jpg",
+   "img/p74_mw7kmyhp_3.jpg",
+   "img/p74_mw7kmyhp_4.jpg"
+  ]
+ },
+ {
   "id": 73,
   "cat": "jersey",
   "auth": "replica",
