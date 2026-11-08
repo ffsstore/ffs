@@ -1,5 +1,25 @@
 [
  {
+  "id": 76,
+  "cat": "jersey",
+  "auth": "replica",
+  "title": "Турция Домашняя 20/21",
+  "club": "Турция Домашняя",
+  "league": "",
+  "era": "Современные",
+  "named": "Без фамилии",
+  "sleeve": "Короткий",
+  "version": "Фанатская",
+  "size": "2XL",
+  "byn": 50,
+  "rub": 1990,
+  "stock": "В наличии",
+  "photos": [
+   "img/p76_mw7l302m_1.jpg",
+   "img/p76_mw7l302m_2.jpg"
+  ]
+ },
+ {
   "id": 75,
   "cat": "jersey",
   "auth": "replica",
