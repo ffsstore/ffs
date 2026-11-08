@@ -1,5 +1,25 @@
 [
  {
+  "id": 75,
+  "cat": "jersey",
+  "auth": "replica",
+  "title": "Бразилия 04/05",
+  "club": "Бразилия",
+  "league": "Сборные",
+  "era": "Ретро",
+  "named": "Без фамилии",
+  "sleeve": "Короткий",
+  "version": "Фанатская",
+  "size": "L",
+  "byn": 55,
+  "rub": 1990,
+  "stock": "В наличии",
+  "photos": [
+   "img/p75_mw7ksru3_1.jpg",
+   "img/p75_mw7ksru3_2.jpg"
+  ]
+ },
+ {
   "id": 74,
   "cat": "jersey",
   "auth": "replica",
