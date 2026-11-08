@@ -967,31 +967,6 @@
   ]
  },
  {
-  "id": 22,
-  "cat": "jersey",
-  "auth": "replica",
-  "title": "Милан 23/24 × Pleasures Тео 19 · игровая",
-  "club": "Милан",
-  "league": "Серия А",
-  "era": "Современные",
-  "named": "С фамилией",
-  "sleeve": "Короткий",
-  "version": "Игровая",
-  "size": "S",
-  "byn": 80,
-  "rub": 2790,
-  "stock": "В наличии",
-  "photos": [
-   "img/mil2324_1_w.jpg",
-   "img/mil2324_2_w.jpg",
-   "img/mil2324_3_e.jpg",
-   "img/mil2324_4_e.jpg",
-   "img/mil2324_5_e.jpg",
-   "img/mil2324_6_e.jpg",
-   "img/mil2324_7_e.jpg"
-  ]
- },
- {
   "id": 21,
   "cat": "jersey",
   "auth": "replica",
