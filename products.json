@@ -1,5 +1,25 @@
 [
  {
+  "id": 78,
+  "cat": "jersey",
+  "auth": "replica",
+  "title": "Тоттенхэм 19/20 домашняя",
+  "club": "Тоттенхэм",
+  "league": "АПЛ",
+  "era": "Ретро",
+  "named": "Без фамилии",
+  "sleeve": "Короткий",
+  "version": "Фанатская",
+  "size": "L",
+  "byn": 70,
+  "rub": 2490,
+  "stock": "В наличии",
+  "photos": [
+   "img/p78_mw7liv79_1.jpg",
+   "img/p78_mw7liv79_2.jpg"
+  ]
+ },
+ {
   "id": 77,
   "cat": "jersey",
   "auth": "replica",
