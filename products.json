@@ -1,5 +1,26 @@
 [
  {
+  "id": 86,
+  "cat": "jersey",
+  "auth": "replica",
+  "title": "Барселона 08/10 Гостевая Месси 10",
+  "club": "Барселона",
+  "league": "Ла Лига",
+  "era": "Ретро",
+  "named": "С фамилией",
+  "sleeve": "Короткий",
+  "version": "Фанатская",
+  "size": "S / M / L / XL / 2XL",
+  "byn": 100,
+  "rub": 2990,
+  "stock": "Под заказ",
+  "sup": true,
+  "photos": [
+   "img/p86_mwaif2ih_1.jpg",
+   "img/p86_mwaif2ih_2.jpg"
+  ]
+ },
+ {
   "id": 85,
   "cat": "jersey",
   "auth": "replica",
