@@ -1,5 +1,26 @@
 [
  {
+  "id": 89,
+  "cat": "jersey",
+  "auth": "replica",
+  "title": "Барселона 13/14 Домашняя Неймар 11",
+  "club": "Барселона",
+  "league": "Ла Лига",
+  "era": "Ретро",
+  "named": "С фамилией",
+  "sleeve": "Короткий",
+  "version": "Фанатская",
+  "size": "S / M / L / XL / 2XL",
+  "byn": 100,
+  "rub": 2990,
+  "stock": "Под заказ",
+  "sup": true,
+  "photos": [
+   "img/p89_mwaijxw5_1.jpg",
+   "img/p89_mwaijxw5_2.jpg"
+  ]
+ },
+ {
   "id": 88,
   "cat": "jersey",
   "auth": "replica",
