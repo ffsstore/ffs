@@ -1,5 +1,25 @@
 [
  {
+  "id": 85,
+  "cat": "jersey",
+  "auth": "replica",
+  "title": "Барселона 07/08 Домашняя Месси 19",
+  "club": "Барселона",
+  "league": "Ла Лига",
+  "era": "Ретро",
+  "named": "С фамилией",
+  "sleeve": "Короткий",
+  "version": "Фанатская",
+  "size": "S / M / L / XL / 2XL",
+  "byn": 100,
+  "rub": 2990,
+  "stock": "В наличии",
+  "photos": [
+   "img/p85_mwaiclo7_1.jpg",
+   "img/p85_mwaiclo7_2.jpg"
+  ]
+ },
+ {
   "id": 84,
   "cat": "jersey",
   "auth": "replica",
