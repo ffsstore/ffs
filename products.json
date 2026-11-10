@@ -1,5 +1,26 @@
 [
  {
+  "id": 88,
+  "cat": "jersey",
+  "auth": "replica",
+  "title": "Барселона 19/20 Домашняя Дембеле 11",
+  "club": "Барселона",
+  "league": "Ла Лига",
+  "era": "Ретро",
+  "named": "С фамилией",
+  "sleeve": "Короткий",
+  "version": "Фанатская",
+  "size": "S / M / L / XL / 2XL",
+  "byn": 100,
+  "rub": 2990,
+  "stock": "Под заказ",
+  "sup": true,
+  "photos": [
+   "img/p88_mwaiikcy_1.jpg",
+   "img/p88_mwaiikcy_2.jpg"
+  ]
+ },
+ {
   "id": 87,
   "cat": "jersey",
   "auth": "replica",
