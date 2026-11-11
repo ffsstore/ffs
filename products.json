@@ -1,5 +1,26 @@
 [
  {
+  "id": 103,
+  "cat": "jersey",
+  "auth": "replica",
+  "title": "Барселона 1998/00 Домашняя Ривалдо 11",
+  "club": "Барселона",
+  "league": "Ла Лига",
+  "era": "Современные",
+  "named": "С фамилией",
+  "sleeve": "Короткий",
+  "version": "Фанатская",
+  "size": "S / M / L / XL / 2XL",
+  "byn": 100,
+  "rub": 2990,
+  "stock": "Под заказ",
+  "sup": true,
+  "photos": [
+   "img/p103_mwc44vws_1.jpg",
+   "img/p103_mwc44vws_2.jpg"
+  ]
+ },
+ {
   "id": 102,
   "cat": "jersey",
   "auth": "replica",
