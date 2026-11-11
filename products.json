@@ -1,5 +1,25 @@
 [
  {
+  "id": 96,
+  "cat": "jersey",
+  "auth": "replica",
+  "title": "Бразилия 02/04 Домашняя Ривалдо 10",
+  "club": "Бразилия",
+  "league": "Сборные",
+  "era": "Ретро",
+  "named": "С фамилией",
+  "sleeve": "Короткий",
+  "version": "Фанатская",
+  "size": "S",
+  "byn": 80,
+  "rub": 2690,
+  "stock": "В наличии",
+  "photos": [
+   "img/p96_mwbvazp7_1.jpg",
+   "img/p96_mwbvazp7_2.jpg"
+  ]
+ },
+ {
   "id": 95,
   "cat": "jersey",
   "auth": "replica",
