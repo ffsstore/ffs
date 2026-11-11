@@ -1,5 +1,25 @@
 [
  {
+  "id": 91,
+  "cat": "jersey",
+  "auth": "replica",
+  "title": "Барселона 10/11 Гостевая Маскерано 14",
+  "club": "Барселона",
+  "league": "Ла Лига",
+  "era": "Ретро",
+  "named": "С фамилией",
+  "sleeve": "Короткий",
+  "version": "Фанатская",
+  "size": "XL",
+  "byn": 90,
+  "rub": 2990,
+  "stock": "В наличии",
+  "photos": [
+   "img/p91_mwbv7dbe_1.jpg",
+   "img/p91_mwbv7dbe_2.jpg"
+  ]
+ },
+ {
   "id": 90,
   "cat": "jersey",
   "auth": "replica",
