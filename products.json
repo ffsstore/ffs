@@ -1,5 +1,26 @@
 [
  {
+  "id": 108,
+  "cat": "jersey",
+  "auth": "replica",
+  "title": "Барселона 10/11 Домашняя Месси 10",
+  "club": "Барселона",
+  "league": "Ла Лига",
+  "era": "Ретро",
+  "named": "С фамилией",
+  "sleeve": "Короткий",
+  "version": "Фанатская",
+  "size": "S / M / L / XL / 2XL",
+  "byn": 100,
+  "rub": 2990,
+  "stock": "Под заказ",
+  "sup": true,
+  "photos": [
+   "img/p108_mwc5okbr_1.jpg",
+   "img/p108_mwc5okbr_2.jpg"
+  ]
+ },
+ {
   "id": 107,
   "cat": "jersey",
   "auth": "replica",
