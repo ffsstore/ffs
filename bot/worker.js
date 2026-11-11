@@ -186,7 +186,7 @@ async function cron(env) {
 
 
 // ---------- фото товаров: хранятся в Cloudflare R2 (привязка IMG), сайт берёт их по адресу …workers.dev/img/имя.jpg ----------
-// Если фото ещё нет в R2 — один раз берём его из GitHub (тег img-archive, потом main) и сохраняем в R2.
+// Если фото ещё нет в R2 — один раз берём его из GitHub (коммит 993d0b2, где лежат все старые фото, потом main) и сохраняем в R2.
 const IMG_TYPE = n => /\.webp$/i.test(n) ? 'image/webp' : /\.png$/i.test(n) ? 'image/png' : 'image/jpeg';
 async function serveImg(env, request, ctx, key) {
   if (!/^img\/[\w.-]+$/.test(key)) return new Response('not found', { status: 404 });
@@ -195,7 +195,7 @@ async function serveImg(env, request, ctx, key) {
   const head = { 'content-type': IMG_TYPE(key), 'cache-control': 'public, max-age=31536000, immutable', ...CORS };
   let body = null;
   if (env.IMG) { const o = await env.IMG.get(key); if (o) body = await o.arrayBuffer(); }
-  if (!body) for (const ref of ['img-archive', 'main']) {
+  if (!body) for (const ref of ['993d0b242c7380b1b8b8447c55fb0445911edbf2', 'main']) {
     const r = await fetch('https://raw.githubusercontent.com/' + REPO + '/' + ref + '/' + key);
     if (!r.ok) continue;
     body = await r.arrayBuffer();
