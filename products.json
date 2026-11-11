@@ -1,5 +1,25 @@
 [
  {
+  "id": 90,
+  "cat": "jersey",
+  "auth": "replica",
+  "title": "Ливерпуль 08/10 Домашняя Джеррард 8",
+  "club": "Ливерпуль",
+  "league": "АПЛ",
+  "era": "Ретро",
+  "named": "С фамилией",
+  "sleeve": "Короткий",
+  "version": "Фанатская",
+  "size": "M",
+  "byn": 75,
+  "rub": 2490,
+  "stock": "В наличии",
+  "photos": [
+   "img/p90_mwbv6vdn_1.jpg",
+   "img/p90_mwbv6vdn_2.jpg"
+  ]
+ },
+ {
   "id": 89,
   "cat": "jersey",
   "auth": "replica",
