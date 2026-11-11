@@ -1,5 +1,25 @@
 [
  {
+  "id": 116,
+  "cat": "jersey",
+  "auth": "replica",
+  "title": "Реал Мадрид 19/20 Третья",
+  "club": "Реал Мадрид",
+  "league": "Ла Лига",
+  "era": "Ретро",
+  "named": "Без фамилии",
+  "sleeve": "Длинный",
+  "version": "Игровая",
+  "size": "M/L/XL",
+  "byn": 75,
+  "rub": 2490,
+  "stock": "В наличии",
+  "photos": [
+   "img/p116_mwccdg3p_1.jpg",
+   "img/p116_mwccdg3p_2.jpg"
+  ]
+ },
+ {
   "id": 115,
   "cat": "jersey",
   "auth": "replica",
