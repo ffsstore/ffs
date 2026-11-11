@@ -1,5 +1,26 @@
 [
  {
+  "id": 102,
+  "cat": "jersey",
+  "auth": "replica",
+  "title": "Барселона 11/12 Гостевая Иньеста 8",
+  "club": "Барселона",
+  "league": "Ла Лига",
+  "era": "Ретро",
+  "named": "С фамилией",
+  "sleeve": "Короткий",
+  "version": "Фанатская",
+  "size": "S / M / L / XL / 2XL",
+  "byn": 100,
+  "rub": 2990,
+  "stock": "Под заказ",
+  "sup": true,
+  "photos": [
+   "img/p102_mwc3vng3_1.jpg",
+   "img/p102_mwc3vng3_2.jpg"
+  ]
+ },
+ {
   "id": 101,
   "cat": "jersey",
   "auth": "replica",
