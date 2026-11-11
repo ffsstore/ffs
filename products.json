@@ -1,5 +1,25 @@
 [
  {
+  "id": 98,
+  "cat": "jersey",
+  "auth": "replica",
+  "title": "Реал Мадрид 03/04 Домашняя Бекхэм 23",
+  "club": "Реал Мадрид",
+  "league": "Ла Лига",
+  "era": "Ретро",
+  "named": "С фамилией",
+  "sleeve": "Короткий",
+  "version": "Фанатская",
+  "size": "M",
+  "byn": 75,
+  "rub": 2690,
+  "stock": "В наличии",
+  "photos": [
+   "img/p98_mwbvdaka_1.jpg",
+   "img/p98_mwbvdaka_2.jpg"
+  ]
+ },
+ {
   "id": 97,
   "cat": "jersey",
   "auth": "replica",
