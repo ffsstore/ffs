@@ -209,11 +209,11 @@ function home(){
 function vals(list,key){const s=[...new Set(list.map(p=>p[key]).filter(Boolean))];return key==='size'?s.sort((a,b)=>(SIZE_ORDER.indexOf(a)+1||+a+100)-(SIZE_ORDER.indexOf(b)+1||+b+100)):s.sort()}
 function filtered(){let r=P.filter(p=>p.cat===st.cat&&(st.auth==='all'||p.auth===st.auth)&&match(p));
  for(const[k,v]of Object.entries(st.f))if(v.length)r=r.filter(p=>v.includes(p[k]));
- if(st.mine&&st.cat==='jersey')r=r.filter(p=>fitDiff(p)===0);if(st.pmin)r=r.filter(p=>p.byn>=+st.pmin);if(st.pmax)r=r.filter(p=>p.byn&&p.byn<=+st.pmax);
+ if(st.mine&&st.cat==='jersey')r=r.filter(p=>fitDiff(p)===0);if(st.instock)r=r.filter(p=>!p.stock||p.stock==='В наличии');if(st.pmin)r=r.filter(p=>p.byn>=+st.pmin);if(st.pmax)r=r.filter(p=>p.byn&&p.byn<=+st.pmax);
  r.sort(st.sort==='asc'?(a,b)=>(a.byn||1e9)-(b.byn||1e9):st.sort==='desc'?(a,b)=>b.byn-a.byn:(a,b)=>b.added-a.added);return r}
 function catView(){const r=filtered();const nf=Object.values(st.f).reduce((a,v)=>a+v.length,0)+(st.pmin||st.pmax?1:0);
  view.innerHTML=`<div class="seg">${[['all','Все'],['original','Оригинал'],['replica','Реплика']].map(([k,t])=>`<button data-auth="${k}" class="${st.auth===k?'on':''}">${t}</button>`).join('')}</div>
- <div class="bar"><button class="chip ${nf?'on':''}" id="fopen">⚙️ Фильтры${nf?' · '+nf:''}</button>${st.cat==='jersey'&&hasFit()?`<button class="chip ${st.mine?'on':''}" id="mine">✅ Мой размер</button>`:''}${[['asc','Дешевле'],['desc','Дороже']].map(([k,t])=>`<button class="chip ${st.sort===k?'on':''}" data-sort="${k}">${t}</button>`).join('')}</div>
+ <div class="bar"><button class="chip ${nf?'on':''}" id="fopen">⚙️ Фильтры${nf?' · '+nf:''}</button>${st.cat==='jersey'&&hasFit()?`<button class="chip ${st.mine?'on':''}" id="mine">✅ Мой размер</button>`:''}${[['asc','Дешевле'],['desc','Дороже']].map(([k,t])=>`<button class="chip ${st.sort===k?'on':''}" data-sort="${k}">${t}</button>`).join('')}<button class="chip ${st.instock?'on':''}" id="instock">В наличии</button></div>
  <div class="count">Найдено: ${r.length}</div>`+(r.length?`<div class="grid">${r.map(card).join('')}</div>${subBtn('cat',st.cat,catLabel(st.cat))}`:`<div class="empty"><b>${P.some(p=>p.cat===st.cat)?'Ничего не подошло':'Скоро в продаже'}</b>Напиши менеджеру — подберём или привезём под заказ<br><br><a class="btn btn-y" href="https://t.me/${MANAGER}">Написать @${MANAGER}</a>${subBtn('cat',st.cat,catLabel(st.cat))}</div>`)}
 function prodView(){const p=P.find(x=>x.id===st.prod);if(!p){go('home');return}
  const rows=FILTERS[p.cat].filter(([k])=>p[k]&&k!=='stock').map(([k,t])=>`<div class="row"><span>${t}</span><b>${esc(p[k])}</b></div>`).join('');
@@ -377,12 +377,13 @@ view.onclick=e=>{const hf=e.target.closest('[data-fav]');if(hf){e.stopPropagatio
  const sb=e.target.closest('[data-sub]');if(sb){toggleSub(sb.dataset.sub,sb.dataset.key,sb.dataset.label);return}
  const rm=e.target.closest('[data-rm]');if(rm){CART=CART.filter(c=>c.id!==+rm.dataset.rm);srv('uncart',+rm.dataset.rm);save();render();return}
  const t=e.target.closest('button');if(!t)return;
- if(t.dataset.cat){go('cat',{cat:t.dataset.cat,auth:'all',f:{},pmin:'',pmax:'',sort:'new'})}
+ if(t.dataset.cat){go('cat',{cat:t.dataset.cat,auth:'all',f:{},pmin:'',pmax:'',sort:'new',instock:false})}
  else if(t.dataset.id){go('prod',{prod:+t.dataset.id})}
  else if(t.dataset.auth){st.auth=t.dataset.auth;st.f={};render()}
  else if(t.dataset.sort){st.sort=st.sort===t.dataset.sort?'new':t.dataset.sort;render()}
  else if(t.id==='fopen')openF()
  else if(t.id==='mine'){st.mine=!st.mine;render()}
+ else if(t.id==='instock'){st.instock=!st.instock;render()}
  else if(t.dataset.go){go(t.dataset.go)}};
 const back=()=>{closeF();st.size=null;const h=HIST.pop();if(h)Object.assign(st,h);else st.page='home';render()};
 $('#back').onclick=back;$('#favBtn').onclick=()=>go('fav');$('#cartBtn').onclick=()=>go('cart'); if(tg)tg.BackButton.onClick(back);
