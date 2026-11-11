@@ -1,5 +1,25 @@
 [
  {
+  "id": 115,
+  "cat": "jersey",
+  "auth": "replica",
+  "title": "Бавария 19/20 Гостевая",
+  "club": "Бавария",
+  "league": "Бундеслига",
+  "era": "Ретро",
+  "named": "Без фамилии",
+  "sleeve": "Длинный",
+  "version": "Фанатская",
+  "size": "M/L/XL",
+  "byn": 70,
+  "rub": 2490,
+  "stock": "В наличии",
+  "photos": [
+   "img/p115_mwcccv1c_1.jpg",
+   "img/p115_mwcccv1c_2.jpg"
+  ]
+ },
+ {
   "id": 114,
   "cat": "jersey",
   "auth": "replica",
