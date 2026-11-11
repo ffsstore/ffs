@@ -1,5 +1,25 @@
 [
  {
+  "id": 119,
+  "cat": "jersey",
+  "auth": "replica",
+  "title": "Ливерпуль 20/21 Домашняя Тьяго Алькантра 6",
+  "club": "Ливерпуль",
+  "league": "АПЛ",
+  "era": "Современные",
+  "named": "С фамилией",
+  "sleeve": "Короткий",
+  "version": "Фанатская",
+  "size": "M",
+  "byn": 70,
+  "rub": 2490,
+  "stock": "В наличии",
+  "photos": [
+   "img/p119_mwccjbpx_1.jpg",
+   "img/p119_mwccjbpx_2.jpg"
+  ]
+ },
+ {
   "id": 118,
   "cat": "jersey",
   "auth": "replica",
