@@ -1,5 +1,26 @@
 [
  {
+  "id": 105,
+  "cat": "jersey",
+  "auth": "replica",
+  "title": "Барселона 12/13 Домашняя Пуйоль 5",
+  "club": "Барселона",
+  "league": "Ла Лига",
+  "era": "Ретро",
+  "named": "С фамилией",
+  "sleeve": "Короткий",
+  "version": "Фанатская",
+  "size": "S / M / L / XL / 2XL",
+  "byn": 100,
+  "rub": 2990,
+  "stock": "Под заказ",
+  "sup": true,
+  "photos": [
+   "img/p105_mwc4v40p_1.jpg",
+   "img/p105_mwc4v40p_2.jpg"
+  ]
+ },
+ {
   "id": 104,
   "cat": "jersey",
   "auth": "replica",
