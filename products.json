@@ -1,5 +1,25 @@
 [
  {
+  "id": 110,
+  "cat": "jersey",
+  "auth": "replica",
+  "title": "Манчестер Юнайтед 18/19 Гостевая",
+  "club": "Манчестер Юнайтед",
+  "league": "АПЛ",
+  "era": "Ретро",
+  "named": "Без фамилии",
+  "sleeve": "Короткий",
+  "version": "Фанатская",
+  "size": "L",
+  "byn": 70,
+  "rub": 2490,
+  "stock": "В наличии",
+  "photos": [
+   "img/p110_mwcbxsgq_1.jpg",
+   "img/p110_mwcbxsgq_2.jpg"
+  ]
+ },
+ {
   "id": 109,
   "cat": "jersey",
   "auth": "replica",
