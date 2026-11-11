@@ -1,5 +1,25 @@
 [
  {
+  "id": 114,
+  "cat": "jersey",
+  "auth": "replica",
+  "title": "Атлетико Мадрид 04/05 Домашняя Торрес 9",
+  "club": "Атлетико Мадрид",
+  "league": "Ла Лига",
+  "era": "Ретро",
+  "named": "С фамилией",
+  "sleeve": "Короткий",
+  "version": "Фанатская",
+  "size": "S",
+  "byn": 70,
+  "rub": 2490,
+  "stock": "В наличии",
+  "photos": [
+   "img/p114_mwccbtn0_1.jpg",
+   "img/p114_mwccbtn0_2.jpg"
+  ]
+ },
+ {
   "id": 113,
   "cat": "jersey",
   "auth": "replica",
