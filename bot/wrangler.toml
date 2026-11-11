@@ -1,6 +1,7 @@
 name = "ffs-bot"
 main = "worker.js"
 compatibility_date = "2026-11-01"
+keep_vars = true  # не стирать переменные, заданные в панели Cloudflare
 
 [triggers]
 crons = ["0 * * * *"]
