@@ -1,5 +1,25 @@
 [
  {
+  "id": 95,
+  "cat": "jersey",
+  "auth": "replica",
+  "title": "Бавария 14/15 Домашняя Роббен 10",
+  "club": "Бавария",
+  "league": "Бундеслига",
+  "era": "Ретро",
+  "named": "С фамилией",
+  "sleeve": "Короткий",
+  "version": "Фанатская",
+  "size": "M",
+  "byn": 80,
+  "rub": 2690,
+  "stock": "В наличии",
+  "photos": [
+   "img/p95_mwbvaba9_1.jpg",
+   "img/p95_mwbvaba9_2.jpg"
+  ]
+ },
+ {
   "id": 94,
   "cat": "jersey",
   "auth": "replica",
