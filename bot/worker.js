@@ -185,6 +185,37 @@ async function cron(env) {
 }
 
 
+// ---------- фото товаров: хранятся в Cloudflare R2 (привязка IMG), сайт берёт их по адресу …workers.dev/img/имя.jpg ----------
+// Если фото ещё нет в R2 — один раз берём его из GitHub (тег img-archive, потом main) и сохраняем в R2.
+const IMG_TYPE = n => /\.webp$/i.test(n) ? 'image/webp' : /\.png$/i.test(n) ? 'image/png' : 'image/jpeg';
+async function serveImg(env, request, ctx, key) {
+  if (!/^img\/[\w.-]+$/.test(key)) return new Response('not found', { status: 404 });
+  const cache = caches.default, hit = await cache.match(request);
+  if (hit) return hit;
+  const head = { 'content-type': IMG_TYPE(key), 'cache-control': 'public, max-age=31536000, immutable', ...CORS };
+  let body = null;
+  if (env.IMG) { const o = await env.IMG.get(key); if (o) body = await o.arrayBuffer(); }
+  if (!body) for (const ref of ['img-archive', 'main']) {
+    const r = await fetch('https://raw.githubusercontent.com/' + REPO + '/' + ref + '/' + key);
+    if (!r.ok) continue;
+    body = await r.arrayBuffer();
+    if (env.IMG) ctx.waitUntil(env.IMG.put(key, body, { httpMetadata: { contentType: IMG_TYPE(key) } }));
+    break;
+  }
+  if (!body) return new Response('not found', { status: 404, headers: CORS });
+  const res = new Response(body, { headers: head });
+  ctx.waitUntil(cache.put(request, res.clone()));
+  return res;
+}
+// фото — в R2, а в GitHub коммитим только products.json (сайт пересобирается быстро).
+// Если привязки IMG ещё нет — по-старому, фото коммитятся в репозиторий.
+async function saveWithImgs(env, imgs, P, message) {
+  if (!env.IMG) return commitFiles(env, [...imgs, pjson(P)], message);
+  for (const f of imgs) await env.IMG.put(f.path, f.bytes, { httpMetadata: { contentType: IMG_TYPE(f.path) } });
+  const { sha } = await loadP(env);
+  await saveP(env, P, sha, message);
+}
+
 // ---------- админ: добавление товаров через бота ----------
 // секреты в Cloudflare: GH_TOKEN (GitHub, доступ Contents: write к ffsstore/ffs), ADMIN_ID (твой Telegram ID, узнать — /myid)
 const REPO = 'ffsstore/ffs';
@@ -327,7 +358,7 @@ async function adminCmd(env, msg) {
       const paths = imgs.map(f => f.path);
       const fresh = await loadP(env), q = fresh.P.find(x => x.id === id);
       q.photos = paths;
-      await commitFiles(env, [...imgs, pjson(fresh.P)], 'Новые фото: ' + q.title);
+      await saveWithImgs(env, imgs, fresh.P, 'Новые фото: ' + q.title);
       await d.prepare('DELETE FROM draft WHERE uid=?').bind(chat).run();
       await say(env, chat, '✅ Заменил фото у <b>' + esc(q.title) + '</b>: теперь ' + paths.length + ' шт. Первое — главное.', { reply_markup: appBtn('👀 Посмотреть', '?p=' + id) });
       return true;
@@ -342,7 +373,7 @@ async function adminCmd(env, msg) {
     o.id = Math.max(o.id, ...fresh.P.map(p => p.id + 1));
     const imgs = await download(env, ph, 'img/p' + o.id + '_' + Date.now().toString(36));
     o.photos = imgs.map(f => f.path);
-    await commitFiles(env, [...imgs, pjson([o, ...fresh.P].sort((a, b) => b.id - a.id))], 'Добавлен: ' + o.title);
+    await saveWithImgs(env, imgs, [o, ...fresh.P].sort((a, b) => b.id - a.id), 'Добавлен: ' + o.title);
     await d.prepare('DELETE FROM draft WHERE uid=?').bind(chat).run();
     const rows = [['Категория', o.cat === 'boots' ? 'Бутсы' : 'Джерси'], ['Клуб', o.club], ['Лига', o.league], ['Тип', o.era], ['Версия', o.version],
       ['Размер', o.size], ['Цена', o.byn + ' BYN' + (o.rub ? ' / ' + o.rub + ' ₽' : ' (₽ по курсу)')], ['Наличие', o.stock], ['Оригинал/реплика', o.auth === 'original' ? 'Оригинал' : 'Реплика']]
@@ -432,6 +463,7 @@ export default {
     if (!env.BOT_TOKEN) return new Response('Не задан секрет BOT_TOKEN', { status: 500 });
 
     if (request.method === 'OPTIONS') return new Response(null, { headers: CORS });
+    if (request.method === 'GET' && url.pathname.startsWith('/img/')) return serveImg(env, request, ctx, url.pathname.slice(1));
     if (['/stats', '/track', '/sub', '/mysubs'].includes(url.pathname)) {
       if (!env.DB) return json({ ok: false, reason: 'no DB binding' }, 503);
       if (url.pathname === '/stats') return stats(env);

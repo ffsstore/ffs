@@ -9,3 +9,8 @@ crons = ["0 * * * *"]
 binding = "DB"
 database_name = "ffs-stats"
 database_id = "5d831441-b302-4118-b6b8-c51424394b35"
+
+# фото товаров (Cloudflare → R2 → создать бакет ffs-img)
+[[r2_buckets]]
+binding = "IMG"
+bucket_name = "ffs-img"
