@@ -1,5 +1,25 @@
 [
  {
+  "id": 112,
+  "cat": "jersey",
+  "auth": "replica",
+  "title": "Португалия 16/18 гостевая Нани 17",
+  "club": "Португалия",
+  "league": "Сборные",
+  "era": "Ретро",
+  "named": "С фамилией",
+  "sleeve": "Короткий",
+  "version": "Фанатская",
+  "size": "S",
+  "byn": 70,
+  "rub": 2490,
+  "stock": "В наличии",
+  "photos": [
+   "img/p112_mwcc2qe8_1.jpg",
+   "img/p112_mwcc2qe8_2.jpg"
+  ]
+ },
+ {
   "id": 111,
   "cat": "jersey",
   "auth": "replica",
