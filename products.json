@@ -1,5 +1,26 @@
 [
  {
+  "id": 122,
+  "cat": "jersey",
+  "auth": "replica",
+  "title": "Барселона 04/05  Домашняя Месси10",
+  "club": "Барселона",
+  "league": "Ла Лига",
+  "era": "Ретро",
+  "named": "Без фамилии",
+  "sleeve": "Короткий",
+  "version": "Фанатская",
+  "size": "S / M / L / XL / 2XL",
+  "byn": 100,
+  "rub": 2990,
+  "stock": "Под заказ",
+  "sup": true,
+  "photos": [
+   "img/p122_mwdc8xgx_1.jpg",
+   "img/p122_mwdc8xgx_2.jpg"
+  ]
+ },
+ {
   "id": 121,
   "cat": "jersey",
   "auth": "replica",
