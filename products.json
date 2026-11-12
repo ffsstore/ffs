@@ -1,5 +1,25 @@
 [
  {
+  "id": 124,
+  "cat": "jersey",
+  "auth": "replica",
+  "title": "Барселона 10/11 Гостевая Давид Вилья 7",
+  "club": "Барселона",
+  "league": "Ла Лига",
+  "era": "Ретро",
+  "named": "С фамилией",
+  "sleeve": "Короткий",
+  "version": "Фанатская",
+  "size": "S / M / L / XL / 2XL",
+  "byn": 100,
+  "rub": 2990,
+  "stock": "В наличии",
+  "photos": [
+   "img/p124_mwdcesf7_1.jpg",
+   "img/p124_mwdcesf7_2.jpg"
+  ]
+ },
+ {
   "id": 123,
   "cat": "jersey",
   "auth": "replica",
