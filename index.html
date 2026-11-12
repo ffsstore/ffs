@@ -212,7 +212,9 @@ function vals(list,key){const s=[...new Set(list.map(p=>p[key]).filter(Boolean))
 function filtered(){let r=P.filter(p=>p.cat===st.cat&&(st.auth==='all'||p.auth===st.auth)&&match(p));
  for(const[k,v]of Object.entries(st.f))if(v.length)r=r.filter(p=>v.includes(p[k]));
  if(st.mine&&st.cat==='jersey')r=r.filter(p=>fitDiff(p)===0);if(st.instock)r=r.filter(p=>!p.stock||p.stock==='В наличии');if(st.pmin)r=r.filter(p=>p.byn>=+st.pmin);if(st.pmax)r=r.filter(p=>p.byn&&p.byn<=+st.pmax);
- r.sort(st.sort==='asc'?(a,b)=>(a.byn||1e9)-(b.byn||1e9):st.sort==='desc'?(a,b)=>b.byn-a.byn:(a,b)=>b.added-a.added);return r}
+ r.sort(st.sort==='asc'?(a,b)=>(a.byn||1e9)-(b.byn||1e9):st.sort==='desc'?(a,b)=>b.byn-a.byn:(a,b)=>b.added-a.added);
+ if(st.cat==='jersey'){const ins=p=>!p.stock||p.stock==='В наличии';r=[...r.filter(ins),...r.filter(p=>!ins(p))]} // джерси: сначала в наличии, потом под заказ
+ return r}
 function catView(){const r=filtered();const nf=Object.values(st.f).reduce((a,v)=>a+v.length,0)+(st.pmin||st.pmax?1:0);
  view.innerHTML=`<div class="seg">${[['all','Все'],['original','Оригинал'],['replica','Реплика']].map(([k,t])=>`<button data-auth="${k}" class="${st.auth===k?'on':''}">${t}</button>`).join('')}</div>
  <div class="bar"><button class="chip ${nf?'on':''}" id="fopen">⚙️ Фильтры${nf?' · '+nf:''}</button>${st.cat==='jersey'&&hasFit()?`<button class="chip ${st.mine?'on':''}" id="mine">✅ Мой размер</button>`:''}${[['asc','Дешевле'],['desc','Дороже']].map(([k,t])=>`<button class="chip ${st.sort===k?'on':''}" data-sort="${k}">${t}</button>`).join('')}<button class="chip ${st.instock?'on':''}" id="instock">В наличии</button></div>
