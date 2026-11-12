@@ -1,5 +1,26 @@
 [
  {
+  "id": 125,
+  "cat": "jersey",
+  "auth": "replica",
+  "title": "Барселона 03/04 Домашняя Иньеста 14",
+  "club": "Барселона",
+  "league": "Ла Лига",
+  "era": "Ретро",
+  "named": "С фамилией",
+  "sleeve": "Короткий",
+  "version": "Фанатская",
+  "size": "S / M / L / XL / 2XL",
+  "byn": 100,
+  "rub": 2990,
+  "stock": "Под заказ",
+  "sup": true,
+  "photos": [
+   "img/p125_mwdckw5j_1.jpg",
+   "img/p125_mwdckw5j_2.jpg"
+  ]
+ },
+ {
   "id": 124,
   "cat": "jersey",
   "auth": "replica",
