@@ -1,5 +1,26 @@
 [
  {
+  "id": 123,
+  "cat": "jersey",
+  "auth": "replica",
+  "title": "Барселона 14/15 Гостевая Неймар 11",
+  "club": "Барселона",
+  "league": "Ла Лига",
+  "era": "Ретро",
+  "named": "С фамилией",
+  "sleeve": "Длинный",
+  "version": "Фанатская",
+  "size": "S / M / L / XL / 2XL",
+  "byn": 120,
+  "rub": 3490,
+  "stock": "Под заказ",
+  "sup": true,
+  "photos": [
+   "img/p123_mwdcbjtx_1.jpg",
+   "img/p123_mwdcbjtx_2.jpg"
+  ]
+ },
+ {
   "id": 122,
   "cat": "jersey",
   "auth": "replica",
