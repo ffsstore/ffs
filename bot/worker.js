@@ -91,16 +91,21 @@ async function seenUser(env, uid, src) {
   } catch (e) { console.error('seenUser', e); }
 }
 async function usersStats(env) {
-  const d = await db(env), day = 86400000, now = Date.now();
-  const today = Math.floor((now + 3 * 3600000) / day) * day - 3 * 3600000; // полночь по Минску/Москве
+  const d = await db(env), day = 86400000, now = Date.now(), tz = 3 * 3600000; // Минск/Москва
+  const loc = new Date(now + tz);
+  const today = Math.floor((now + tz) / day) * day - tz;
+  const month = Date.UTC(loc.getUTCFullYear(), loc.getUTCMonth(), 1) - tz;
+  const prev = Date.UTC(loc.getUTCFullYear(), loc.getUTCMonth() - 1, 1) - tz;
+  const MON = ['январе', 'феврале', 'марте', 'апреле', 'мае', 'июне', 'июле', 'августе', 'сентябре', 'октябре', 'ноябре', 'декабре'];
   const q = (where, ...b) => d.prepare('SELECT COUNT(*) AS n FROM users' + (where ? ' WHERE ' + where : '')).bind(...b).first('n');
-  const [all, t, w, m, act, join, old] = await Promise.all([q(''), q("first_ts>=? AND src<>'old'", today), q("first_ts>=? AND src<>'old'", now - 7 * day),
-    q("first_ts>=? AND src<>'old'", now - 30 * day), q('last_ts>=?', now - 7 * day), q("src='join'"), q("src='old'")]);
-  return '👥 <b>Пользователи бота: ' + all + '</b>\n\n' +
-    '🆕 Новых сегодня: ' + t + '\n🆕 За 7 дней: ' + w + '\n🆕 За 30 дней: ' + m + '\n\n' +
-    '🔥 Активных за 7 дней: ' + act + '\n📢 Пришли через заявку в канал: ' + join + '\n\n' +
-    '<i>' + old + ' — старые пользователи, которых бот знал по магазину (избранное, корзина, просмотры, подписки). ' +
-    'Те, кто раньше только нажимал /start, посчитаются, когда снова напишут боту или откроют магазин.</i>';
+  const NEW = "src<>'old' AND first_ts>=?";
+  const [all, m, pm, t, act, old] = await Promise.all([q(''), q(NEW, month), q(NEW + ' AND first_ts<?', prev, month), q(NEW, today),
+    q('last_ts>=?', now - 30 * day), q("src='old'")]);
+  return '👥 <b>Пользователей за всё время: ' + all + '</b>\n' +
+    '🆕 <b>Новых в ' + MON[loc.getUTCMonth()] + ': ' + m + '</b>\n\n' +
+    'В ' + MON[(loc.getUTCMonth() + 11) % 12] + ': ' + pm + '\nСегодня: ' + t + '\nАктивных за 30 дней: ' + act + '\n\n' +
+    '<i>Учёт новых идёт с 14 ноября 2026. ' + old + ' — старые пользователи, которых бот знал по магазину; ' +
+    'те, кто раньше только нажимал /start, посчитаются, когда снова напишут боту или откроют магазин.</i>';
 }
 async function track(env, body) {
   const kinds = ['view', 'fav', 'cart', 'order', 'unfav', 'uncart'];
