@@ -1,5 +1,26 @@
 [
  {
+  "id": 127,
+  "cat": "boots",
+  "auth": "original",
+  "title": "Puma Future Z 1.4 FG",
+  "brand": "Puma",
+  "model": "Future Z 1.4 FG",
+  "surface": "FG (натуральный газон)",
+  "size": "40 ( 25.5 см )",
+  "byn": 310,
+  "rub": 9790,
+  "stock": "В наличии",
+  "ship": "warehouse",
+  "photos": [
+   "img/p127_mwg3jbr3_1.jpg",
+   "img/p127_mwg3jbr3_2.jpg",
+   "img/p127_mwg3jbr3_3.jpg",
+   "img/p127_mwg3jbr3_4.jpg",
+   "img/p127_mwg3jbr3_5.jpg"
+  ]
+ },
+ {
   "id": 126,
   "cat": "boots",
   "auth": "original",
