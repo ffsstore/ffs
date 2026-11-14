@@ -70,16 +70,44 @@ async function db(env) {
       'CREATE TABLE IF NOT EXISTS seen (pid INTEGER PRIMARY KEY)',
       'CREATE TABLE IF NOT EXISTS optout (uid INTEGER PRIMARY KEY)',
       'CREATE TABLE IF NOT EXISTS draft (uid INTEGER, mid INTEGER, file_id TEXT, PRIMARY KEY (uid, mid))',
+      // все, кто писал боту, пользовался магазином или подавал заявку в канал (src: bot / shop / join / old)
+      'CREATE TABLE IF NOT EXISTS users (uid INTEGER PRIMARY KEY, first_ts INTEGER, last_ts INTEGER, src TEXT)',
+      // старые пользователи — из того, что бот уже знал до появления таблицы users
+      "INSERT OR IGNORE INTO users SELECT uid, MIN(ts), MAX(ts), 'old' FROM ev GROUP BY uid",
+      "INSERT OR IGNORE INTO users SELECT uid, MIN(ts), MAX(ts), 'old' FROM sub GROUP BY uid",
+      "INSERT OR IGNORE INTO users SELECT DISTINCT uid, 0, 0, 'old' FROM rem",
+      "INSERT OR IGNORE INTO users SELECT uid, 0, 0, 'old' FROM optout",
     ]) await env.DB.prepare(q).run();
     ready = true;
   }
   return env.DB;
+}
+async function seenUser(env, uid, src) {
+  if (!env.DB || !uid) return;
+  try {
+    const now = Date.now();
+    await (await db(env)).prepare('INSERT INTO users (uid, first_ts, last_ts, src) VALUES (?, ?, ?, ?) ON CONFLICT(uid) DO UPDATE SET last_ts=excluded.last_ts')
+      .bind(uid, now, now, src).run();
+  } catch (e) { console.error('seenUser', e); }
+}
+async function usersStats(env) {
+  const d = await db(env), day = 86400000, now = Date.now();
+  const today = Math.floor((now + 3 * 3600000) / day) * day - 3 * 3600000; // полночь по Минску/Москве
+  const q = (where, ...b) => d.prepare('SELECT COUNT(*) AS n FROM users' + (where ? ' WHERE ' + where : '')).bind(...b).first('n');
+  const [all, t, w, m, act, join, old] = await Promise.all([q(''), q("first_ts>=? AND src<>'old'", today), q("first_ts>=? AND src<>'old'", now - 7 * day),
+    q("first_ts>=? AND src<>'old'", now - 30 * day), q('last_ts>=?', now - 7 * day), q("src='join'"), q("src='old'")]);
+  return '👥 <b>Пользователи бота: ' + all + '</b>\n\n' +
+    '🆕 Новых сегодня: ' + t + '\n🆕 За 7 дней: ' + w + '\n🆕 За 30 дней: ' + m + '\n\n' +
+    '🔥 Активных за 7 дней: ' + act + '\n📢 Пришли через заявку в канал: ' + join + '\n\n' +
+    '<i>' + old + ' — старые пользователи, которых бот знал по магазину (избранное, корзина, просмотры, подписки). ' +
+    'Те, кто раньше только нажимал /start, посчитаются, когда снова напишут боту или откроют магазин.</i>';
 }
 async function track(env, body) {
   const kinds = ['view', 'fav', 'cart', 'order', 'unfav', 'uncart'];
   const pid = Number(body.pid), kind = String(body.kind);
   if (!pid || !kinds.includes(kind)) return json({ ok: false }, 400);
   const uid = await tgUser(env, body.initData);
+  await seenUser(env, uid, 'shop');
   if (!uid) return json({ ok: false, reason: 'not telegram' });
   const d = await db(env);
   if (kind.startsWith('un')) await d.prepare('DELETE FROM ev WHERE pid=? AND kind=? AND uid=?').bind(pid, kind.slice(2), uid).run();
@@ -97,6 +125,7 @@ async function stats(env) {
 // ---------- подписки «сообщить о новинках» ----------
 async function subscribe(env, body) {
   const uid = await tgUser(env, body.initData);
+  await seenUser(env, uid, 'shop');
   if (!uid) return json({ ok: false, reason: 'not telegram' });
   const kind = String(body.kind), key = String(body.key || '').slice(0, 60);
   if (!['cat', 'club'].includes(kind) || !key) return json({ ok: false }, 400);
@@ -109,6 +138,7 @@ async function subscribe(env, body) {
 }
 async function mysubs(env, body) {
   const uid = await tgUser(env, body.initData);
+  await seenUser(env, uid, 'shop');
   if (!uid) return json({ subs: [] });
   const d = await db(env);
   const { results } = await d.prepare('SELECT kind, key FROM sub WHERE uid=?').bind(uid).all();
@@ -303,7 +333,7 @@ const HELP =
   '<code>/add Арсенал 26/27 домашняя | M | 50 | 1890 | игровая</code>\n' +
   '<code>/add Nike Phantom GT2 Elite FG | 42.5 (27 см) | 360 | 11490 | оригинал б/у</code>\n\n' +
   'Метки (необязательно): игровая, оригинал, под заказ, б/у, длинный рукав. ₽ можно не писать — посчитается по курсу.\n\n' +
-  '<b>Другое:</b>\n/photos 12 — заменить фото у товара (сначала пришли фото)\n/list — последние товары с номерами\n/sold 45 — убрать проданный товар\n/price 45 70 2490 — новая цена (BYN и ₽)\n/cancel — сбросить присланные фото';
+  '<b>Другое:</b>\n/photos 12 — заменить фото у товара (сначала пришли фото)\n/list — последние товары с номерами\n/sold 45 — убрать проданный товар\n/price 45 70 2490 — новая цена (BYN и ₽)\n/cancel — сбросить присланные фото\n/users — сколько пользователей у бота';
 
 async function download(env, ph, prefix) {
   const out = [];
@@ -324,6 +354,7 @@ async function adminCmd(env, msg) {
     return true;
   }
   if (/^\/(help|admin)/.test(text)) { await say(env, chat, HELP); return true; }
+  if (/^\/users/.test(text)) { await say(env, chat, await usersStats(env)); return true; }
   if (/^\/cancel/.test(text)) { await d.prepare('DELETE FROM draft WHERE uid=?').bind(chat).run(); await say(env, chat, '🗑 Фото сброшены.'); return true; }
   if (!/^\/(add|list|sold|del|price|photos)/.test(text)) return false;
   if (!env.GH_TOKEN) { await say(env, chat, '❌ Не задан секрет GH_TOKEN в Cloudflare.'); return true; }
@@ -385,6 +416,9 @@ async function adminCmd(env, msg) {
 }
 
 async function handle(env, update) {
+  const pm = update.message && update.message.chat && update.message.chat.type === 'private' ? update.message.from : null;
+  if (update.chat_join_request) await seenUser(env, update.chat_join_request.from.id, 'join');
+  else if (pm || update.callback_query) await seenUser(env, (pm || update.callback_query.from).id, 'bot');
   // заявка на вступление в канал → приветствие с каталогом, затем одобряем заявку
   const jr = update.chat_join_request;
   // заявка в другой канал (например, «Футбольные вещи из WB & OZON») → сначала подписка на FFS
