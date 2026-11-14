@@ -1,5 +1,29 @@
 [
  {
+  "id": 128,
+  "cat": "boots",
+  "auth": "original",
+  "title": "Adidas Copa Pure 2 Elite FG",
+  "brand": "Adidas",
+  "model": "Copa Pure 2 Elite FG",
+  "surface": "FG (натуральный газон)",
+  "state": "Б/у",
+  "size": "42.5 ( 27 см )",
+  "byn": 210,
+  "rub": 6790,
+  "stock": "В наличии",
+  "ship": "warehouse",
+  "photos": [
+   "img/p128_mwg3mpee_1.jpg",
+   "img/p128_mwg3mpee_2.jpg",
+   "img/p128_mwg3mpee_3.jpg",
+   "img/p128_mwg3mpee_4.jpg",
+   "img/p128_mwg3mpee_5.jpg",
+   "img/p128_mwg3mpee_6.jpg",
+   "img/p128_mwg3mpee_7.jpg"
+  ]
+ },
+ {
   "id": 127,
   "cat": "boots",
   "auth": "original",
