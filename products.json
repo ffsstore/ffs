@@ -1,5 +1,26 @@
 [
  {
+  "id": 126,
+  "cat": "boots",
+  "auth": "original",
+  "title": "Adidas Copa 19+ FG",
+  "brand": "Adidas",
+  "model": "Copa 19+ FG",
+  "surface": "FG (натуральный газон)",
+  "size": "42 ( 26.5 см )",
+  "byn": 400,
+  "rub": 12690,
+  "stock": "В наличии",
+  "ship": "warehouse",
+  "photos": [
+   "img/p126_mwg3g64q_1.jpg",
+   "img/p126_mwg3g64q_2.jpg",
+   "img/p126_mwg3g64q_3.jpg",
+   "img/p126_mwg3g64q_4.jpg",
+   "img/p126_mwg3g64q_5.jpg"
+  ]
+ },
+ {
   "id": 125,
   "cat": "jersey",
   "auth": "replica",
